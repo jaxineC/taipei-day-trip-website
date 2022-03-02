@@ -34,6 +34,9 @@ col_list=[]
 for n in data['result']['results'][0]:
   col_list.append(n)
 
+
+
+
 sql= f'''CREATE TABLE attractions (
   {col_list[0]} VARCHAR(255) NOT NULL, 
   {col_list[1]} VARCHAR(255) NOT NULL, 
@@ -62,8 +65,14 @@ cursor_query.execute(sql, value)
 cnx.commit()
 
 for n in data['result']['results']:
-  sql = f'INSERT INTO attractions ({data['result']['results'][0]}) VALUES({data['result']['results'][0][n]});'
+  col_list_indivisual=[]
+  for items in data['result']['results'][0]:
+    col_list_indivisual.append(items)
+  col_indivisual_string=', '.join(col_list_indivisual)
+  values_indivisual=data['result']['results'][0][n]
+  sql = f'INSERT INTO attractions ({col_indivisual_string}) VALUES({values_indivisual});'
   cursor_query.execute(sql)
+  cnx.commit()
 
 cursor_query.close()
 cnx.close()
