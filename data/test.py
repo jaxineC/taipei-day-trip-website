@@ -15,10 +15,55 @@ src = "taipei-attractions.json"
 with open(src, mode="r", encoding="UTF-8") as file:
   data = json.load(file)
 
-col_list=[]
-for n in data['result']['results'][0]:
-  col_list.append(n)
+
+ 
+col_list_indivisual=[]
+for items in data['result']['results'][0]:
+  col_list_indivisual.append(items)
+col_list_individual_str = ', '.join(col_list_indivisual)
+
+val_list_indivisual=[]
+for items in data['result']['results'][0]:   
+  x = data['result']['results'][0][items]
+  val_list_indivisual.append(x)
+val_list_individual_str = str(val_list_indivisual).replace("[","").replace("]","")
+
+
+sql =f"INSERT INTO attractions ({col_list_individual_str}) VALUES ({val_list_individual_str});"
+cursor_query.execute(sql)
+cnx.commit()
+
+# for individuals in data['result']['results']:
+  # col_list_individual_str = str(list(individuals.keys()))
+  # val_list_individual_str = str(list(individuals.values()))
+  # sql = "INSERT INTO %s (%s) VALUES(%s);"
+  # val = ("attractions", col_list_individual_str, val_list_individual_str)
+  # cursor_query.execute(sql)
+  # cnx.commit()
+
+# for n in range(len(data['result']['results'])):     #individual dict/ 總筆數/ =>index
+  
+#   col_list_individual_str =
+#   val_list_individual_str =
+
+#   col_list_indivisual=list(data['result']['results'][n].keys())
+#   col_indivisual_string=', '.join(col_list_indivisual)
+#   values_indivisual= str(data['result']['results'][n].values())
+
+#   sql = 'INSERT INTO %s (%s) VALUES(%s);'
+#   val = ("attractions", col_list_individual_str, val_list_individual_str)
+#   cursor_query.execute(sql,val)
+#   cnx.commit()
+
+
+cursor_query.close()
+cnx.close()
+
 #---------------------------------------------------------------
+# col_list=[]
+# for n in data['result']['results'][0]:
+#   col_list.append(n)
+
 # sql= f'''CREATE TABLE attractions (
 #   {col_list[0]} VARCHAR(255) NOT NULL, 
 #   {col_list[1]} VARCHAR(255) NOT NULL, 
@@ -29,7 +74,7 @@ for n in data['result']['results'][0]:
 #   {col_list[6]} INT NOT NULL, 
 #   {col_list[7]} VARCHAR(255) NOT NULL, 
 #   {col_list[8]} INT NOT NULL, 
-#   {col_list[9]} INT NOT NULL, 
+#   {col_list[9]} BIGINT NOT NULL, 
 #   {col_list[10]} VARCHAR(255) NOT NULL, 
 #   {col_list[11]} VARCHAR(255) NOT NULL, 
 #   {col_list[12]} VARCHAR(255) NOT NULL, 
@@ -44,15 +89,5 @@ for n in data['result']['results'][0]:
 #   PRIMARY KEY ({col_list[18]}))CHARACTER SET utf8;'''
 # cursor_query.execute(sql)
 #---------------------------------------------------------------
-for n in range(len(data['result']['results'])):
-  col_list_indivisual=list(data['result']['results'][n].keys())
-  col_indivisual_string=', '.join(col_list_indivisual)
-  values_indivisual= str(data['result']['results'][n].values())
-  sql = f'INSERT INTO attractions ({col_indivisual_string}) VALUES({values_indivisual});'
-  cursor_query.execute(sql,val)
-  cnx.commit()
 
-cnx.commit()
-cursor_query.close()
-cnx.close()
 

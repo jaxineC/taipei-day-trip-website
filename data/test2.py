@@ -5,10 +5,17 @@ src = "taipei-attractions.json"
 with open(src, mode="r", encoding="UTF-8") as file:
   data = json.load(file)
 
-col_list_indivisual=list(data['result']['results'][0].keys())
-result=  ', '.join(col_list_indivisual)
-print(result)
-print(type(result))
+# col_list_indivisual=list(data['result']['results'][0].keys())
+# result=  ', '.join(col_list_indivisual)
+
+# col_list_indivisual=[]
+# for items in data['result']['results'][0]:
+#   col_list_indivisual.append(items)
+# col_indivisual_string=', '.join(col_list_indivisual)
+# print(col_indivisual_string)
+# print(type(col_indivisual_string))
+
+
 
 
 # x=data['result']['results'][0]
@@ -22,9 +29,13 @@ print(type(result))
 # for n in data['result']['results'][0]:   #all keys
 #   print(n)  
 
-# for n in data['result']['results'][0]:   #all values
-#   result = data['result']['results'][0][n]
-#   print(result)  
+val_list_indivisual=[]
+for items in data['result']['results'][0]:   
+  x = data['result']['results'][0][items]
+  val_list_indivisual.append(x)
+val_list_individual_str = str(val_list_indivisual)
+print(val_list_individual_str)  
+print(type(val_list_individual_str))  
 
 # for indivisual_attractions in data['result']['results']:
 #   value_list=[]
