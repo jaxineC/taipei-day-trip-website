@@ -44,12 +44,12 @@ sql= f'''CREATE TABLE attractions (
   {col_list[4]} VARCHAR(255) NOT NULL, 
   {col_list[5]} DATE NOT NULL,
   {col_list[6]} INT NOT NULL, 
-  {col_list[7]} VARCHAR(255) NOT NULL, 
+  {col_list[7]} VARCHAR(255), 
   {col_list[8]} BIGINT NOT NULL, 
   {col_list[9]} INT NOT NULL, 
   {col_list[10]} VARCHAR(255) NOT NULL, 
   {col_list[11]} VARCHAR(255) NOT NULL, 
-  {col_list[12]} VARCHAR(255) NOT NULL, 
+  {col_list[12]} VARCHAR(1024), 
   {col_list[13]} VARCHAR(255) NOT NULL,
   {col_list[14]} TEXT NOT NULL, 
   {col_list[15]} VARCHAR(255) NOT NULL, 
@@ -59,17 +59,23 @@ sql= f'''CREATE TABLE attractions (
   {col_list[19]} DATE NOT NULL, 
   {col_list[20]} VARCHAR(255) NOT NULL, 
   PRIMARY KEY ({col_list[18]}))CHARACTER SET utf8;'''
-cursor_query.execute(sql, value)
+cursor_query.execute(sql)
 cnx.commit()
 
 #----------------------------------------------------------------------3)
-for n in data['result']['results']:
+for attractions in  range(len(data['result']['results'])):
   col_list_indivisual=[]
-  for items in data['result']['results'][0]:
+  for items in data['result']['results'][attractions]:
     col_list_indivisual.append(items)
-  col_indivisual_string=', '.join(col_list_indivisual)
-  values_indivisual=data['result']['results'][0][n]
-  sql = f'INSERT INTO attractions ({col_indivisual_string}) VALUES({values_indivisual});'
+  col_list_individual_str = ', '.join(col_list_indivisual)
+
+  val_list_indivisual=[]
+  for items in data['result']['results'][attractions]:   
+    x = data['result']['results'][attractions][items]
+    val_list_indivisual.append(x)
+  val_list_individual_str = str(val_list_indivisual).replace("[","").replace("]","").replace("None","null")
+
+  sql =f"INSERT INTO attractions ({col_list_individual_str}) VALUES ({val_list_individual_str});"
   cursor_query.execute(sql)
   cnx.commit()
 

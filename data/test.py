@@ -33,7 +33,7 @@ sql= f'''CREATE TABLE attractions (
   {col_list[9]} INT NOT NULL, 
   {col_list[10]} VARCHAR(255) NOT NULL, 
   {col_list[11]} VARCHAR(255) NOT NULL, 
-  {col_list[12]} VARCHAR(255), 
+  {col_list[12]} VARCHAR(1024), 
   {col_list[13]} VARCHAR(255) NOT NULL,
   {col_list[14]} TEXT NOT NULL, 
   {col_list[15]} VARCHAR(255) NOT NULL, 
@@ -56,7 +56,7 @@ for attractions in  range(len(data['result']['results'])):
   for items in data['result']['results'][attractions]:   
     x = data['result']['results'][attractions][items]
     val_list_indivisual.append(x)
-  val_list_individual_str = str(val_list_indivisual).replace("[","").replace("]","")
+  val_list_individual_str = str(val_list_indivisual).replace("[","").replace("]","").replace("None","null")
 
   sql =f"INSERT INTO attractions ({col_list_individual_str}) VALUES ({val_list_individual_str});"
   cursor_query.execute(sql)

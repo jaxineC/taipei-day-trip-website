@@ -33,7 +33,7 @@ with open(src, mode="r", encoding="UTF-8") as file:
 
   
 for x in data['result']['results']:
-  print(x["MRT"])
+  print(x["MEMO_TIME"])
 
 # for indivisual_attractions in data['result']['results']:
 #   value_list=[]
