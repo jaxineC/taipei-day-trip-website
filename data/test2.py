@@ -26,16 +26,14 @@ with open(src, mode="r", encoding="UTF-8") as file:
 # values_indivisual=data['result']['results'][0].values()
 # print(values_indivisual)
 
+
+
 # for n in data['result']['results'][0]:   #all keys
 #   print(n)  
 
-val_list_indivisual=[]
-for items in data['result']['results'][0]:   
-  x = data['result']['results'][0][items]
-  val_list_indivisual.append(x)
-val_list_individual_str = str(val_list_indivisual)
-print(val_list_individual_str)  
-print(type(val_list_individual_str))  
+  
+for x in data['result']['results']:
+  print(x["MRT"])
 
 # for indivisual_attractions in data['result']['results']:
 #   value_list=[]

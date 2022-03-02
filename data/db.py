@@ -26,6 +26,7 @@ cursor_query = cnx.cursor()
 #... 2) CREATE TABLE
 #... 3) INSERT INTO data 
 
+#----------------------------------------------------------------------1)
 src = "taipei-attractions.json"
 with open(src, mode="r", encoding="UTF-8") as file:
   data = json.load(file)
@@ -34,11 +35,9 @@ col_list=[]
 for n in data['result']['results'][0]:
   col_list.append(n)
 
-
-
-
+#----------------------------------------------------------------------2)
 sql= f'''CREATE TABLE attractions (
-  {col_list[0]} VARCHAR(255) NOT NULL, 
+  {col_list[0]} VARCHAR(1024) NOT NULL, 
   {col_list[1]} VARCHAR(255) NOT NULL, 
   {col_list[2]} DATE NOT NULL, 
   {col_list[3]} DECIMAL(9,6) NOT NULL DEFAULT "0", 
@@ -52,7 +51,7 @@ sql= f'''CREATE TABLE attractions (
   {col_list[11]} VARCHAR(255) NOT NULL, 
   {col_list[12]} VARCHAR(255) NOT NULL, 
   {col_list[13]} VARCHAR(255) NOT NULL,
-  {col_list[14]} VARCHAR(1024) NOT NULL, 
+  {col_list[14]} TEXT NOT NULL, 
   {col_list[15]} VARCHAR(255) NOT NULL, 
   {col_list[16]} DECIMAL(9,6) NOT NULL DEFAULT "0", 
   {col_list[17]} TEXT NOT NULL, 
@@ -60,10 +59,10 @@ sql= f'''CREATE TABLE attractions (
   {col_list[19]} DATE NOT NULL, 
   {col_list[20]} VARCHAR(255) NOT NULL, 
   PRIMARY KEY ({col_list[18]}))CHARACTER SET utf8;'''
-
 cursor_query.execute(sql, value)
 cnx.commit()
 
+#----------------------------------------------------------------------3)
 for n in data['result']['results']:
   col_list_indivisual=[]
   for items in data['result']['results'][0]:
