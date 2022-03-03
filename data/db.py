@@ -14,7 +14,7 @@ import json
 cnx = mysql.connector.connect(
   host='localhost',
   user='root', 
-  password='pw4mysql0000',
+  password='5F1F3E6AA62AAA4D6B9853AF94111B4C62B04A4F',
   database='tpe',
 )
 cursor_query = cnx.cursor()
@@ -78,6 +78,13 @@ for attractions in  range(len(data['result']['results'])):
   sql =f"INSERT INTO attractions ({col_list_individual_str}) VALUES ({val_list_individual_str});"
   cursor_query.execute(sql)
   cnx.commit()
+
+#update table
+#過濾資料中，不是 JPG 或 PNG 的檔案，
+#file:[url, url, url,...]
+#----------------------------------------------------------------------4)
+# for attractions in  range(len(data['result']['results'])):
+#   data['result']['results'][attractions]['file'].split("https")
 
 cursor_query.close()
 cnx.close()
