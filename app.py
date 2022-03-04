@@ -5,8 +5,8 @@
 from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
-from dotenv import load_dotenv
-import os
+# from dotenv import load_dotenv
+# import os
 
 #settings
 #... config
