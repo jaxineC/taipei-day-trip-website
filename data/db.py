@@ -58,7 +58,7 @@ sql= f'''CREATE TABLE attractions (
   {col_list[18]} BIGINT NOT NULL AUTO_INCREMENT, 
   {col_list[19]} DATE NOT NULL, 
   {col_list[20]} VARCHAR(255) NOT NULL, 
-  PRIMARY KEY ({col_list[18]}))CHARACTER SET utf8;'''
+  PRIMARY KEY ({col_list[18]}));'''
 cursor_query.execute(sql)
 cnx.commit()
 

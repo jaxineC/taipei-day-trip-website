@@ -12,7 +12,7 @@ import mysql.connector.pooling as mypl
 #... config
 #... connections
 #... connection pool
-#NOTE:https://flask.palletsprojects.com/en/2.0.x/config/
+#https://flask.palletsprojects.com/en/2.0.x/config/
 
 app=Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
