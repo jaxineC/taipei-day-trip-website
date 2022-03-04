@@ -14,7 +14,7 @@ import json
 cnx = mysql.connector.connect(
   host='localhost',
   user='root', 
-  password='5F1F3E6AA62AAA4D6B9853AF94111B4C62B04A4F',
+  password='pw4mysql0000',
   database='tpe',
 )
 cursor_query = cnx.cursor()
