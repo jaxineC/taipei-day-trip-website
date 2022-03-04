@@ -24,7 +24,7 @@ load_dotenv()
 
 cnxpool = mypl.MySQLConnectionPool(
 	host = "localhost",
-	user = "root",
+	user = "rooty",
 	password = "pw4mysql0000",
 	database = "tpe",
 	pool_name = "mypool",
