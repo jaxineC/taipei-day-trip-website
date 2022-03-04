@@ -18,7 +18,7 @@ app=Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
-load_dotenv()
+# load_dotenv()
 # user = os.environ.get('USER')
 # password = os.environ.get('password')
 
