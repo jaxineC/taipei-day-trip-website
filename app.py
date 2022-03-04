@@ -24,8 +24,8 @@ load_dotenv()
 
 cnxpool = mypl.MySQLConnectionPool(
 	host = "localhost",
-	user = os.environ.get('USER'),
-	password = os.environ.get('password'),
+	user = "root",
+	password = "pw4mysql0000",
 	database = "tpe",
 	pool_name = "mypool",
 	pool_size = 5,
