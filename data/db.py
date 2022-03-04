@@ -16,7 +16,7 @@ cnx = mysql.connector.connect(
   user='root', 
   password='pw4mysql0000',
   database='tpe',
-)
+) 
 cursor_query = cnx.cursor()
 
 
