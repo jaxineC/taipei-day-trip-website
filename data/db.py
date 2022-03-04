@@ -82,6 +82,7 @@ for attractions in  range(len(data['result']['results'])):
 #update table
 #過濾資料中，不是 JPG 或 PNG 的檔案，
 #file:[url, url, url,...]
+#https://cflin.com/course/python/Python_03.pdf
 #----------------------------------------------------------------------4)
 # for attractions in  range(len(data['result']['results'])):
 #   data['result']['results'][attractions]['file'].split("https")

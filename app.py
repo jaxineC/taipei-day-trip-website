@@ -5,6 +5,8 @@
 from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
+from dotenv import load_dotenv
+import os
 
 #settings
 #... config
@@ -16,17 +18,17 @@ app=Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
-dbconfig = {
-	"host": 'localhost',
-	"user": 'root',
-	# "password":	'8DEFF0F101ECCB7A0901A80827CBB9547B7636C1780F95DD63BB0B3DC3D4E9EA',
-	"password": 'pw4mysql0000',
-	"database":	'tpe'
-}
+load_dotenv()
+# user = os.environ.get('USER')
+# password = os.environ.get('password')
+
 cnxpool = mypl.MySQLConnectionPool(
+	host = "localhost",
+	user = os.environ.get('USER'),
+	password = os.environ.get('password'),
+	database = "tpe",
 	pool_name = "mypool",
 	pool_size = 5,
-	**dbconfig
 )
 
 # Pages
