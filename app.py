@@ -52,21 +52,24 @@ def thankyou():
 #... 可 篩選景點名稱的關鍵字 無給定則不做篩選query string=>get
 @app.route("/api/attractions", methods=['GET'])
 def attractions():
+	group = "id,  name, category, description, address, transport, mrt, latitude, longitude"
 	input_page= request.args.get('page',1)
 	input_keyword= request.args.get('keyword')
-	count = (int(input_page) -1)*12
+	number = (int(input_page) -1)*12
 	keyword = str(input_keyword)
 	cnx1 = cnxpool.get_connection()
 	cur = cnx1.cursor(dictionary=True)
 	if input_keyword == None:
-		sql = "SELECT * FROM attractions WHERE stitle IS NOT NULL LIMIT %s,12"
+		sql = f"SELECT {group} FROM attractions WHERE stitle IS NOT NULL LIMIT %s,12"
 		val = (count,)
 		cur.execute(sql,val)
 	else:
-		sql = "SELECT * FROM attractions WHERE stitle REGEXP %s LIMIT %s,12" 
-		val = (keyword,count)
+		sql = f"SELECT {group} FROM attractions WHERE stitle REGEXP %s LIMIT %s,12" 
+		val = (keyword,number)
 		cur.execute(sql,val)
+	
 	result = cur.fetchall()
+	count =
 	cur.close()
 	cnx1.close() 
 	return jsonify(
