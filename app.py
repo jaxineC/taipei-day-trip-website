@@ -53,7 +53,7 @@ def thankyou():
 @app.route("/api/attractions", methods=['GET'])
 def attractions():
 	try:
-		input_page= request.args.get('page',1)
+		input_page= request.args.get('page',0)
 		input_keyword= request.args.get('keyword')
 		# if int(input_page)<1 or int(input_page)>6: 
 		# 	raise ValueError
@@ -100,6 +100,10 @@ def attractions():
 		if result == []:
 			raise ValueError
 		else:
+
+			for image in range(len(result)):
+				image_str = result[image]['images'].replace('""','"')
+				result[image]['images']=eval(image_str)
 			return jsonify({"nextPage": nextpage, "data": result})
 	except ValueError as e:
 		input_msg= request.args.get('message','輸入錯誤')
@@ -127,7 +131,7 @@ def attractionId(attractionId):
 		if result == []:
 			raise ValueError
 		else:
-			return jsonify({"data":result})
+			return jsonify({"data":result[0]})
 	except ValueError:
 		input_msg= request.args.get('message','景點編號不正確')
 		return jsonify({"error":True, "message": input_msg})

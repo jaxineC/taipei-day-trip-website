@@ -85,9 +85,10 @@ for attractions in  range(len(data['result']['results'])):
   cursor_query.execute(sql)
   cnx.commit()
 
-  file_ls_0 = data['result']['results'][attractions]['file'].lower().replace("ghttps","g+https").split("+")
+  file_ls_0 = data['result']['results'][attractions]['file'].lower().replace('ghttps','g"+"https').split("+")
   file_ls_1 = [x for x in file_ls_0 if (".jpg" or ".png") in x]
-  data['result']['results'][attractions]['file'] = '['+', '.join(file_ls_1)+']'
+  data['result']['results'][attractions]['file'] = '["'+', '.join(file_ls_1)+'"]'
+  # data['result']['results'][attractions]['file'] = eval(y)
   
   sql ="UPDATE attractions SET file= %s WHERE (_id = %s);"
   val =(data['result']['results'][attractions]['file'],data['result']['results'][attractions]['_id'])

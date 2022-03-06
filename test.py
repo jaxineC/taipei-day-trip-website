@@ -113,15 +113,14 @@ else:
 	val = (keyword,number2)
 	cur.execute(sql,val)
 	count = cur.fetchone()
-
 	if count == None: nextpage= None
-	elif (count - currentPage*12) >0 : nextpage=currentPage+1
+	elif (count['COUNT(name)'] - currentPage*12) >0 : nextpage=currentPage+1
 	else: nextpage=None
+cur.close()
+cnx1.close() 
 
-
-	print(count)
-	print(type(count) )
-	print(nextpage)
+print(result[0])
+print(type(result[0]) )
 
 
 
