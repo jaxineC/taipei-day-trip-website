@@ -52,16 +52,18 @@ def thankyou():
 #... 可 篩選景點名稱的關鍵字 無給定則不做篩選query string=>get
 @app.route("/api/attractions", methods=['GET'])
 def attractions():
-	input_page= request.args.get('page',1)
-	input_keyword= request.args.get('keyword')
-	number = (int(input_page) -1)*12
-	number2 = int(input_page)*12
-	currentPage = int(input_page)
-	nextpage=int(input_page)+1
-	keyword = str(input_keyword)
-	cnx1 = cnxpool.get_connection()
-	cur = cnx1.cursor(dictionary=True)
 	try:
+		input_page= request.args.get('page',1)
+		input_keyword= request.args.get('keyword')
+		if int(input_page)<0 or int(input_page)>6: 
+			raise ValueError
+		number = (int(input_page) -1)*12
+		number2 = int(input_page)*12
+		currentPage = int(input_page)
+		keyword = str(input_keyword)
+		cnx1 = cnxpool.get_connection()
+		cur = cnx1.cursor(dictionary=True)
+		
 		if input_keyword == None:
 			sql = "SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE name IS NOT NULL LIMIT %s,12"
 			val = (number,)
@@ -70,8 +72,10 @@ def attractions():
 			sql = "SELECT COUNT(name) FROM attractions WHERE name IS NOT NULL"
 			cur.execute(sql)
 			count = cur.fetchone()
-			if count['COUNT(name)'] != None: nextpage=+1
-			# nextpage =+1		
+			if count['COUNT(name)'] == None: nextpage= None
+			elif (count['COUNT(name)'] - int(input_page)*12) >0 : nextpage=currentPage+1
+			else: nextpage=None
+
 		else:
 			sql = "SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE name REGEXP %s LIMIT %s,12" 
 			val = (keyword,number)
@@ -81,15 +85,20 @@ def attractions():
 			val = (keyword,number2)
 			cur.execute(sql,val)
 			count = cur.fetchone()
-			if count['COUNT(name)'] != None: nextpage =+1
-			# nextpage =+1
+			if count['COUNT(name)'] == None: nextpage= None
+			elif (count['COUNT(name)'] - int(input_page)*12) >0 : nextpage=currentPage+1
+			else: nextpage=None
 		cur.close()
 		cnx1.close() 
 		return jsonify({"nextPage": nextpage, "data": result})
-	except:
+	except ValueError as e:
+		input_msg= request.args.get('message','輸入錯誤')
+		return jsonify({"error":True, "message": input_msg})
+	except Exception as e:
 		input_msg= request.args.get('message','程式錯誤')
 		return jsonify({"error":True, "message": input_msg})
-		# return jsonify('hello')
+		# return (str(e))
+
 
 @app.route("/api/attraction/<attractionId>")
 def attractionId(attractionId):
@@ -110,8 +119,8 @@ def attractionId(attractionId):
 	except:
 		input_msg= request.args.get('message','程式錯誤')
 		return jsonify({"error":True, "message": input_msg})
-		# return error
+		return error
 
 if __name__ == '__main__':
-	# app.debug = True
+	app.debug = True
 	app.run(host='0.0.0.0',port=3000)

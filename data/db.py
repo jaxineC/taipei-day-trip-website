@@ -102,6 +102,7 @@ sql ='''ALTER TABLE attractions
   RENAME COLUMN CAT1 TO category,
   RENAME COLUMN xbody TO description,
   RENAME COLUMN MRT TO mrt,
+  RENAME COLUMN info TO transport,
   RENAME COLUMN file TO images;'''
 cursor_query.execute(sql)
 cnx.commit()
