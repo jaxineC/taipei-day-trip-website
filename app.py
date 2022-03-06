@@ -55,10 +55,14 @@ def attractions():
 	try:
 		input_page= request.args.get('page',1)
 		input_keyword= request.args.get('keyword')
-		if int(input_page)<0 or int(input_page)>6: 
-			raise ValueError
-		number = (int(input_page) -1)*12
-		number2 = int(input_page)*12
+		# if int(input_page)<1 or int(input_page)>6: 
+		# 	raise ValueError
+		if int(input_page)==0:
+			number = 0
+			number2 = 0
+		else:
+			number = (int(input_page) -1)*12
+			number2 = int(input_page)*12
 		currentPage = int(input_page)
 		keyword = str(input_keyword)
 		cnx1 = cnxpool.get_connection()
@@ -104,6 +108,8 @@ def attractions():
 def attractionId(attractionId):
 	try:
 		id_str= str(int(attractionId))
+		if int(attractionId)<0 or int(attractionId)>58: 
+			raise ValueError
 		cnx2 = cnxpool.get_connection()
 		cur = cnx2.cursor(dictionary=True)
 		sql =	"SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE id = %s"
@@ -116,10 +122,11 @@ def attractionId(attractionId):
 	except ValueError:
 		input_msg= request.args.get('message','景點編號不正確')
 		return jsonify({"error":True, "message": input_msg})
-	except:
+	except Exception as e:
 		input_msg= request.args.get('message','程式錯誤')
 		return jsonify({"error":True, "message": input_msg})
+		return (str(e))
 
 if __name__ == '__main__':
-	# app.debug = True
+	app.debug = True
 	app.run(host='0.0.0.0',port=3000)
