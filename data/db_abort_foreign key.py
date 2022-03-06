@@ -25,17 +25,13 @@ cursor_query = cnx.cursor()
 #過濾資料中，不是 JPG 或 PNG 的檔案，
 #... use data from json file for column names to 
 #... 2) CREATE TABLE
-#... 3) INSERT INTO data 
+#... 3.1) INSERT INTO data 
+#... 3.2) INSERT INTO data: file
 
 #----------------------------------------------------------------------1)
 src = "taipei-attractions.json"
 with open(src, mode="r", encoding="UTF-8") as file:
   data = json.load(file)
-
-# for n in  range(len(data['result']['results'])):
-#   file_ls_0 = data['result']['results'][n]['file'].lower().replace("ghttps","g+https").split("+")
-#   file_ls_1 = [x for x in file_ls_0 if (".jpg" or ".png") in x]
-#   data['result']['results'][n]['file'] = '['+', '.join(file_ls_1)+']'
 
 col_list=[]
 for n in data['result']['results'][0]:
@@ -57,7 +53,6 @@ sql= f'''CREATE TABLE attractions (
   {col_list[11]} VARCHAR(255) NOT NULL, 
   {col_list[12]} VARCHAR(1024), 
   {col_list[13]} VARCHAR(255) NOT NULL,
-  {col_list[14]} TEXT NOT NULL, 
   {col_list[15]} VARCHAR(255) NOT NULL, 
   {col_list[16]} DECIMAL(9,6) NOT NULL DEFAULT "0", 
   {col_list[17]} TEXT NOT NULL, 
@@ -69,6 +64,7 @@ cursor_query.execute(sql)
 cnx.commit()
 
 #----------------------------------------------------------------------3)
+#... 3.1) all columns except for file
 for attractions in  range(len(data['result']['results'])):
   col_list_indivisual=[]
   for items in data['result']['results'][attractions]:
@@ -85,14 +81,36 @@ for attractions in  range(len(data['result']['results'])):
   cursor_query.execute(sql)
   cnx.commit()
 
-  file_ls_0 = data['result']['results'][attractions]['file'].lower().replace("ghttps","g+https").split("+")
-  file_ls_1 = [x for x in file_ls_0 if (".jpg" or ".png") in x]
-  data['result']['results'][attractions]['file'] = '['+', '.join(file_ls_1)+']'
-  
-  sql ="UPDATE attractions SET file= %s WHERE _id = %s;"
-  val =(data['result']['results'][attractions]['file'],data['result']['results'][attractions]['_id'])
-  cursor_query.execute(sql,val)
+
+#... 3.2) file+join
+#----------------------------------------------------------------------ˋ)
+
+sql= f'''CREATE TABLE file (
+    fileId BIGINT NOT NULL AUTO_INCREMENT, 
+    {col_list[18]} BIGINT,
+    {col_list[14]} TEXT NOT NULL, 
+    PRIMARY KEY (fileId),
+    FOREIGN KEY({col_list[18]}) REFERENCES attractions({col_list[18]}));'''
+cursor_query.execute(sql)
+cnx.commit()
+
+for n in  range(len(data['result']['results'])):
+  file_ls_0 = data['result']['results'][n]['file'].lower().replace("ghttps","g+https").split("+")
+  data['result']['results'][n]['file'] = [x for x in file_ls_0 if (".jpg" or ".png") in x]
+  # data['result']['results'][n]['file'] = '['+', '.join(file_ls_1)+']'
+
+# for attractions in  range(len(data['result']['results'])):
+#   val_list_indivisual=[]
+#   for items in data['result']['results'][attractions]:   
+#     x = data['result']['results'][attractions][items]
+#     val_list_indivisual.append(x)
+  file_str = str(data['result']['results'][n]['file']).replace("[","").replace("]","").replace("None","null")
+
+  sql =f"INSERT INTO file (file) VALUES ({val_list_individual_str});"
+  cursor_query.execute(sql)
   cnx.commit()
+
+
 
 #... 4) 換名字
 #----------------------------------------------------------------------ˋ)
@@ -101,10 +119,14 @@ sql = '''ALTER TABLE attractions
   RENAME COLUMN stitle TO name,
   RENAME COLUMN CAT1 TO category,
   RENAME COLUMN xbody TO description,
+  RENAME COLUMN info TO transport,
   RENAME COLUMN MRT TO mrt,
   RENAME COLUMN file TO images;'''
 cursor_query.execute(sql)
 cnx.commit()
+
+
+
 
 cursor_query.close()
 cnx.close()
@@ -112,3 +134,7 @@ cnx.close()
 
 
 #run apps: NOPE
+
+
+
+

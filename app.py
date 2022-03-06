@@ -52,56 +52,66 @@ def thankyou():
 #... 可 篩選景點名稱的關鍵字 無給定則不做篩選query string=>get
 @app.route("/api/attractions", methods=['GET'])
 def attractions():
-	group = "id,  name, category, description, address, transport, mrt, latitude, longitude"
 	input_page= request.args.get('page',1)
 	input_keyword= request.args.get('keyword')
 	number = (int(input_page) -1)*12
+	number2 = int(input_page)*12
+	currentPage = int(input_page)
+	nextpage=int(input_page)+1
 	keyword = str(input_keyword)
 	cnx1 = cnxpool.get_connection()
 	cur = cnx1.cursor(dictionary=True)
-	if input_keyword == None:
-		sql = f"SELECT {group} FROM attractions WHERE stitle IS NOT NULL LIMIT %s,12"
-		val = (count,)
-		cur.execute(sql,val)
-	else:
-		sql = f"SELECT {group} FROM attractions WHERE stitle REGEXP %s LIMIT %s,12" 
-		val = (keyword,number)
-		cur.execute(sql,val)
-	
-	result = cur.fetchall()
-	count =
-	cur.close()
-	cnx1.close() 
-	return jsonify(
-		{"nextPage": int(input_page)+1, "data": result})
+	try:
+		if input_keyword == None:
+			sql = "SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE name IS NOT NULL LIMIT %s,12"
+			val = (number,)
+			cur.execute(sql,val)
+			result = cur.fetchall()
+			sql = "SELECT COUNT(name) FROM attractions WHERE name IS NOT NULL"
+			cur.execute(sql)
+			count = cur.fetchone()
+			if count['COUNT(name)'] != None: nextpage=+1
+			# nextpage =+1		
+		else:
+			sql = "SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE name REGEXP %s LIMIT %s,12" 
+			val = (keyword,number)
+			cur.execute(sql,val)
+			result = cur.fetchall()
+			sql = "SELECT COUNT(name) FROM attractions WHERE name REGEXP %s LIMIT %s,12"
+			val = (keyword,number2)
+			cur.execute(sql,val)
+			count = cur.fetchone()
+			if count['COUNT(name)'] != None: nextpage =+1
+			# nextpage =+1
+		cur.close()
+		cnx1.close() 
+		return jsonify({"nextPage": nextpage, "data": result})
+	except:
+		input_msg= request.args.get('message','程式錯誤')
+		return jsonify({"error":True, "message": input_msg})
+		# return jsonify('hello')
 
-@app.route("/api/attraction/<int:attractionId>")
+@app.route("/api/attraction/<attractionId>")
 def attractionId(attractionId):
 	try:
-		#https://docs.python.org/zh-tw/3/tutorial/errors.html
-		id_str= str(attractionId)
+		id_str= str(int(attractionId))
 		cnx2 = cnxpool.get_connection()
 		cur = cnx2.cursor(dictionary=True)
-		# sql = "SELECT _id WHERE _id = %s"
-		# val = (id_str,)
-		# cur.excute(sql,val)
-
-		sql =	"SELECT _id, stitle, CAT1, xbody, address, info, MRT, latitude, longitude, file FROM attractions WHERE _id = %s"
+		sql =	"SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE id = %s"
 		val = (id_str,)
 		cur.execute(sql, val)
 		result = cur.fetchall()
 		cur.close()
 		cnx2.close()
 		return jsonify({"data":result})
+	except ValueError:
+		input_msg= request.args.get('message','景點編號不正確')
+		return jsonify({"error":True, "message": input_msg})
 	except:
-		return jsonify({"error":True, "message": "自訂的錯誤訊息except"})
-
-
-@app.route('/api/test/<name>')
-def test(name):
-  # return "The product is " + str(name)
-	return "The product is " + str(name)
+		input_msg= request.args.get('message','程式錯誤')
+		return jsonify({"error":True, "message": input_msg})
+		# return error
 
 if __name__ == '__main__':
-	# app.debug = True
+	app.debug = True
 	app.run(host='0.0.0.0',port=3000)
