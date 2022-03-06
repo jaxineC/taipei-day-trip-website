@@ -60,10 +60,10 @@ def attractions():
 		if int(input_page)==0:
 			number = 0
 			number2 = 0
-			currentPage = 1
+			currentPage = 0
 		else:
-			number = (int(input_page) -1)*12
-			number2 = int(input_page)*12
+			number = (int(input_page))*12
+			number2 = (int(input_page)+1)*12
 			currentPage = int(input_page)
 		keyword = str(input_keyword)
 		cnx1 = cnxpool.get_connection()
