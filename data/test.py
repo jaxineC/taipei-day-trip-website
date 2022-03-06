@@ -15,7 +15,29 @@ src = "taipei-attractions.json"
 with open(src, mode="r", encoding="UTF-8") as file:
   data = json.load(file)
 
-print(type(data))
+sql ='''SELECT id, images
+FROM attractions
+JOIN images_table
+WHERE id = 1'''
+
+cursor_query.execute(sql)
+result = cursor_query.fetchall()
+cnx.commit()
+print(result)
+
+
+
+
+# for n in  range(len(data['result']['results'])):
+#   file_ls_0 = data['result']['results'][n]['file'].lower().replace("ghttps","g+https").split("+")
+#   data['result']['results'][n]['file'] = [x for x in file_ls_0 if (".jpg" or ".png") in x]
+#   # data['result']['results'][n]['file'] = '['+', '.join(file_ls_1)+']'
+# print(data['result']['results'][0]['file'][0])
+
+
+  # for x in range(len(data['result']['results'][n]['file'])):
+  #   print(data['result']['results'][n]['file'][x])
+
 # for n in  range(len(data['result']['results'])):
 #   file_ls_0 = data['result']['results'][n]['file'].lower().replace("ghttps","g+https").split("+")
 #   file_ls_1 = [x for x in file_ls_0 if (".jpg" or ".png") in x]

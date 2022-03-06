@@ -119,7 +119,6 @@ def attractionId(attractionId):
 	except:
 		input_msg= request.args.get('message','程式錯誤')
 		return jsonify({"error":True, "message": input_msg})
-		return error
 
 if __name__ == '__main__':
 	app.debug = True

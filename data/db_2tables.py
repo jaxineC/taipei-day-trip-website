@@ -53,6 +53,7 @@ sql= f'''CREATE TABLE attractions (
   {col_list[11]} VARCHAR(255) NOT NULL, 
   {col_list[12]} VARCHAR(1024), 
   {col_list[13]} VARCHAR(255) NOT NULL,
+  {col_list[14]} TEXT NOT NULL,
   {col_list[15]} VARCHAR(255) NOT NULL, 
   {col_list[16]} DECIMAL(9,6) NOT NULL DEFAULT "0", 
   {col_list[17]} TEXT NOT NULL, 
@@ -85,10 +86,10 @@ for attractions in  range(len(data['result']['results'])):
 #... 3.2) file+join
 #----------------------------------------------------------------------ˋ)
 
-sql= f'''CREATE TABLE file (
+sql= f'''CREATE TABLE images_table (
     fileId BIGINT NOT NULL AUTO_INCREMENT, 
     {col_list[18]} BIGINT,
-    {col_list[14]} TEXT NOT NULL, 
+    images TEXT NOT NULL, 
     PRIMARY KEY (fileId),
     FOREIGN KEY({col_list[18]}) REFERENCES attractions({col_list[18]}));'''
 cursor_query.execute(sql)
@@ -98,17 +99,21 @@ for n in  range(len(data['result']['results'])):
   file_ls_0 = data['result']['results'][n]['file'].lower().replace("ghttps","g+https").split("+")
   data['result']['results'][n]['file'] = [x for x in file_ls_0 if (".jpg" or ".png") in x]
   # data['result']['results'][n]['file'] = '['+', '.join(file_ls_1)+']'
+  for x in range(len(data['result']['results'][n]['file'])):
+    sql =f"INSERT INTO images_table (_id, images) VALUES ('{data['result']['results'][n]['_id']}','{data['result']['results'][n]['file'][x]}');"
+    cursor_query.execute(sql)
+    cnx.commit()
 
 # for attractions in  range(len(data['result']['results'])):
 #   val_list_indivisual=[]
 #   for items in data['result']['results'][attractions]:   
 #     x = data['result']['results'][attractions][items]
 #     val_list_indivisual.append(x)
-  file_str = str(data['result']['results'][n]['file']).replace("[","").replace("]","").replace("None","null")
+  # file_str = str(data['result']['results'][n]['file']).replace("[","").replace("]","").replace("None","null")
 
-  sql =f"INSERT INTO file (file) VALUES ({val_list_individual_str});"
-  cursor_query.execute(sql)
-  cnx.commit()
+  # sql =f"INSERT INTO file_table (file) VALUES ({val_list_individual_str});"
+  # cursor_query.execute(sql)
+  # cnx.commit()
 
 
 
@@ -120,8 +125,7 @@ sql = '''ALTER TABLE attractions
   RENAME COLUMN CAT1 TO category,
   RENAME COLUMN xbody TO description,
   RENAME COLUMN info TO transport,
-  RENAME COLUMN MRT TO mrt,
-  RENAME COLUMN file TO images;'''
+  RENAME COLUMN MRT TO mrt;'''
 cursor_query.execute(sql)
 cnx.commit()
 
