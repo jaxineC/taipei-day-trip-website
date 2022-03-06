@@ -109,9 +109,9 @@ def attractions():
 		input_msg= request.args.get('message','輸入錯誤')
 		return jsonify({"error":True, "message": input_msg})
 	except Exception as e:
-		# input_msg= request.args.get('message','程式錯誤')
-		# return jsonify({"error":True, "message": input_msg})
-		return (str(e))
+		input_msg= request.args.get('message','程式錯誤')
+		return jsonify({"error":True, "message": input_msg})
+		# return (str(e))
 
 
 @app.route("/api/attraction/<attractionId>")
