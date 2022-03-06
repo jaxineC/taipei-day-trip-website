@@ -60,10 +60,11 @@ def attractions():
 		if int(input_page)==0:
 			number = 0
 			number2 = 0
+			currentPage = 1
 		else:
 			number = (int(input_page) -1)*12
 			number2 = int(input_page)*12
-		currentPage = int(input_page)
+			currentPage = int(input_page)
 		keyword = str(input_keyword)
 		cnx1 = cnxpool.get_connection()
 		cur = cnx1.cursor(dictionary=True)
@@ -90,7 +91,7 @@ def attractions():
 			cur.execute(sql,val)
 			count = cur.fetchone()
 			if count['COUNT(name)'] == None: nextpage= None
-			elif (count['COUNT(name)'] - int(input_page)*12) >0 : nextpage=currentPage+1
+			elif (count['COUNT(name)'] - currentPage*12) >0 : nextpage=currentPage+1
 			else: nextpage=None
 		cur.close()
 		cnx1.close() 
