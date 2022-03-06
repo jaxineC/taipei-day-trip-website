@@ -100,7 +100,6 @@ def attractions():
 		if result == []:
 			raise ValueError
 		else:
-
 			for image in range(len(result)):
 				image_str = result[image]['images'].replace('""','"')
 				result[image]['images']=eval(image_str)
@@ -131,6 +130,9 @@ def attractionId(attractionId):
 		if result == []:
 			raise ValueError
 		else:
+			for image in range(len(result)):
+				image_str = result[image]['images'].replace('""','"')
+				result[image]['images']=eval(image_str)
 			return jsonify({"data":result[0]})
 	except ValueError:
 		input_msg= request.args.get('message','景點編號不正確')
