@@ -90,19 +90,24 @@ def attractions():
 			val = (keyword,number2)
 			cur.execute(sql,val)
 			count = cur.fetchone()
-			if count['COUNT(name)'] == None: nextpage= None
+			# if count['COUNT(name)'] == None: nextpage= None
+			if count == None: nextpage= None
 			elif (count['COUNT(name)'] - currentPage*12) >0 : nextpage=currentPage+1
+			# elif (count - currentPage*12) >0 : nextpage=currentPage+1
 			else: nextpage=None
 		cur.close()
 		cnx1.close() 
-		return jsonify({"nextPage": nextpage, "data": result})
+		if result == []:
+			raise ValueError
+		else:
+			return jsonify({"nextPage": nextpage, "data": result})
 	except ValueError as e:
 		input_msg= request.args.get('message','輸入錯誤')
 		return jsonify({"error":True, "message": input_msg})
 	except Exception as e:
-		input_msg= request.args.get('message','程式錯誤')
-		return jsonify({"error":True, "message": input_msg})
-		# return (str(e))
+		# input_msg= request.args.get('message','程式錯誤')
+		# return jsonify({"error":True, "message": input_msg})
+		return (str(e))
 
 
 @app.route("/api/attraction/<attractionId>")
@@ -119,15 +124,18 @@ def attractionId(attractionId):
 		result = cur.fetchall()
 		cur.close()
 		cnx2.close()
-		return jsonify({"data":result})
+		if result == []:
+			raise ValueError
+		else:
+			return jsonify({"data":result})
 	except ValueError:
 		input_msg= request.args.get('message','景點編號不正確')
 		return jsonify({"error":True, "message": input_msg})
 	except Exception as e:
 		input_msg= request.args.get('message','程式錯誤')
 		return jsonify({"error":True, "message": input_msg})
-		return (str(e))
+		# return (str(e))
 
 if __name__ == '__main__':
-	# app.debug = True
+	app.debug = True
 	app.run(host='0.0.0.0',port=3000)

@@ -79,9 +79,50 @@ cur = cnx.cursor(dictionary=True)
 
 #----------------------------------------
 input_page= 1
-input_keyword= 101
-while input_page<0 or input_page>6: input_page = 'a'
-number = (int(input_page) -1)*12  
+input_keyword= '溫泉'
+if int(input_page)==0:
+  number = 0
+  number2 = 0
+  currentPage = 1
+else:
+  number = (int(input_page) -1)*12
+  number2 = int(input_page)*12
+  currentPage = int(input_page)
+keyword = str(input_keyword)
+cnx1 = cnxpool.get_connection()
+cur = cnx1.cursor(dictionary=True)
+
+if input_keyword == None:
+	sql = "SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE name IS NOT NULL LIMIT %s,12"
+	val = (number,)
+	cur.execute(sql,val)
+	result = cur.fetchall()
+	sql = "SELECT COUNT(name) FROM attractions WHERE name IS NOT NULL"
+	cur.execute(sql)
+	count = cur.fetchone()
+	if count['COUNT(name)'] == None: nextpage= None
+	elif (count['COUNT(name)'] - int(input_page)*12) >0 : nextpage=currentPage+1
+	else: nextpage=None
+
+else:
+	sql = "SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE name REGEXP %s LIMIT %s,12" 
+	val = (keyword,number)
+	cur.execute(sql,val)
+	result = cur.fetchall()
+	sql = "SELECT COUNT(name) FROM attractions WHERE name REGEXP %s LIMIT %s,12"
+	val = (keyword,number2)
+	cur.execute(sql,val)
+	count = cur.fetchone()
+
+	if count == None: nextpage= None
+	elif (count - currentPage*12) >0 : nextpage=currentPage+1
+	else: nextpage=None
+
+
+	print(count)
+	print(type(count) )
+	print(nextpage)
+
 
 
 

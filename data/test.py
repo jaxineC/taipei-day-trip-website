@@ -15,15 +15,19 @@ src = "taipei-attractions.json"
 with open(src, mode="r", encoding="UTF-8") as file:
   data = json.load(file)
 
-sql ='''SELECT id, images
-FROM attractions
-JOIN images_table
-WHERE id = 1'''
+input_page= 1
+input_keyword= 溫泉
+if int(input_page)==0:
+  number = 0
+  number2 = 0
+  currentPage = 1
+else:
+  number = (int(input_page) -1)*12
+  number2 = int(input_page)*12
+  currentPage = int(input_page)
+print(int(input_page) )
+print(type(int(input_page)) )
 
-cursor_query.execute(sql)
-result = cursor_query.fetchall()
-cnx.commit()
-print(result)
 
 
 
