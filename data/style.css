@@ -1,0 +1,10 @@
+* {
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 24px;
+  /* identical to box height, or 86% */
+  text-decoration-line: underline;
+  color: #000000;
+}

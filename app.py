@@ -1,26 +1,20 @@
-#import modules
-#... json			X
-#... requests   X
-#... mysql connector+pooling
+# import modules-------------------------------------------------------------
 from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
-# from dotenv import load_dotenv
-# import os
 
-#settings
-#... config
-#... connections
-#... connection pool
-#https://flask.palletsprojects.com/en/2.0.x/config/
 
-app=Flask(__name__)
+# settings-------------------------------------------------------------------
+app=Flask(
+	__name__,
+	static_folder = 'data',
+	static_url_path = '/'
+)
+
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
-# load_dotenv()
-# user = os.environ.get('USER')
-# password = os.environ.get('password')
+apps.secret_key = 'secret4Session'
 
 cnxpool = mypl.MySQLConnectionPool(
 	host = "localhost",
@@ -31,7 +25,8 @@ cnxpool = mypl.MySQLConnectionPool(
 	pool_size = 5,
 )
 
-# Pages
+
+# templates----------------------------------------------------------------------
 @app.route("/")
 def index():
 	return render_template("index.html")
@@ -46,10 +41,7 @@ def thankyou():
 	return render_template("thankyou.html")
 
 
-#APIs
-#... 取得景點資料列表 fetch get
-#... 分頁 每頁12筆 select 0-12 ------------->required@@....page 4 shows nothing???
-#... 可 篩選景點名稱的關鍵字 無給定則不做篩選query string=>get
+# APIs------------------------------------------------------------------------
 @app.route("/api/attractions", methods=['GET'])
 def attractions():
 	try:
@@ -112,7 +104,6 @@ def attractions():
 		return jsonify({"error":True, "message": input_msg})
 		# return (str(e))
 
-
 @app.route("/api/attraction/<attractionId>")
 def attractionId(attractionId):
 	try:
@@ -142,6 +133,8 @@ def attractionId(attractionId):
 		return jsonify({"error":True, "message": input_msg})
 		# return (str(e))
 
+
+# run--------------------------------------------------------------------------
 if __name__ == '__main__':
-	# app.debug = True
+	app.debug = True
 	app.run(host='0.0.0.0',port=3000)
