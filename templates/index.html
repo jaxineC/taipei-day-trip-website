@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="../data/style.css" rel="stylesheet"></link>
     <!-- load RWD javascript -->
     <script type="text/javascript">
@@ -20,46 +20,51 @@
     <title>index</title>
   </head>
   <body>
-    <nav class="navContainer" id="navContainer">
-      <div class="navTitle">台北一日遊</div>
-      <div class="navBtnContainer">
-        <button class="navBtn">預定行程</button>
-        <button class="navBtn">登入/註冊</button>
+    <nav>
+      <div class="navContainer">
+        <div class="navTitle">台北一日遊</div>
+        <div class="navBtnContainer">
+          <button class="navBtn">預定行程</button>
+          <button class="navBtn">登入/註冊</button>
+        </div>
       </div>
     </nav>
 
     <header>
-      <div class="hContainer" id="hContainer">
-        <div class="hContainerTxt" id="hContainerTxt">
-        <div>輕鬆享受台北一日悠閒</div>
-        <div>探索每個角落，體驗城市的深度旅遊行程</div>
-        <div class="searchContainer" id="searchContainer" >
-          <div>
-            <input type="text" placeholder="輸入景點名稱查詢" id="keyword" class="keyword">
-            <button>
-              <img src="..\data\icon\icon_search.png"/>
-            </button>
+      <div class="headContainer" id="headContainer">
+        <div>
+          <div class="header1">輕鬆享受台北一日悠閒</div>
+          <div class="header2">探索每個角落，體驗城市的深度旅遊行程</div>
+          <input type="text" placeholder="輸入景點名稱查詢" id="keyword">
+          <button><img src="..\data\icon\icon_search.png"/></button>
+        </div>       
+        <div class="welcomeImage">
+          <img src="..\data\welcome 1.png"/>
         </div>
-  
-        </div>
-      </div>
-     
-      <div>
-        <img src="..\data\welcome 1.png"/>
       </div>
     </header>
 
     <!-- fetch images javascript -->
-    <main class="mainContainer" id="mainContainer" onload="webContent()">
+    <main> 
+      <div class="mainContainer" id="mainContainer" onload="webContent()">
       <!-- <div class="attractionContainer">
         <img src="{...text.jpg}" alt="{name}.jpg" />
         <div class="name"></div>
         <div class="mrt"></div>
         <div class="category"></div>
       </div> -->
+      <div id="test">test</div>
+      <div id="test">test</div>
+      <div id="test">test</div>
+      <div id="test">test</div>      
+      <div id="test">test</div>
+      <div id="test">test</div>
+      <div id="test">test</div>
+      <div id="test">test</div>
+      </div>
     </main>
 
-    <footer styleName="test">
+    <footer>
       COPYRIGHT © 2021 台北一日遊
     </footer>
 

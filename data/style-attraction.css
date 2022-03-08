@@ -131,8 +131,69 @@ main {
 .mainContainer {
   margin: 55px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr) auto;
+  /* grid-template-columns: 406px repeat(2, 1fr) auto; */
+  grid-template-columns: 540px 1fr;
+  grid-template-rows: 406px 1fr;
   gap: 30px;
+}
+
+img {
+  width: 540px;
+  height: 406px;
+  grid-column: 1/2;
+  grid-row: 1/2;
+  object-fit: cover;
+}
+
+.profile {
+  grid-column: 2/3;
+  grid-row: 1/2;
+
+  //styleName: Body - Reg 16(13.3);
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 13px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+#profileName {
+  width: 600px;
+  height: 33px;
+  margin-bottom: 15px;
+  //styleName: Header 3 - Bold 24(24);
+  font-family: Noto Sans TC;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+#profileCat {
+  width: 600px;
+  height: 22px;
+  margin-bottom: 20px;
+}
+
+.bookingForm {
+  width: 600px;
+  height: 302px;
+  background: #e8e8e8;
+  padding-top: 15px;
+  padding-left: 20px;
+}
+
+.text15 {
+  margin: 15px 0;
+}
+
+.infors {
+  grid-column: 1/-1;
+  grid-row: 2/-1;
 }
 
 footer {
