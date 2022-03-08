@@ -1,10 +1,188 @@
-* {
+body {
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  margin: auto;
+  align-items: center;
+}
+
+nav {
+  height: 54px;
+  width: 1200px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navTitle {
   font-family: Noto Sans TC;
+  font-size: 30px;
   font-style: normal;
-  font-weight: bold;
+  font-weight: 700;
+  line-height: 34px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #448899;
+}
+
+.navBtnContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+.navBtn {
+  //styleName: Body - Reg 16(13.3);
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 13px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #666666;
+  padding: 10px;
+  border: none;
+  background: none;
+}
+
+header {
+  height: 320px;
+  width: 100%;
+  background: linear-gradient(135deg, #aaddee 0%, #66aabb 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hContainer {
+  width: 1200px;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 300px 300px 300px 300px;
+  grid-column: 1/5;
+  grid-row: 2/3;
+  background: pink;
+}
+
+footer {
+  height: 104px;
+}
+
+/* Font from Typography, google what's //styleName */
+
+.Typography {
+  //styleName: H2;
+  font-family: Work Sans;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 47px;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+
+.SloganTitle {
+  //styleName: Header 1 - Bold 28(24);
+  font-family: Noto Sans TC;
   font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
   line-height: 24px;
-  /* identical to box height, or 86% */
-  text-decoration-line: underline;
-  color: #000000;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.Header {
+  //styleName: Header 2 - Bold 30(34);
+  font-family: Noto Sans TC;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 34px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.DialogTitle {
+  //styleName: Header 3 - Bold 24(24);
+  font-family: Noto Sans TC;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.DialogTitle {
+  //styleName: Header 3 - Reg 24(24);
+  font-family: Noto Sans TC;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.ButtonBold {
+  //styleName: Button - Bold 19(16);
+  font-family: Noto Sans TC;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.Button {
+  //styleName: Button - Reg 19(16);
+  font-family: Noto Sans TC;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.ContentBold {
+  //styleName: Content - Bold 16(Auto);
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.Content {
+  //styleName: Content - Reg 16(Auto);
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.Body {
+  //styleName: Body - Reg 16(13.3);
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 13px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.BodyBold {
+  //styleName: Body - Bold 16(13.3);
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 13px;
+  letter-spacing: 0em;
+  text-align: left;
 }
