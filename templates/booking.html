@@ -10,4 +10,79 @@
   <body>
     <script src="script.js" type="text/javascript"></script>
   </body>
+</html><!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="../data/style-attraction.css" rel="stylesheet"></link>
+    <!-- load RWD javascript -->
+    <script type="text/javascript">
+      // function toggleMenu() {
+      //   var menu = document.getElementById("items");
+      //   menu.classList.toggle("item");
+      //   if (menu.style.display == "none") {
+      //     menu.style.display = "block";
+      //   } else {
+      //     menu.style.display = "none";
+      //   }
+      // }
+    </script>
+    <title>attraction</title>
+  </head>
+  <body>
+    <nav>
+      <div class="navContainer">
+        <div class="navTitle">台北一日遊</div>
+        <div class="navBtnContainer">
+          <button class="navBtn">預定行程</button>
+          <button class="navBtn">登入/註冊</button>
+        </div>
+      </div>
+    </nav>
+
+    <main> 
+      <div>您好，<span>{{username}}</span>，待預訂的行程如下：</div>
+      <div class="section">
+        <div class="imgContainer">
+          <img class="block" src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000848.jpg">
+        </div>
+        <div class="section">
+          <div class="image">
+            <img src="">
+          </div>
+          <div class="infors">
+            <div>台北一日游：{{平安鐘}}</div>
+            <div>日期：{{}}</div>
+            <div>時間：{{}}</div>
+            <div>費用：{{}}</div>
+            <div>地點：{{}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="contactForm">
+        <hr>
+        <div>您的聯絡資訊</div>
+        <div>聯絡姓名：<input type="text"></div>
+        <div>連絡信箱：<input type="text"></div>
+        <div>手機號碼：<input type="text"></div>
+        <div>請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。<input type="text"></div>
+      </div>
+      <div>
+        <hr>
+        <div>信用卡付款資訊<input type="text"></div>
+        <div>卡片號碼：<input type="text"></div>
+        <div>過期時間：<input type="text"></div>
+        <div>驗證密碼：<input type="text"></div>
+      </div>
+    </main>
+
+    <footer>
+      COPYRIGHT © 2021 台北一日遊
+    </footer>
+
+    <script src="../data/script.js" type="text/javascript">
+    </script>
+  </body>
 </html>
