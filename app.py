@@ -14,7 +14,7 @@ app=Flask(
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
-apps.secret_key = 'secret4Session'
+app.secret_key = 'secret4Session'
 
 cnxpool = mypl.MySQLConnectionPool(
 	host = "localhost",

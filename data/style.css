@@ -72,8 +72,9 @@ header {
 }
 
 .headers {
-  position: relative;
+  position: sticky;
   left: 10px;
+  z-index: 99;
 }
 
 .header1 {
@@ -89,14 +90,6 @@ header {
   padding-bottom: 4px;
   margin-bottom: 25px;
 
-  //styleName: Body - Reg 16(13.3);
-  font-family: Noto Sans TC;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 13px;
-  letter-spacing: 0em;
-  text-align: left;
   color: #f8f8f8;
 }
 
@@ -144,6 +137,54 @@ main {
   gap: 30px;
 }
 
+.attractions {
+  height: 242px;
+  width: 270px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e8e8e8;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(4, 1fr);
+}
+
+.attractions img {
+  width: 270px;
+  height: 163px;
+  object-fit: cover;
+  border-radius: 4px 4px 0px 0px;
+  grid-column: 1/-1;
+  grid-row: 1/2;
+}
+
+.attractionName {
+  grid-column: 1/-1;
+  grid-row: 2/3;
+  margin: 10px 10px 7px 10px;
+  color: #757575;
+
+  overflow: visible;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 250px;
+}
+
+.attractionMrt {
+  margin: 8px 0px 12px 10px;
+  position: relative;
+  left: 0px;
+  color: #757575;
+}
+
+.attractionCat {
+  margin: 8px 10px 12px 0px;
+  position: relative;
+  right: 0px;
+  text-align: right;
+  color: #757575;
+}
+
 footer {
   width: 100%;
   height: 104px;
@@ -180,7 +221,7 @@ footer {
 @media only screen and (max-width: 1200px) {
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 480px) {
   header {
     width: 100%;
     height: 280px;
@@ -189,7 +230,17 @@ footer {
     height: 148px;
     width: 276px;
     position: relative;
-    right: -64px;
+    right: 64px;
+    bottom: -66px;
+  }
+  .searchBar input {
+    width: 230px;
+  }
+  .mainContainer {
+    margin: 55px 18px 47px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 

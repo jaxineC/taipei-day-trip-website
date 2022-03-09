@@ -3,41 +3,59 @@
 
 // alert("test");
 
-let round = -1;
+let page = -1;
+
 function webContent() {
   let keyword = document.getElementById("keyword");
-  fetch(`http://52.20.252.232:3000/api/attractions?page=0`, {
+  // fetch("http://52.20.252.232:3000/api/attractions", {
+  fetch("http://192.168.0.69:3000/api/attractions", {
     method: "GET",
     mode: "cors",
     headers: { "Content-Type": "application/json" },
     // body: `{"page": 0,
     //         "keyword":${keyword}}`,
   })
-    .then((res) => res.json())
+    .then((response) => response.json())
     .then((result) => {
-      // let txt = this.response();
+      // let txt = res.json();
       // let objectTxt = JSON.parse(txt);
-      let objectTxt = this.JSON.parse();
-      let round = 0;
-      for (i = 0 + 8 * round; i < 8 + 8 * round; i++) {
-        let divContainer = document.createElement("div"); //step1
-        divContainer.id = "divContainer" + i;
-        divContainer.className = "image";
-        document.getElementById("mainContainer").appendChild(divContainer);
+      // data.JSON.parse();
+      let page = 0;
+      for (let i = 0 + 8 * page; i < 8 + 8 * page; i++) {
+        //appendchild 8 containers "attractions" uder mainContainer
+        let attractions = document.createElement("div"); //step1
+        attractions.id = "attraction-" + i;
+        attractions.className = "attractions";
+        document.getElementById("mainContainer").appendChild(attractions);
 
-        // let images = document.createElement("img"); //step2
-        // // let picUrl = "https"+src.result[i].results.file.split("https")[1];
-        // let picUrl = objectTxt.data.images[0];
-        // console.log(picUrl);
-        // images.src = picUrl;
+        //appendchild 8 containers "attractions" uder mainContainer
+        let images = document.createElement("img");
+        let url = result.data[i].images[0];
+        images.src = url;
+        images.id = "attractionImage-" + i;
+        images.className = "attractionImage";
+        document.getElementById("attraction-" + i).appendChild(images);
 
-        // document.getElementById("divContainer" + i).appendChild(images);
-        // let picTitle = document.createElement("div");
-        // picTitle.className = "photo-name";
-        // document.getElementById("divContainer" + i).appendChild(picTitle);
-        // let srcTxt = objectTxt.result.results[i].stitle;
-        // let picTitleTxt = document.createTextNode(srcTxt);
-        // pTitle.appendChild(pTitleTxt);
+        let names = document.createElement("div");
+        names.id = "attractionName-" + i;
+        names.className = "attractionName Bold";
+        document.getElementById("attraction-" + i).appendChild(names);
+        let namesNode = document.createTextNode(result.data[i].name);
+        names.appendChild(namesNode);
+
+        let mrts = document.createElement("div");
+        mrts.id = "attractionMrt-" + i;
+        mrts.className = "attractionMrt";
+        document.getElementById("attraction-" + i).appendChild(mrts);
+        let mrtNode = document.createTextNode(result.data[i].mrt);
+        mrts.appendChild(mrtNode);
+
+        let cats = document.createElement("div");
+        cats.id = "attractionCat-" + i;
+        cats.className = "attractionCat";
+        document.getElementById("attraction-" + i).appendChild(cats);
+        let catNode = document.createTextNode(result.data[i].category);
+        cats.appendChild(catNode);
       }
     });
 }
