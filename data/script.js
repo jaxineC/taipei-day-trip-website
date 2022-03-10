@@ -1,10 +1,11 @@
 // a literal expression, With strict mode, you can not use undeclared variables to write cleaner code.
 "use strict";
 
-// alert("test");
-
 let page = 0;
 function webContent() {
+  // if (nextPage == null) {
+  //   break;
+  // }
   // let keyword = document.getElementById("keyword");
   // if (keyword != "") {
   //   let query = `&keyword=${keyword}`;
@@ -27,17 +28,18 @@ function webContent() {
       // let objectTxt = JSON.parse(txt);
       // data.JSON.parse();
       // let page = 0;
+
       for (let i = 0; i < 12; i++) {
         //appendchild 8 containers "attractions" uder mainContainer
 
-        // if (result.data[i].images == null) {
+        // if (!result.data[i].images) {
         //   let noMore = document.createElement("div");
         //   noMore.appendChild("No More Result");
         //   break;
         // } else {
         // }
 
-        let attractions = document.createElement("div"); //step1
+        let attractions = document.createElement("div");
         attractions.id = "attraction-" + (i + 12 * page);
         attractions.className = "attractions";
         document.getElementById("mainContainer").appendChild(attractions);
@@ -82,3 +84,54 @@ function webContent() {
       return (page = result.nextPage);
     });
 }
+
+// let scroller = document.createElement("div");
+// scroller.id = "scroller";
+// document.getElementById("main").appendChild(scroller);
+
+// let output = document.createTextNode("text");
+// output.id = "output";
+// document.getElementById("scroller").appendChild(output);
+
+//--------------------------------------------------------------------
+//監聽 scroll 事件，並利用 getBoundingClientRect() 計算元素和可視範圍的相對位置。
+// element.addEventListener(event, function, useCapture)
+// element.scrollHeight - element.scrollTop === element.clientHeight
+
+let body = document.getElementById("body");
+let rec = body.getBoundingClientRect().bottom;
+
+// alert(window.document.getBoundingClientRect().bottom);
+
+function scroll() {
+  let lastMove = 0;
+  if (Date.now() - lastMove > 3) {
+    alert("test");
+    let bodyBottom = body.getBoundingClientRect().bottom;
+    if (bodyBottom > body.clientHeight + 100) {
+      break;
+    } else {
+      webContent();
+    }
+    lastMove = Date.now();
+  }
+
+  // while (true) {
+  //   let bodyBottom = body.getBoundingClientRect().bottom;
+  //   if (bodyBottom > body.clientHeight + 100) break;
+  //   webContent();
+  // }
+}
+
+window.addEventListener("scroll", scroll());
+
+// alert(`body.getBoundingClientRect().bottom=${rec}`);
+
+// body.addEventListener("scroll", function (event) {
+//   // let element = body.target;
+//   if (body.scrollHeight - body.scrollTop === window.clientHeight) {
+//     alert(`scrollHeight:${body.scrollHeight}&scrollTop:${body.scrollTop}`);
+//   }
+// });
+
+//--------------------------------------------------------------------

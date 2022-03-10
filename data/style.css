@@ -128,10 +128,11 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .mainContainer {
-  margin: 55px;
+  margin: 55px 15px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
@@ -183,6 +184,12 @@ main {
   right: 0px;
   text-align: right;
   color: #757575;
+}
+
+#scroller {
+  /* overflow: scroll; */
+  height: 55px;
+  width: 100%;
 }
 
 footer {
