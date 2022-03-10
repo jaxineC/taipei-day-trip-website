@@ -6,15 +6,21 @@ function webContent() {
   // if (nextPage == null) {
   //   break;
   // }
-  // let keyword = document.getElementById("keyword");
-  // if (keyword != "") {
-  //   let query = `&keyword=${keyword}`;
-  // } else {
+  // let keyword = document.getElementById("keyword").value;
+  // alert(`${keyword} & type of ${typeof keyword}`);
+
+  // if (keyword == "") {
   //   let query = "";
+  //   alert("if");
+  // } else {
+  //   let query = `&keyword=${keyword}`;
+  //   alert("else");
   // }
+
   let query = "";
+  // let query = "";
   // fetch("http://52.20.252.232:3000/api/attractions", {
-  fetch(`http://192.168.1.103:3000/api/attractions?page=${page + query}`, {
+  fetch(`http://192.168.0.186:3000/api/attractions?page=${page + query}`, {
     method: "GET",
     mode: "cors",
     headers: { "Content-Type": "application/json" },
@@ -81,10 +87,20 @@ function webContent() {
         let catNode = document.createTextNode(result.data[i].category);
         cats.appendChild(catNode);
       }
+      // alert(
+      //   `body.getBoundingClientRect().bottom=${
+      //     main.getBoundingClientRect().bottom
+      //   }
+      //    body.scrollHeight=${body.scrollHeight}
+      //    header.sH=${header.scrollHeight}
+      //    main.sH=${main.scrollHeight}
+      //    footer.sH=${footer.scrollHeight}
+      //    body.scrollTop=${body.scrollTop}
+      //    body.clientHeight=${body.clientHeight}`
+      // );
       return (page = result.nextPage);
     });
 }
-
 // let scroller = document.createElement("div");
 // scroller.id = "scroller";
 // document.getElementById("main").appendChild(scroller);
@@ -94,44 +110,85 @@ function webContent() {
 // document.getElementById("scroller").appendChild(output);
 
 //--------------------------------------------------------------------
+//訂變數 選定拿來算位置的對象
+let main = document.getElementById("main");
+let body = document.getElementById("body");
+let bodyBottom = body.getBoundingClientRect().bottom;
+let mainBottom = main.getBoundingClientRect().bottom;
+// ---------------------------addEventListener
 //監聽 scroll 事件，並利用 getBoundingClientRect() 計算元素和可視範圍的相對位置。
 // element.addEventListener(event, function, useCapture)
-// element.scrollHeight - element.scrollTop === element.clientHeight
+// window.addEventListener("scroll", throttle());
+window.addEventListener("scroll", debounce(loadMore, 10));
+// ---------------------------avoid triggering scroll continously
+function debounce(func, wait) {
+  let timeout;
 
-let body = document.getElementById("body");
-let rec = body.getBoundingClientRect().bottom;
+  return function executedFunction() {
+    let later = () => {
+      clearTimeout(timeout);
+      func();
+    };
 
-// alert(window.document.getBoundingClientRect().bottom);
-
-function scroll() {
-  let lastMove = 0;
-  if (Date.now() - lastMove > 3) {
-    alert("test");
-    let bodyBottom = body.getBoundingClientRect().bottom;
-    if (bodyBottom > body.clientHeight + 100) {
-      break;
-    } else {
-      webContent();
-    }
-    lastMove = Date.now();
-  }
-
-  // while (true) {
-  //   let bodyBottom = body.getBoundingClientRect().bottom;
-  //   if (bodyBottom > body.clientHeight + 100) break;
-  //   webContent();
-  // }
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
-window.addEventListener("scroll", scroll());
-
-// alert(`body.getBoundingClientRect().bottom=${rec}`);
-
-// body.addEventListener("scroll", function (event) {
-//   // let element = body.target;
-//   if (body.scrollHeight - body.scrollTop === window.clientHeight) {
-//     alert(`scrollHeight:${body.scrollHeight}&scrollTop:${body.scrollTop}`);
+// function throttle() {
+//   let lastMove = 0;
+//   if (Date.now() - lastMove > 3) {
+//     test();
+//     lastMove = Date.now();
 //   }
-// });
+// }
 
-//--------------------------------------------------------------------
+// ---------------------------scroll triggers webContent if user at bottom
+// element.scrollHeight - element.scrollTop === element.clientHeight
+function loadMore() {
+  // if (mainBottom < main.clientHeight + 104 + 55 + 10) {
+  if (body.scrollHeight >= document.documentElement.clientHeight) {
+    if (
+      body.getBoundingClientRect().bottom ==
+      document.documentElement.clientHeight
+    ) {
+      webContent();
+    }
+    // else {
+    //   alert(`body.scrollHeight=${body.scrollHeight}
+    //   body.scrollTop=${body.scrollTop}
+    //   document.documentElement.clientHeight=${
+    //     document.documentElement.clientHeight
+    //   }
+    //   body.getBoundingClientRect().bottom=${
+    //     body.getBoundingClientRect().bottom
+    //   }`);
+    // }
+  }
+}
+
+// alert(
+//   `main.getBoundingClientRect().bottom=${main.getBoundingClientRect().bottom}
+//    main.scrollHeight=${main.scrollHeight}
+//    main.scrollTop=${main.scrollTop}
+//    main.clientHeight=${main.clientHeight}`
+// );
+
+// alert(
+//   `body.getBoundingClientRect().bottom=${main.getBoundingClientRect().bottom}
+//    body.scrollHeight=${body.scrollHeight}
+//    header.sH=${header.scrollHeight}
+//    main.sH=${main.scrollHeight}
+//    footer.sH=${footer.scrollHeight}
+//    body.scrollTop=${body.scrollTop}
+//    body.clientHeight=${body.clientHeight}`
+// );
+
+// alert(
+//   `document.getBoundingClientRect().bottom=${
+//     main.getBoundingClientRect().bottom
+//   }
+//    ddE.scrollHeight=${document.documentElement.scrollHeight}
+//    ddE.scrollTop=${document.documentElement.scrollTop}
+//    ddE.clientHeight=${document.documentElement.clientHeight}`
+// );
