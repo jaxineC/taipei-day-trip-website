@@ -10,7 +10,7 @@ function searchContent() {
   } else {
     let page = 0;
     let query = `&keyword=${keyword}`;
-    fetch(`http://192.168.50.177:3000/api/attractions?page=${page + query}`, {
+    fetch(`http://52.20.252.232:3000/api/attractions?page=${page + query}`, {
       method: "GET",
       mode: "cors",
       headers: { "Content-Type": "application/json" },
@@ -83,7 +83,7 @@ function searchContent() {
 
 function webContent() {
   let query = null;
-  fetch(`http://192.168.50.177:3000/api/attractions?page=${page + query}`, {
+  fetch(`http://52.20.252.232:3000/api/attractions?page=${page + query}`, {
     method: "GET",
     mode: "cors",
     headers: { "Content-Type": "application/json" },
@@ -149,7 +149,7 @@ let mainBottom = main.getBoundingClientRect().bottom;
 //監聽 scroll 事件，並利用 getBoundingClientRect() 計算元素和可視範圍的相對位置。
 // element.addEventListener(event, function, useCapture)
 // window.addEventListener("scroll", throttle());
-window.addEventListener("scroll", debounce(loadMore, 10));
+window.addEventListener("scroll", debounce(loadMore, 100));
 // ---------------------------avoid triggering scroll continously
 function debounce(func, wait) {
   let timeout;
@@ -179,7 +179,7 @@ function loadMore() {
   // if (mainBottom < main.clientHeight + 104 + 55 + 10) {
   if (body.scrollHeight >= document.documentElement.clientHeight) {
     if (
-      body.getBoundingClientRect().bottom ==
+      body.getBoundingClientRect().bottom <=
       document.documentElement.clientHeight
     ) {
       if (page == null) {
