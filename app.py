@@ -1,26 +1,20 @@
-#import modules
-#... json			X
-#... requests   X
-#... mysql connector+pooling
+# import modules-------------------------------------------------------------
 from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
-# from dotenv import load_dotenv
-# import os
 
-#settings
-#... config
-#... connections
-#... connection pool
-#https://flask.palletsprojects.com/en/2.0.x/config/
 
-app=Flask(__name__)
+# settings-------------------------------------------------------------------
+app=Flask(
+	__name__,
+	static_folder = 'data',
+	static_url_path = '/'
+)
+
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
-# load_dotenv()
-# user = os.environ.get('USER')
-# password = os.environ.get('password')
+app.secret_key = 'secret4Session'
 
 cnxpool = mypl.MySQLConnectionPool(
 	host = "localhost",
@@ -31,7 +25,8 @@ cnxpool = mypl.MySQLConnectionPool(
 	pool_size = 5,
 )
 
-# Pages
+
+# templates----------------------------------------------------------------------
 @app.route("/")
 def index():
 	return render_template("index.html")
@@ -46,10 +41,7 @@ def thankyou():
 	return render_template("thankyou.html")
 
 
-#APIs
-#... 取得景點資料列表 fetch get
-#... 分頁 每頁12筆 select 0-12 ------------->required@@....page 4 shows nothing???
-#... 可 篩選景點名稱的關鍵字 無給定則不做篩選query string=>get
+# APIs------------------------------------------------------------------------
 @app.route("/api/attractions", methods=['GET'])
 def attractions():
 	try:
@@ -78,7 +70,7 @@ def attractions():
 			cur.execute(sql)
 			count = cur.fetchone()
 			if count['COUNT(name)'] == None: nextpage= None
-			elif (count['COUNT(name)'] - int(input_page)*12) >0 : nextpage=currentPage+1
+			elif (count['COUNT(name)'] - (int(input_page)+1)*12) >0 : nextpage=currentPage+1
 			else: nextpage=None
 
 		else:
@@ -92,13 +84,15 @@ def attractions():
 			count = cur.fetchone()
 			# if count['COUNT(name)'] == None: nextpage= None
 			if count == None: nextpage= None
-			elif (count['COUNT(name)'] - currentPage*12) >0 : nextpage=currentPage+1
+			elif (count['COUNT(name)'] - (currentPage+1)*12) >0 : nextpage=currentPage+1
 			# elif (count - currentPage*12) >0 : nextpage=currentPage+1
 			else: nextpage=None
 		cur.close()
 		cnx1.close() 
-		if result == []:
+		# if result == []:
+		if int(input_page)>58//12:
 			raise ValueError
+			# return "error"
 		else:
 			for image in range(len(result)):
 				image_str = result[image]['images'].replace('""','"')
@@ -107,11 +101,11 @@ def attractions():
 	except ValueError as e:
 		input_msg= request.args.get('message','輸入錯誤')
 		return jsonify({"error":True, "message": input_msg})
-	except Exception as e:
+		# return (str(e))
+	except Exception:
 		input_msg= request.args.get('message','程式錯誤')
 		return jsonify({"error":True, "message": input_msg})
 		# return (str(e))
-
 
 @app.route("/api/attraction/<attractionId>")
 def attractionId(attractionId):
@@ -142,6 +136,8 @@ def attractionId(attractionId):
 		return jsonify({"error":True, "message": input_msg})
 		# return (str(e))
 
+
+# run--------------------------------------------------------------------------
 if __name__ == '__main__':
 	# app.debug = True
 	app.run(host='0.0.0.0',port=3000)
