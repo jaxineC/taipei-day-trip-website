@@ -70,7 +70,7 @@ def attractions():
 			cur.execute(sql)
 			count = cur.fetchone()
 			if count['COUNT(name)'] == None: nextpage= None
-			elif (count['COUNT(name)'] - int(input_page)*12) >0 : nextpage=currentPage+1
+			elif (count['COUNT(name)'] - (int(input_page)+1)*12) >0 : nextpage=currentPage+1
 			else: nextpage=None
 
 		else:
@@ -84,13 +84,15 @@ def attractions():
 			count = cur.fetchone()
 			# if count['COUNT(name)'] == None: nextpage= None
 			if count == None: nextpage= None
-			elif (count['COUNT(name)'] - currentPage*12) >0 : nextpage=currentPage+1
+			elif (count['COUNT(name)'] - (currentPage+1)*12) >0 : nextpage=currentPage+1
 			# elif (count - currentPage*12) >0 : nextpage=currentPage+1
 			else: nextpage=None
 		cur.close()
 		cnx1.close() 
-		if result == []:
+		# if result == []:
+		if int(input_page)>58//12:
 			raise ValueError
+			# return "error"
 		else:
 			for image in range(len(result)):
 				image_str = result[image]['images'].replace('""','"')
@@ -99,10 +101,11 @@ def attractions():
 	except ValueError as e:
 		input_msg= request.args.get('message','輸入錯誤')
 		return jsonify({"error":True, "message": input_msg})
-	except Exception as e:
-		# input_msg= request.args.get('message','程式錯誤')
-		# return jsonify({"error":True, "message": input_msg})
-		return (str(e))
+		# return (str(e))
+	except Exception:
+		input_msg= request.args.get('message','程式錯誤')
+		return jsonify({"error":True, "message": input_msg})
+		# return (str(e))
 
 @app.route("/api/attraction/<attractionId>")
 def attractionId(attractionId):

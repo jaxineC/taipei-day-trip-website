@@ -36,6 +36,7 @@ nav {
   letter-spacing: 0em;
   text-align: left;
   color: #448899;
+  margin-left: 10px;
 }
 
 .navBtnContainer {
@@ -52,7 +53,13 @@ nav {
 header {
   width: 100%;
   height: 320px;
-  background: linear-gradient(135deg, #aaddee 0%, #66aabb 100%);
+  /* background: linear-gradient(135deg, #aaddee 0%, #66aabb 100%); */
+  /* background-color: linear-gradient(135deg, #aaddee 0%, #66aabb 100%); */
+  background-image: linear-gradient(135deg, #aaddee 0%, #66aabb 100%);
+  background-blend-mode: normal;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  z-index: 98;
 
   display: flex;
   justify-content: center;
@@ -61,13 +68,18 @@ header {
 
 .headContainer {
   width: 100%;
+  height: 320px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-image: url("welcome 1.png");
+  background-blend-mode: normal;
+  background-position: right -128px bottom;
+  background-repeat: no-repeat;
 }
 
 .welcomeImg {
-  position: absolute;
+  position: relative;
   right: -128px;
 }
 
@@ -134,13 +146,15 @@ main {
 .mainContainer {
   margin: 55px 15px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* grid-template-columns: repeat(4, 1fr); */
+  grid-template-columns: repeat(auto-fill, 270px);
   gap: 30px;
+  justify-content: center;
 }
 
 .attractions {
   height: 242px;
-  width: 270px;
+  width: 100%;
   border-style: solid;
   border-width: 1px;
   border-color: #e8e8e8;
@@ -151,7 +165,7 @@ main {
 }
 
 .attractions img {
-  width: 270px;
+  width: 100%;
   height: 163px;
   object-fit: cover;
   border-radius: 4px 4px 0px 0px;
@@ -168,7 +182,7 @@ main {
   overflow: visible;
   white-space: nowrap;
   text-overflow: ellipsis;
-  width: 250px;
+  width: 100%;
 }
 
 .attractionMrt {
@@ -190,6 +204,12 @@ main {
   /* overflow: scroll; */
   height: 55px;
   width: 100%;
+}
+
+#noMore {
+  margin: auto;
+  color: #757575;
+  font-weight: bold;
 }
 
 footer {
@@ -226,28 +246,63 @@ footer {
 }
 
 @media only screen and (max-width: 1200px) {
+  .navContainer,
+  .headContainer,
+  .mainContainer {
+    width: 100%;
+  }
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 600px) {
   header {
     width: 100%;
     height: 280px;
+    /* background-image: url("welcome 2.png"),
+      linear-gradient(135deg, #aaddee 0%, #66aabb 100%); */
+    /* background-blend-mode: normal;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    z-index: 98; */
+    background-image: linear-gradient(135deg, #aaddee 0%, #66aabb 100%);
+    background-blend-mode: normal;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    z-index: 98;
   }
+
+  .headContainer {
+    height: 280px;
+    background-image: url("welcome 2.png");
+    background-blend-mode: normal;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+  }
+
   .welcomeImg {
-    height: 148px;
-    width: 276px;
-    position: relative;
-    right: 64px;
-    bottom: -66px;
+    /* height: 148px;
+    width: 276px; */
+    /* position: relative; */
+    /* left: 148px;
+    bottom: -66px; */
   }
   .searchBar input {
     width: 230px;
   }
   .mainContainer {
+    width: 90%;
     margin: 55px 18px 47px 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+
+  .headContainer {
+    /* overflow: hidden; */
+  }
+
+  .attractions {
+    width: 100%;
+    min-height: 202px;
   }
 }
 
