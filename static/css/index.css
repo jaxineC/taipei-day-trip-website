@@ -55,7 +55,7 @@ header {
   height: 320px;
   /* background: linear-gradient(135deg, #aaddee 0%, #66aabb 100%); */
   /* background-color: linear-gradient(135deg, #aaddee 0%, #66aabb 100%); */
-  background-image: url("welcome 1.png"),
+  background-image: url("/media/welcome 1.png"),
     linear-gradient(135deg, #aaddee 0%, #66aabb 100%);
   background-blend-mode: normal;
   background-position: calc(60% + 200px) calc(100% - 0px), right bottom;
@@ -255,7 +255,7 @@ footer {
   header {
     width: 100%;
     height: 280px;
-    background-image: url("welcome 2.png"),
+    background-image: url("/media/welcome 2.png"),
       linear-gradient(135deg, #aaddee 0%, #66aabb 100%);
     background-blend-mode: normal;
     background-position: right bottom;

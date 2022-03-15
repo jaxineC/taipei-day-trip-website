@@ -129,31 +129,23 @@ input {
   margin-right: 6px;
   margin-left: 12px;
 }
-#dot1 {
+#dotMorning {
   background: #448899;
 }
 
-#dot2 {
+#dotAfternoon {
   background: white;
 }
 
 #booking {
   background: #448899;
   color: #ffffff;
-  border-raduis: 5px;
+  border-radius: 5px;
   height: 36px;
   width: 154px;
   padding: auto;
   margin: 25px 20px 20px 20px;
   text-align: center;
-}
-
-#morning {
-  display: inline;
-}
-
-#afternoon {
-  display: none;
 }
 
 button {

@@ -7,7 +7,7 @@ import mysql.connector.pooling as mypl
 # settings-------------------------------------------------------------------
 app=Flask(
 	__name__,
-	static_folder = 'data',
+	static_folder = 'static',
 	static_url_path = '/'
 )
 

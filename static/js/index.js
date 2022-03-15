@@ -10,7 +10,7 @@ function searchContent() {
   } else {
     let page = 0;
     let query = `&keyword=${keyword}`;
-    fetch(`http://192.168.1.103:3000/api/attractions?page=${page + query}`, {
+    fetch(`/api/attractions?page=${page + query}`, {
       method: "GET",
       mode: "cors",
       headers: { "Content-Type": "application/json" },
@@ -28,7 +28,7 @@ function searchContent() {
             noMore.className = "noMore";
             document.getElementById("mainContainer").appendChild(noMore);
             let nMoreNode = document.createTextNode(
-              `沒有名稱符合${keyword}的景點`
+              `沒有更多名稱符合${keyword}的景點`
             );
             noMore.appendChild(nMoreNode);
             break;
@@ -83,7 +83,7 @@ function searchContent() {
 
 function webContent() {
   let query = null;
-  fetch(`http://192.168.1.103:3000/api/attractions?page=${page + query}`, {
+  fetch(`/api/attractions?page=${page + query}`, {
     method: "GET",
     mode: "cors",
     headers: { "Content-Type": "application/json" },
