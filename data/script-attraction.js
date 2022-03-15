@@ -10,7 +10,7 @@ function searchContent() {
   } else {
     let page = 0;
     let query = `&keyword=${keyword}`;
-    fetch(`http://52.20.252.232:3000/api/attractions?page=${page + query}`, {
+    fetch(`http://192.168.1.103:3000/api/attractions?page=${page + query}`, {
       method: "GET",
       mode: "cors",
       headers: { "Content-Type": "application/json" },
@@ -83,7 +83,7 @@ function searchContent() {
 
 function webContent() {
   let query = null;
-  fetch(`http://52.20.252.232:3000/api/attractions?page=${page + query}`, {
+  fetch(`http://192.168.1.103:3000/api/attractions?page=${page + query}`, {
     method: "GET",
     mode: "cors",
     headers: { "Content-Type": "application/json" },
@@ -165,13 +165,13 @@ function debounce(func, wait) {
   };
 }
 
-// function throttle() {
-//   let lastMove = 0;
-//   if (Date.now() - lastMove > 3) {
-//     test();
-//     lastMove = Date.now();
-//   }
-// }
+function throttle() {
+  let lastMove = 0;
+  if (Date.now() - lastMove > 3) {
+    test();
+    lastMove = Date.now();
+  }
+}
 
 // ---------------------------scroll triggers webContent if user at bottom
 // element.scrollHeight - element.scrollTop === element.clientHeight
