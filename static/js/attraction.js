@@ -46,6 +46,7 @@ function next() {
     index = 0;
     document.getElementById("image-0").src = imagesList[index];
     document.getElementById(`circle-${index}`).classList.add("current");
+    return index;
   } else {
     document.getElementById("image-0").src = imagesList[index + 1];
     document.getElementById(`circle-${index}`).classList.remove("current");
@@ -58,11 +59,19 @@ function next() {
 
 function prev() {
   let total = imagesList.length;
-  document.getElementById("images-0").src = imagesList[index - 1];
-  document.getElementById(`circle-${index}`).classList.remove("current");
-  index--;
-  document.getElementById(`circle-${index}`).classList.add("current");
-  return index;
+  if (index > 0) {
+    document.getElementById("image-0").src = imagesList[index - 1];
+    document.getElementById(`circle-${index}`).classList.remove("current");
+    index--;
+    document.getElementById(`circle-${index}`).classList.add("current");
+    return index;
+  } else {
+    document.getElementById(`circle-${index}`).classList.remove("current");
+    index = total - 1;
+    document.getElementById("image-0").src = imagesList[index];
+    document.getElementById(`circle-${index}`).classList.add("current");
+    return index;
+  }
 }
 
 function toggle(event) {

@@ -28,14 +28,16 @@ function searchContent() {
             noMore.className = "noMore";
             document.getElementById("mainContainer").appendChild(noMore);
             let nMoreNode = document.createTextNode(
-              `沒有更多名稱符合${keyword}的景點`
+              `以上是全部符合${keyword}的景點`
             );
             noMore.appendChild(nMoreNode);
             break;
           } else {
-            let attractions = document.createElement("div");
+            let attractions = document.createElement("a");
             attractions.id = "attraction-" + (i + 12 * page);
             attractions.className = "attractions";
+            // attractions.href = `/attraction/${i + 1}`;
+            attractions.href = `/attraction/${result.data[i].id}`;
             document.getElementById("mainContainer").appendChild(attractions);
 
             //appendchild 8 containers "attractions" uder mainContainer
@@ -97,7 +99,8 @@ function webContent() {
           let attractions = document.createElement("a");
           attractions.id = "attraction-" + (i + 12 * page);
           attractions.className = "attractions";
-          attractions.href = `/attraction/${i + 1}`;
+          // attractions.href = `/attraction/${i + 1}`;
+          attractions.href = `/attraction/${result.data[i].id}`;
           document.getElementById("mainContainer").appendChild(attractions);
 
           let images = document.createElement("img");
