@@ -94,9 +94,10 @@ function webContent() {
         if (!result.data[i]) {
           break;
         } else {
-          let attractions = document.createElement("div");
+          let attractions = document.createElement("a");
           attractions.id = "attraction-" + (i + 12 * page);
           attractions.className = "attractions";
+          attractions.href = `/attraction/${i + 1}`;
           document.getElementById("mainContainer").appendChild(attractions);
 
           let images = document.createElement("img");

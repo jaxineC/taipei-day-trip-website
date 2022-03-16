@@ -4,6 +4,9 @@
 // alert(window.location.href);
 // alert(window.location.pathname);
 
+let index = 0;
+let imagesList;
+
 function load() {
   let attractionId = window.location.pathname.replace("/attraction/", "");
   fetch(`/api/attraction/${attractionId}`, {
@@ -13,7 +16,7 @@ function load() {
   })
     .then((response) => response.json())
     .then((result) => {
-      document.getElementById("images").src = result.data.images[0];
+      document.getElementById("image-0").src = result.data.images[0];
       document.getElementById("name").innerHTML = result.data.name;
       document.getElementById("category").innerHTML = result.data.category;
       document.getElementById("mrt").innerHTML = result.data.mrt;
@@ -23,12 +26,26 @@ function load() {
       document.getElementById("address").innerHTML = result.data.address;
       document.getElementById("transport").innerHTML = result.data.transport;
 
-      // result.data.images;
+      let lenth = result.data.images.lenth;
+      for (let i = 0; i < lenth; i++) {
+        let newCircle = document.createElement("div");
+        newCircle.id = `circle-${i}`;
+        document.getElementById("circles").appendChild(newCircle);
+      }
+
+      let imagesList = result.data.images;
+      // alert(imagesList[0]);
     });
 }
 
-function change(index) {
-  document.getElementById("images").innerHTML = result.data.images[index];
+function next(index) {
+  document.getElementById("image-0").src = imagesList[index];
+  index = +1;
+}
+
+function prev(index) {
+  document.getElementById("images-0").src = imagesList[index];
+  index = -1;
 }
 
 function toggle(event) {
