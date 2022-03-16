@@ -137,9 +137,19 @@ main .images {
 .circle {
   width: 12px;
   height: 12px;
-  border-radius: 6px;
-  background: gray;
+  border-radius: 6.5px;
+  background: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: white;
   place-self: center center;
+}
+
+.current {
+  background: black;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #448899;
 }
 
 main .name {

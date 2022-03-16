@@ -25,27 +25,44 @@ function load() {
         result.data.description;
       document.getElementById("address").innerHTML = result.data.address;
       document.getElementById("transport").innerHTML = result.data.transport;
-
-      let lenth = result.data.images.lenth;
-      for (let i = 0; i < lenth; i++) {
+      let length = result.data.images.length;
+      for (let i = 0; i < length; i++) {
         let newCircle = document.createElement("div");
+        newCircle.className = "circle";
         newCircle.id = `circle-${i}`;
         document.getElementById("circles").appendChild(newCircle);
       }
-
-      let imagesList = result.data.images;
-      // alert(imagesList[0]);
+      document.getElementById(`circle-${index}`).classList.add("current");
+      return (imagesList = result.data.images);
     });
+  // alert(imagesList);------------>undefined ?????????@@
 }
 
-function next(index) {
-  document.getElementById("image-0").src = imagesList[index];
-  index = +1;
+function next() {
+  let total = imagesList.length;
+  // alert(`index=${index};total=${total}`);
+  if (index === total - 1) {
+    document.getElementById(`circle-${index}`).classList.remove("current");
+    index = 0;
+    document.getElementById("image-0").src = imagesList[index];
+    document.getElementById(`circle-${index}`).classList.add("current");
+  } else {
+    document.getElementById("image-0").src = imagesList[index + 1];
+    document.getElementById(`circle-${index}`).classList.remove("current");
+    index++;
+    document.getElementById(`circle-${index}`).classList.add("current");
+    // index=+1;--------------->wrong ??????????????@@
+    return index;
+  }
 }
 
-function prev(index) {
-  document.getElementById("images-0").src = imagesList[index];
-  index = -1;
+function prev() {
+  let total = imagesList.length;
+  document.getElementById("images-0").src = imagesList[index - 1];
+  document.getElementById(`circle-${index}`).classList.remove("current");
+  index--;
+  document.getElementById(`circle-${index}`).classList.add("current");
+  return index;
 }
 
 function toggle(event) {
