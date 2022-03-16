@@ -27,9 +27,7 @@ function searchContent() {
             noMore.id = "noMore";
             noMore.className = "noMore";
             document.getElementById("mainContainer").appendChild(noMore);
-            let nMoreNode = document.createTextNode(
-              `以上是全部符合${keyword}的景點`
-            );
+            let nMoreNode = document.createTextNode(`沒有更多符合您查找的景點`);
             noMore.appendChild(nMoreNode);
             break;
           } else {
