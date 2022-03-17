@@ -96,6 +96,7 @@ function searchContent() {
 
 function webContent() {
   let query = null;
+  // fetch(`/api/attractions?page=${page}`, {
   fetch(`/api/attractions?page=${page + query}`, {
     method: "GET",
     mode: "cors",
@@ -205,9 +206,11 @@ function loadMore() {
         let nMoreNode = document.createTextNode("沒有再多景點要載入了");
         noMore.appendChild(nMoreNode);
       } else {
-        if (keyword === "") {
+        let keyword = document.getElementById("keyword").value;
+        if (keyword == "") {
           webContent();
         } else {
+          // alert(keyword);
           searchContent();
         }
       }
