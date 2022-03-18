@@ -2,8 +2,6 @@
 from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
-
-
 # settings-------------------------------------------------------------------
 app=Flask(
 	__name__,
