@@ -7,7 +7,7 @@ import mysql.connector.pooling as mypl
 # settings-------------------------------------------------------------------
 app=Flask(
 	__name__,
-	static_folder = 'data',
+	static_folder = 'static',
 	static_url_path = '/'
 )
 
@@ -102,7 +102,7 @@ def attractions():
 		input_msg= request.args.get('message','輸入錯誤')
 		return jsonify({"error":True, "message": input_msg})
 		# return (str(e))
-	except Exception:
+	except Exception as e:
 		input_msg= request.args.get('message','程式錯誤')
 		return jsonify({"error":True, "message": input_msg})
 		# return (str(e))
@@ -139,5 +139,5 @@ def attractionId(attractionId):
 
 # run--------------------------------------------------------------------------
 if __name__ == '__main__':
-	# app.debug = True
+	app.debug = True
 	app.run(host='0.0.0.0',port=3000)

@@ -1,0 +1,421 @@
+/* 1. Mutual Basic */
+/* ------------------------------------------------------------------------------ */
+body {
+  box-sizing: border-box;
+
+  width: 100%;
+
+  padding: 0px;
+  margin: auto;
+
+  color: #666666;
+  vertical-align: center;
+}
+
+/* 2. nav->main->footer */
+/* ------------------------------------------------------------------------------ */
+nav {
+  width: 100%;
+  height: 54px;
+  background: white;
+
+  position: fixed;
+  top: 0px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navTitle {
+  font-family: Noto Sans TC;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 34px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #448899;
+  margin-left: 10px;
+}
+
+.navBtnContainer {
+  display: flex;
+  justify-content: end;
+}
+.navBtn {
+  padding: 10px;
+  border: none;
+  background: none;
+  color: #666666;
+}
+
+main {
+  width: 100%;
+  margin-top: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.mainContainer {
+  margin: 37px 0px 120px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+main .profile {
+  display: grid;
+  grid-template-columns: 45% 50%;
+  grid-template-rows: 51px 42px min-content;
+  column-gap: 2.5%;
+  place-content: center;
+  /* margin: auto; ??????????????*/
+  /* extra */
+  align-items: center;
+}
+
+main .images {
+  grid-row: 1/-1;
+  /* grid-area: images; */
+
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  /* max-height: clamp(450px, 50vh, 600px);
+  max-width: 1000px; */
+
+  display: grid;
+  grid-template: "images" 1fr;
+  place-items: center;
+  place-content: center;
+}
+
+.image {
+  width: 100%;
+  height: 406px;
+  object-fit: cover;
+  border-radius: 5px;
+  /* aspect-ratio: 16 / 9; */
+
+  grid-area: images;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  z-index: -1;
+}
+
+.arrows {
+  width: 90%;
+  opacity: 80%;
+  grid-area: images;
+  display: flex;
+  align-items: center;
+  /* place-self: center center;*/
+}
+
+#leftArrow {
+  position: absolute;
+  left: 10px;
+  /* place-self: center left; */
+}
+
+#rightArrow {
+  position: absolute;
+  right: 10px;
+  /* place-self: center right; */
+}
+
+.circles {
+  grid-area: images;
+  place-self: end center;
+  position: relative;
+  bottom: 13px;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: white;
+  place-self: center center;
+}
+
+.current {
+  background: black;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #448899;
+}
+
+main .name {
+  width: 100%;
+  height: 33px;
+  margin-top: 3px;
+  margin-bottom: 15px;
+}
+
+main .cm {
+  margin-bottom: 20px;
+}
+
+main .bookingForm {
+  width: 100%;
+  height: 302px;
+  margin-bottom: 11px;
+  background: #e8e8e8;
+  border-radius: 5px;
+}
+
+.bookingForm > .bookingTxt {
+  margin: 15px 20px 0px 20px;
+}
+
+input {
+  box-sizing: border-box !important;
+  width: 193px;
+  height: 35px;
+  padding: 5px 10px 5px 10px;
+  border-style: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("/icon/icon_calendar.png");
+
+  background-position: right 0px bottom 0px;
+}
+
+#placeholder {
+  margin: 5px 34px 5px 14px;
+  /* top right bottum left */
+}
+
+.dot {
+  width: 20px;
+  height: 20px;
+  border: 1px;
+  border-style: solid;
+  border-color: #ffffff;
+  border-radius: 10px;
+  margin-right: 6px;
+  margin-left: 12px;
+}
+#dotMorning {
+  background: #448899;
+}
+
+#dotAfternoon {
+  background: white;
+}
+
+#booking {
+  background: #448899;
+  color: #ffffff;
+  border-radius: 5px;
+  height: 36px;
+  width: 154px;
+  padding: auto;
+  margin: 25px 20px 20px 20px;
+  text-align: center;
+}
+
+button {
+  border-style: none;
+  border-radius: 5px;
+}
+
+hr {
+  width: 100%;
+  margin: 37px 0px 50px 0px;
+  border: 1px solid #e8e8e8;
+}
+
+.description {
+  width: 95%;
+  margin-bottom: 20px;
+  align-self: center;
+}
+
+.address {
+  width: 95%;
+  margin-bottom: 20px;
+  align-self: center;
+  vertical-align: center;
+}
+.transport {
+  width: 95%;
+  margin: auto auto 20px auto;
+  /* margin-bottom: 20px; */
+  align-self: center;
+}
+
+footer {
+  width: 100%;
+  height: 104px;
+  background: #757575;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer {
+  margin: auto;
+  text-align: center !important;
+  vertical-align: middle;
+  line-height: 104px;
+}
+
+/* 3. media query */
+/* ------------------------------------------------------------------------------ */
+@media only screen and (max-width: 4000px) {
+  .navContainer,
+  .headContainer,
+  .mainContainer {
+    width: 1200px;
+  }
+}
+
+.welcomeImg {
+  position: relative;
+  right: -128px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .navContainer,
+  .headContainer,
+  .mainContainer {
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .mainContainer {
+    width: 90%;
+    margin: 55px 18px 47px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  main .profile {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: min-content;
+    overflow: visible;
+
+    /* margin: auto; ??????????????*/
+    /* extra */
+    align-items: center;
+  }
+
+  main .images {
+    grid-row: 1/-1;
+    /* grid-area: images; */
+
+    width: 100%;
+    position: relative;
+    margin: 0px 0px 20px 0px;
+    overflow: visible;
+    /* max-height: clamp(450px, 50vh, 600px);
+    max-width: 1000px; */
+
+    display: grid;
+    grid-template: "images" 1fr;
+    place-items: center;
+    place-content: center;
+  }
+  .image {
+    width: 100vw;
+    height: 350px;
+    object-fit: cover;
+    /* aspect-ratio: 16 / 9; */
+
+    grid-area: images;
+    position: relative;
+    overflow: visible;
+    margin: 0 auto;
+    z-index: -1;
+  }
+}
+
+#test {
+  background: red;
+}
+
+/* 4. Mutual Fonts */
+/* ------------------------------------------------------------------------------ */
+.Header1 {
+  font-family: Noto Sans TC;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.Header3 {
+  font-family: Noto Sans TC;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.Button {
+  font-family: Noto Sans TC;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: center;
+}
+
+.Content {
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400, Regular;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #666666;
+}
+
+.Body {
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 13px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.Bold {
+  font-weight: bold;
+}
+
+.Height32 {
+  line-height: 32px;
+}

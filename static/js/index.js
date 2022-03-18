@@ -2,88 +2,102 @@
 "use strict";
 let page = 0;
 
-function searchContent() {
+function newSearch() {
+  clearContent();
+  checkSearch();
+  searchContent();
+}
+
+function checkSearch() {
   let keyword = document.getElementById("keyword").value;
   if (!keyword) {
     alert("請輸入關鍵字搜尋景點");
     let query = null;
   } else {
-    let page = 0;
-    let query = `&keyword=${keyword}`;
-    fetch(`http://52.20.252.232:3000/api/attractions?page=${page + query}`, {
-      method: "GET",
-      mode: "cors",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        let searchResult = document.createElement("div");
-        searchResult.id = "mainContainer";
-        searchResult.className = "mainContainer";
-        document.getElementById("mainContainer").innerHTML = null;
-        for (let i = 0; i < 12; i++) {
-          if (!result.data[i]) {
-            let noMore = document.createElement("div");
-            noMore.id = "noMore";
-            noMore.className = "noMore";
-            document.getElementById("mainContainer").appendChild(noMore);
-            let nMoreNode = document.createTextNode(
-              `沒有名稱符合${keyword}的景點`
-            );
-            noMore.appendChild(nMoreNode);
-            break;
-          } else {
-            let attractions = document.createElement("div");
-            attractions.id = "attraction-" + (i + 12 * page);
-            attractions.className = "attractions";
-            document.getElementById("mainContainer").appendChild(attractions);
-
-            //appendchild 8 containers "attractions" uder mainContainer
-            let images = document.createElement("img");
-            let url = result.data[i].images[0];
-            images.src = url;
-            images.id = "attractionImage-" + i;
-            images.className = "attractionImage";
-            document
-              .getElementById("attraction-" + (i + 12 * page))
-              .appendChild(images);
-
-            let names = document.createElement("div");
-            names.id = "attractionName-" + (i + 12 * page);
-            names.className = "attractionName Bold";
-            document
-              .getElementById("attraction-" + (i + 12 * page))
-              .appendChild(names);
-            let namesNode = document.createTextNode(result.data[i].name);
-            names.appendChild(namesNode);
-
-            let mrts = document.createElement("div");
-            mrts.id = "attractionMrt-" + (i + 12 * page);
-            mrts.className = "attractionMrt";
-            document
-              .getElementById("attraction-" + (i + 12 * page))
-              .appendChild(mrts);
-            let mrtNode = document.createTextNode(result.data[i].mrt);
-            mrts.appendChild(mrtNode);
-
-            let cats = document.createElement("div");
-            cats.id = "attractionCat-" + i;
-            cats.className = "attractionCat";
-            document
-              .getElementById("attraction-" + (i + 12 * page))
-              .appendChild(cats);
-            let catNode = document.createTextNode(result.data[i].category);
-            cats.appendChild(catNode);
-          }
-        }
-        return (page = result.nextPage);
-      });
+    return (page = 0);
   }
+}
+
+function clearContent() {
+  let searchResult = document.createElement("div");
+  searchResult.id = "mainContainer";
+  searchResult.className = "mainContainer";
+  document.getElementById("mainContainer").innerHTML = null;
+}
+
+function searchContent() {
+  let keyword = document.getElementById("keyword").value;
+  let query = `&keyword=${keyword}`;
+  fetch(`/api/attractions?page=${page + query}`, {
+    method: "GET",
+    mode: "cors",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      for (let i = 0; i < 12; i++) {
+        if (!result.data[i]) {
+          let noMore = document.createElement("div");
+          noMore.id = "noMore";
+          noMore.className = "noMore";
+          document.getElementById("mainContainer").appendChild(noMore);
+          let nMoreNode = document.createTextNode(`沒有更多符合您查找的景點`);
+          noMore.appendChild(nMoreNode);
+          break;
+        } else {
+          let attractions = document.createElement("a");
+          attractions.id = "attraction-" + (i + 12 * page);
+          attractions.className = "attractions";
+          // attractions.href = `/attraction/${i + 1}`;
+          attractions.href = `/attraction/${result.data[i].id}`;
+          document.getElementById("mainContainer").appendChild(attractions);
+
+          //appendchild 8 containers "attractions" uder mainContainer
+          let images = document.createElement("img");
+          let url = result.data[i].images[0];
+          images.src = url;
+          images.id = "attractionImage-" + i;
+          images.className = "attractionImage";
+          document
+            .getElementById("attraction-" + (i + 12 * page))
+            .appendChild(images);
+
+          let names = document.createElement("div");
+          names.id = "attractionName-" + (i + 12 * page);
+          names.className = "attractionName Bold";
+          document
+            .getElementById("attraction-" + (i + 12 * page))
+            .appendChild(names);
+          let namesNode = document.createTextNode(result.data[i].name);
+          names.appendChild(namesNode);
+
+          let mrts = document.createElement("div");
+          mrts.id = "attractionMrt-" + (i + 12 * page);
+          mrts.className = "attractionMrt";
+          document
+            .getElementById("attraction-" + (i + 12 * page))
+            .appendChild(mrts);
+          let mrtNode = document.createTextNode(result.data[i].mrt);
+          mrts.appendChild(mrtNode);
+
+          let cats = document.createElement("div");
+          cats.id = "attractionCat-" + i;
+          cats.className = "attractionCat";
+          document
+            .getElementById("attraction-" + (i + 12 * page))
+            .appendChild(cats);
+          let catNode = document.createTextNode(result.data[i].category);
+          cats.appendChild(catNode);
+        }
+      }
+      return (page = result.nextPage);
+    });
 }
 
 function webContent() {
   let query = null;
-  fetch(`http://52.20.252.232:3000/api/attractions?page=${page + query}`, {
+  // fetch(`/api/attractions?page=${page}`, {
+  fetch(`/api/attractions?page=${page + query}`, {
     method: "GET",
     mode: "cors",
     headers: { "Content-Type": "application/json" },
@@ -94,9 +108,11 @@ function webContent() {
         if (!result.data[i]) {
           break;
         } else {
-          let attractions = document.createElement("div");
+          let attractions = document.createElement("a");
           attractions.id = "attraction-" + (i + 12 * page);
           attractions.className = "attractions";
+          // attractions.href = `/attraction/${i + 1}`;
+          attractions.href = `/attraction/${result.data[i].id}`;
           document.getElementById("mainContainer").appendChild(attractions);
 
           let images = document.createElement("img");
@@ -165,13 +181,13 @@ function debounce(func, wait) {
   };
 }
 
-// function throttle() {
-//   let lastMove = 0;
-//   if (Date.now() - lastMove > 3) {
-//     test();
-//     lastMove = Date.now();
-//   }
-// }
+function throttle() {
+  let lastMove = 0;
+  if (Date.now() - lastMove > 3) {
+    test();
+    lastMove = Date.now();
+  }
+}
 
 // ---------------------------scroll triggers webContent if user at bottom
 // element.scrollHeight - element.scrollTop === element.clientHeight
@@ -190,8 +206,13 @@ function loadMore() {
         let nMoreNode = document.createTextNode("沒有再多景點要載入了");
         noMore.appendChild(nMoreNode);
       } else {
-        console.log(`before/after loading page=${page}`);
-        webContent();
+        let keyword = document.getElementById("keyword").value;
+        if (keyword == "") {
+          webContent();
+        } else {
+          // alert(keyword);
+          searchContent();
+        }
       }
     }
   }
