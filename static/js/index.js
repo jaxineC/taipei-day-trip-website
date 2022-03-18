@@ -1,23 +1,25 @@
 // a literal expression, With strict mode, you can not use undeclared variables to write cleaner code.
 "use strict";
 let page = 0;
+let query = null;
+// let result; //op1:global variables: fetch return result=nono; fetchData(query).then(renderContent);
 
 //Model
 async function fetchData(query) {
-  // let query = null;
   let response = await fetch(`/api/attractions?page=${page + query}`, {
     method: "GET",
     mode: "cors",
     headers: { "Content-Type": "application/json" },
   });
   let result = await response.json();
-  // alert(result.data[0].name);
   return result;
 }
 
 //view
-async function renderContent(qurey) {
-  let result = await fetchData(qurey);
+// function renderContent(result) {//op2: fetchData(query).then(renderContent)
+async function renderContent(query) {
+  // op3: rederContent to call fetch
+  let result = await fetchData(query);
   for (let i = 0; i < 12; i++) {
     if (!result.data[i]) {
       let noMore = document.createElement("div");
@@ -94,6 +96,7 @@ function webContent() {
   let query = null;
   // fetchData(query).then(renderContent);
   renderContent(query);
+  // renderContent();
 }
 
 function searchContent() {
@@ -101,6 +104,7 @@ function searchContent() {
   let query = `&keyword=${keyword}`;
   // fetchData(query).then(renderContent);
   renderContent(query);
+  // renderContent();
 }
 
 function checkSearch() {
@@ -158,8 +162,11 @@ function loadMore() {
       } else {
         let keyword = document.getElementById("keyword").value;
         if (keyword == "") {
+          let query = null;
           webContent();
         } else {
+          let keyword = document.getElementById("keyword").value;
+          let query = `&keyword=${keyword}`;
           searchContent();
         }
       }
