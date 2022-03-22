@@ -12,8 +12,6 @@ app=Flask(
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
-app.secret_key = 'secret4Session'
-
 cnxpool = mypl.MySQLConnectionPool(
 	host = "localhost",
 	user = "root",
@@ -22,7 +20,6 @@ cnxpool = mypl.MySQLConnectionPool(
 	pool_name = "mypool",
 	pool_size = 5,
 )
-
 
 # templates----------------------------------------------------------------------
 @app.route("/")
@@ -133,6 +130,72 @@ def attractionId(attractionId):
 		input_msg= request.args.get('message','程式錯誤')
 		return jsonify({"error":True, "message": input_msg})
 		# return (str(e))
+
+#requests.patch(url, params={key:value}, args)
+@app.route("/api/user", methods=['PATCH'])
+def login():
+	#get values from request body
+	input_email = requests.patch(url, params={key:value}, args)
+	input_pw = requests.patch(url, params={key:value}, args)
+
+	try:
+		#check status()
+		if :
+			return jsonify({"ok": True})
+		else:
+			message = "400 登入資訊錯誤"
+			return jsonify({"error": True,"message": "自訂的錯誤訊息"})
+	except:
+		message = "500, 伺服器內部錯誤"
+		return jsonify({"error": True,"message": "自訂的錯誤訊息"}) 
+
+#requests.get(url, params={key:value}, args)
+@app.route("/api/user", methods=['GET'])
+def status():
+	#get request body values saved in user memory 
+	
+	
+
+	#verify tocken
+	if :
+		
+		data = {
+			"id": 1,
+			"name": "彭彭彭",
+			"email": "ply@ply.com"
+  	}
+		return jsonify({"data":data})
+	#fail
+	else:
+		return jsonfy({"data":None})
+
+#requests.post(url, data={key: value}, json={key: value}, args)
+@app.route("/api/user", methods=['POST'])
+def register():
+	#get values from request body
+	req_value = {
+		"name": "彭彭彭",
+		"email": "ply@ply.com",
+		"password": "12345678"
+	}
+	try:
+		#run mysql check if username is taken
+		if :
+			return jsonify({"ok":true})
+		else :
+			message = "自訂的錯誤訊息"
+			return jsonify({"error":true, "message":message})
+	#error handling
+	except:
+		message = "自訂的錯誤訊息"
+		return jsonify({"error":true, "message":message})
+
+#requests.delete(url, params={key: value}, args)
+@app.route("/api/user", methods=['DELETE'])
+def logout():
+	#clear tocken
+	#return logged out successfully
+	return jsonify({"ok": True}) 
 
 
 # run--------------------------------------------------------------------------
