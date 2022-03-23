@@ -11,7 +11,7 @@
 }
 .popupBox {
   width: 340px;
-  height: 275px;
+  /* height: 275px; */
   position: fixed;
   top: 80px;
   left: 50%;
@@ -66,8 +66,8 @@
 
 .popupA {
   width: 310px;
-  height: 22;
-  margin: 10px 0px 15px 0px;
+  height: auto;
+  margin-bottom: 15px;
 }
 
 /* -------------------------------------------------------------------------- */

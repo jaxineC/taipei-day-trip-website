@@ -91,14 +91,19 @@ function renderLogin() {
   login.id = "popupContainer";
   login.textContent = popupContent;
   document.getElementById("body").appendChild(login);
+  document.getElementById("popupContainer").innerHTML = loginContent;
 }
 
 function renderSignUp() {
   let signup = document.createElement("div");
-  login.className = "popupContainer";
-  login.id = "popupContainer";
+  signup.className = "popupContainer";
+  signup.id = "popupContainer";
   document.getElementById("body").appendChild(signup);
   document.getElementById("popupContainer").innerHTML = signupContent;
+}
+
+function closePopup() {
+  document.getElementById("popupContainer").remove();
 }
 
 //Controler
@@ -196,15 +201,15 @@ let loginContent = `<div id="popupContainer" class="popupContainer">
   <div id="popupBackground" class="popupBackground"></div>
   <div id="popupBox" class="popupBox">
     <div id="stripe" class="stripe"></div>
-    <img id="popupImg" class="popupImg" src="icon/icon_close.png"/>
+    <img onclick="closePopup()" id="popupImg" class="popupImg" src="icon/icon_close.png"/>
     <div class="Header3 Bold popupTitle">登入會員帳號</div>
     <form  action="url_for(login())">
-      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入電子信箱">
+      <input id="email" class="Body popupInput email" type="email" name="email" placeholder="輸入電子信箱">
       <br/>
-      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入密碼">
+      <input id="password" class="Body popupInput password" type="password" name="email" placeholder="輸入密碼">
       <button class="popupBoxBtn Button">登入帳戶</button>
       <br/>
-      <a id="popupA" class="popupA" onclick="renderSignUp()">還沒有帳戶？點此註冊</a>
+      <div  id="popupA" class="popupA"><a onclick="renderSignUp()">還沒有帳戶？點此註冊</a></div>
     </form>
   </div>
 </div>`;
@@ -213,16 +218,16 @@ let signupContent = `<div id="popupContainer" class="popupContainer">
   <div id="popupBackground" class="popupBackground"></div>
   <div id="popupBox" class="popupBox">
     <div id="stripe" class="stripe"></div>
-    <img id="popupImg" class="popupImg" src="icon/icon_close.png"/>
+    <img onclick="closePopup()" id="popupImg" class="popupImg" src="icon/icon_close.png"/>
     <div class="Header3 Bold popupTitle">註冊會員帳號</div>
     <form action="url_for(signup())">
-      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入姓名">
-      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入電子信箱">
+      <input id="name" class="Body popupInput name" type="text" name="email" placeholder="輸入姓名">
+      <input id="email" class="Body popupInput email" type="email" name="email" placeholder="輸入電子信箱">
       <br/>
-      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入密碼">
+      <input id="password" class="Body popupInput password" type="password" name="email" placeholder="輸入密碼">
       <button class="popupBoxBtn Button">註冊新帳戶</button>
       <br/>
-      <a id="popupA" class="popupA" onclick="renderLogin()">已經有帳戶了？點此登入</a>
+      <div  id="popupA" class="popupA"><a onclick="renderLogin()">已經有帳戶了？點此登入</a></div>
     </form>
   </div>
 </div>`;
