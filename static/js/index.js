@@ -2,6 +2,7 @@
 "use strict";
 let page = 0;
 let query = null;
+var windowObjectReference = null;
 // let result; //op1:global variables: fetch return result=nono; fetchData(query).then(renderContent);
 
 //Model
@@ -85,6 +86,13 @@ function clearContent() {
 }
 
 //Controler
+function signin() {
+  // window.open(url, target, windowFeatures);
+  let windowFeatures =
+    "titlebar=no, toolbar=no, menubar=no, scrollbars=no, status=no, fullscreen=no, height=pixel, left=375, menubar=yes, top=pixels, width=340, height=275";
+  windowObjectReference = window.open("", "", windowFeatures);
+}
+
 function newSearch() {
   clearContent();
   checkSearch();

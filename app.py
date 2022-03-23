@@ -2,6 +2,9 @@
 from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
+	# pyjwt
+	# import jwt
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 # settings-------------------------------------------------------------------
 app=Flask(
 	__name__,
@@ -20,6 +23,16 @@ cnxpool = mypl.MySQLConnectionPool(
 	pool_name = "mypool",
 	pool_size = 5,
 )
+	# pyjwt
+	# key = "pw_for_jwt"
+	# algorithm = "HS256"
+
+
+# Setup the Flask-JWT-Extended extension
+app.config["JWT_SECRET_KEY"] = "set-to-use-jwt"
+jwt = JWTManager(app)
+# jwt.init_app(app) ...not in Flask doc
+
 
 # templates----------------------------------------------------------------------
 @app.route("/")
@@ -134,66 +147,101 @@ def attractionId(attractionId):
 #requests.patch(url, params={key:value}, args)
 @app.route("/api/user", methods=['PATCH'])
 def login():
-	#get values from request body
-	input_email = requests.patch(url, params={key:value}, args)
-	input_pw = requests.patch(url, params={key:value}, args)
-
 	try:
-		#check status()
-		if :
-			return jsonify({"ok": True})
+		#get values from request body
+		# input_email = requests.args.patch('email') ...本來想用這個,改用下面的是官方文件
+		# input_pw = requests.args.patch('password')
+		input_email = request.json.get("email", None)
+		input_pw = request.json.get("password", None)
+		#run mysql to authenticate  user
+		cnx = cnxpool.get_connection()
+		cursor = cnx.cursor(dictionary=True)
+		sql = 'SELECT id, name, email FROM member WHERE email = %s AND password = %s'
+		injection = (input_email, input_pw)
+		cursor.execute(sql, injection)
+		result = cursor.fetchone()
+		cnx.close()
+		if result != None:
+			#generate json web token????????????????????????????????????????
+				# pyjwt
+				# encoded_jwt = jwt.encode({"data": result}, key, algorithm)
+				# jwt.decode(encoded_jwt, key, algorithms)
+			#Flask-JWT-Extended
+			access_token = create_access_token(identity=input_email, additional_claims=data)
+			data = result
+			#return login success msg + tocken
+			return jsonify({"ok": True, "access_token":access_token})
 		else:
-			message = "400 登入資訊錯誤"
-			return jsonify({"error": True,"message": "自訂的錯誤訊息"})
+			message = "登入資訊錯誤"
+			return jsonify({"error": True,"message": "自訂的錯誤訊息"}), 400
 	except:
-		message = "500, 伺服器內部錯誤"
-		return jsonify({"error": True,"message": "自訂的錯誤訊息"}) 
+		message = "伺服器內部錯誤"
+		return jsonify({"error": True,"message": "自訂的錯誤訊息"}) , 500
 
-#requests.get(url, params={key:value}, args)
+#requests.get(url, params={key:value}, args) ...python requests
+#request.args.get(‘name’)....flask request
+#request.values.get(‘name’)
+# def index_id(id)
+#render_template(‘abc.html’, name_template=name)------>傳回
 @app.route("/api/user", methods=['GET'])
+#verify tocken
+@jwt_required
 def status():
-	#get request body values saved in user memory 
-	
-	
-
-	#verify tocken
-	if :
-		
-		data = {
-			"id": 1,
-			"name": "彭彭彭",
-			"email": "ply@ply.com"
-  	}
+	try:
+		# Access the identity of the current user with get_jwt_identity
+		# claims = get_jwt() ...Flask doc
+		data = get_jwt()
+		# return jsonify(logged_in_as=current_user), 200 .... Flask 官方參考return info
 		return jsonify({"data":data})
-	#fail
-	else:
+		#return jsonify(foo=claims["foo"]) ...Flask doc
+	#fail message
+	except:
 		return jsonfy({"data":None})
+		    
+    
+    
 
-#requests.post(url, data={key: value}, json={key: value}, args)
+#requests.post(url, data={key: value}, json={key: value}, args) ...python requests
+#request.form.get(‘username’)....flask request
+#request.values.get(‘username’)
+#
 @app.route("/api/user", methods=['POST'])
 def register():
-	#get values from request body
-	req_value = {
-		"name": "彭彭彭",
-		"email": "ply@ply.com",
-		"password": "12345678"
-	}
 	try:
+		#get values from request body
+		input_name = request.form.get("name", None)
+		input_email = request.form.get("email", None)
+		input_pw = request.json.get("password", None)
+		#run mysql to authenticate  user
+		cnx = cnxpool.get_connection()
+		cursor = cnx.cursor(dictionary=True)
+		sql = 'SELECT name, email FROM member WHERE email = %s'
+		injection = (input_email,)
+		cursor.execute(sql, injection)
+		result = cursor.fetchone()
 		#run mysql check if username is taken
-		if :
-			return jsonify({"ok":true})
-		else :
+		if result != None:
+			cnx.close()
 			message = "自訂的錯誤訊息"
 			return jsonify({"error":true, "message":message})
+		else:
+			sql = 'INSERT INTO member (name, email, password) VALUES (%s, %s, %s)'
+			injection = (input_name, input_email, input_pw)
+			cursor.execute(sql, injection)
+			cnx.commit()
+			cnx.close()
+			return jsonify({"ok":true})
 	#error handling
 	except:
 		message = "自訂的錯誤訊息"
-		return jsonify({"error":true, "message":message})
+		return jsonify({"error":true, "message":message}), 500
 
 #requests.delete(url, params={key: value}, args)
 @app.route("/api/user", methods=['DELETE'])
 def logout():
 	#clear tocken
+	data = None;
+	access_token = None;
 	#return logged out successfully
 	return jsonify({"ok": True}) 
 
