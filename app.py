@@ -206,7 +206,7 @@ def status():
 #request.values.get(‘username’)
 #
 @app.route("/api/user", methods=['POST'])
-def register():
+def signup():
 	try:
 		#get values from request body
 		input_name = request.form.get("name", None)

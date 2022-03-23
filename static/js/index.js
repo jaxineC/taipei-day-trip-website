@@ -2,7 +2,7 @@
 "use strict";
 let page = 0;
 let query = null;
-var windowObjectReference = null;
+let popup_window = null;
 // let result; //op1:global variables: fetch return result=nono; fetchData(query).then(renderContent);
 
 //Model
@@ -85,14 +85,23 @@ function clearContent() {
   document.getElementById("mainContainer").innerHTML = null;
 }
 
-//Controler
-function signin() {
-  // window.open(url, target, windowFeatures);
-  let windowFeatures =
-    "titlebar=no, toolbar=no, menubar=no, scrollbars=no, status=no, fullscreen=no, height=pixel, left=375, menubar=yes, top=pixels, width=340, height=275";
-  windowObjectReference = window.open("", "", windowFeatures);
+function renderLogin() {
+  let login = document.createElement("div");
+  login.className = "popupContainer";
+  login.id = "popupContainer";
+  login.textContent = popupContent;
+  document.getElementById("body").appendChild(login);
 }
 
+function renderSignUp() {
+  let signup = document.createElement("div");
+  login.className = "popupContainer";
+  login.id = "popupContainer";
+  document.getElementById("body").appendChild(signup);
+  document.getElementById("popupContainer").innerHTML = signupContent;
+}
+
+//Controler
 function newSearch() {
   clearContent();
   checkSearch();
@@ -181,3 +190,39 @@ function loadMore() {
     }
   }
 }
+
+//--------------------------------------------------
+let loginContent = `<div id="popupContainer" class="popupContainer">
+  <div id="popupBackground" class="popupBackground"></div>
+  <div id="popupBox" class="popupBox">
+    <div id="stripe" class="stripe"></div>
+    <img id="popupImg" class="popupImg" src="icon/icon_close.png"/>
+    <div class="Header3 Bold popupTitle">登入會員帳號</div>
+    <form  action="url_for(login())">
+      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入電子信箱">
+      <br/>
+      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入密碼">
+      <button class="popupBoxBtn Button">登入帳戶</button>
+      <br/>
+      <a id="popupA" class="popupA" onclick="renderSignUp()">還沒有帳戶？點此註冊</a>
+    </form>
+  </div>
+</div>`;
+
+let signupContent = `<div id="popupContainer" class="popupContainer">
+  <div id="popupBackground" class="popupBackground"></div>
+  <div id="popupBox" class="popupBox">
+    <div id="stripe" class="stripe"></div>
+    <img id="popupImg" class="popupImg" src="icon/icon_close.png"/>
+    <div class="Header3 Bold popupTitle">註冊會員帳號</div>
+    <form action="url_for(signup())">
+      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入姓名">
+      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入電子信箱">
+      <br/>
+      <input id="email" class="Body popupInput" type="text" name="email" placeholder="輸入密碼">
+      <button class="popupBoxBtn Button">註冊新帳戶</button>
+      <br/>
+      <a id="popupA" class="popupA" onclick="renderLogin()">已經有帳戶了？點此登入</a>
+    </form>
+  </div>
+</div>`;

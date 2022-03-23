@@ -1,3 +1,77 @@
+/* -------------------------------------------------------------------------- */
+.popupBackground {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: #000000;
+  opacity: 0.25;
+  z-index: 99;
+}
+.popupBox {
+  width: 340px;
+  height: 275px;
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  margin-left: -170px;
+  border-radius: 5px;
+
+  background-color: #ffffff;
+  z-index: 100;
+  opacity: 1;
+  color: #666666;
+
+  text-align: center;
+}
+
+.stripe {
+  height: 10px;
+  background: linear-gradient(270deg, #337788 0%, #66aabb 100%);
+  border-radius: 5px 5px 0px 0px;
+}
+
+.popupImg {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 27px;
+  right: 17px;
+}
+
+.popupTitle {
+  margin: 15px 0px 15px 0px;
+}
+.popupInput {
+  box-sizing: border-box;
+  width: 308px;
+  height: 47px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.popupBoxBtn {
+  width: 310px;
+  height: 47px;
+  border-style: none;
+  border-radius: 5px;
+  text-align: center !important;
+  color: #ffffff;
+  background-color: #448899;
+  margin-bottom: 10px;
+}
+
+.popupA {
+  width: 310px;
+  height: 22;
+  margin: 10px 0px 15px 0px;
+}
+
+/* -------------------------------------------------------------------------- */
+
 body {
   box-sizing: border-box;
 
@@ -322,14 +396,14 @@ footer {
   font-weight: 700;
   line-height: 24px;
   letter-spacing: 0em;
-  text-align: left;
+  /* text-align: left; */
 }
 
 .Button {
   font-family: Noto Sans TC;
   font-size: 19px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 16px;
   letter-spacing: 0em;
   text-align: left;
