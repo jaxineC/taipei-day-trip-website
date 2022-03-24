@@ -7,9 +7,12 @@ import json
 	# import jwt
 from flask_jwt_extended import (
 	create_access_token,
+	get_jwt,
 	get_jwt_identity,
 	jwt_required,
-	JWTManager
+	JWTManager,
+	set_access_cookies,
+  unset_jwt_cookies
 )
 
 
@@ -37,8 +40,9 @@ cnxpool = mypl.MySQLConnectionPool(
 
 
 # Setup the Flask-JWT-Extended extension
-app.config["JWT_SECRET_KEY"] = "set-to-use-jwt"
-app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config["JWT_SECRET_KEY"] = "key-to-use-jwt"
+app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
+# app.config["JWT_COOKIE_SECURE"] = True
 jwt = JWTManager(app)
 
 # jwt.init_app(app) ...not in Flask doc
@@ -176,17 +180,17 @@ def login():
 				# encoded_jwt = jwt.encode({"data": result}, key, algorithm)
 				# jwt.decode(encoded_jwt, key, algorithms)
 				#Flask-JWT-Extended
-				# access_token = create_access_token(identity=username, additional_claims=data) ...官方
-			access_token = create_access_token(input_email, result)
+				# access_token = create_access_token(identity=username, additional_claims=claims) ...官方
+			access_token = create_access_token(input_email, additional_claims=result)
 
 			# resp = jsonify({'login': True})
 			# set_access_cookies(resp, access_token)
 			data = result
 			#return login success msg + tocken
-			return jsonify({"ok": True, "access_token":result})
+			return jsonify({"ok": True, "access_token":access_token})
 		else:
-			message = "登入資訊錯誤"
-			return jsonify({"error": True,"message":input_email})
+			message = "帳號密碼輸入錯誤"
+			return jsonify({"error": True,"message":message})
 	except Exception as e:
 		message = "伺服器內部錯誤"
 		return jsonify({"error": True,"message": message}) , 500
@@ -199,18 +203,22 @@ def login():
 #render_template(‘abc.html’, name_template=name)------>傳回
 @app.route("/api/user", methods=['GET'])
 #verify tocken
-# @jwt_required...............Flask doc沒有搞清楚這要幹嗎
-def status():
+@jwt_required(optional=False, fresh=False, refresh=False, locations=None)
+def authentication():
 	try:
 		# Access the identity of the current user with get_jwt_identity
+		# identity = get_jwt_identity()
 		# claims = get_jwt() ...Flask doc
-		data = get_jwt()
+		claim = get_jwt()
+		data = {key:claim[key] for key in["id","name", "email"]}
+		# wanted_keys = ("id","name", "email")
+		# v=verify_jwt_in_request(optional=False, fresh=False, refresh=False, locations=None)
 		# return jsonify(logged_in_as=current_user), 200 ...官方
 		return jsonify({"data":data})
 		#return jsonify(foo=claims["foo"]) ...官方
 	#fail message
 	except:
-		return jsonify({"data":None})
+		return jsonify({"data":None, "message":"請確認正確登入"})
 		    
     
     

@@ -3,6 +3,7 @@
 let page = 0;
 let query = null;
 let popup_window = null;
+let access_token;
 // let result; //op1:global variables: fetch return result=nono; fetchData(query).then(renderContent);
 
 //Model
@@ -16,10 +17,14 @@ async function fetchData(query) {
   return result;
 }
 
-async function authentication() {
+async function authentication(access_token) {
   let response = await fetch("/api/user", {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: `Bearer ${access_token}}` ...原本也可以
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
   });
   let status = await response.json();
   if (status.data != null) {
@@ -32,15 +37,24 @@ async function login() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
   let bodyData = `{"email": "${email}", "password": "${password}"}`;
-  // let bodyData = { email: "jx@gmail.com", password: "0000" };
   let response = await fetch("/api/user", {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: `Bearer ${access_token}}`, ...原本也可以
+      // Authorization: `Bearer ${localStorage.getItem('jwt')}` ...官方
+    },
+
     body: JSON.stringify(bodyData),
     // body: `{"email": ${email}, "password": ${password}}`,
     // body: { email: "jx@gmail.com", password: "0000" },
   });
   let loginResult = await response.json();
+  localStorage.setItem("jwt", loginResult.access_token);
+  // localStorage.setItem("jwt", result.access_token);
+  closePopup();
+  // authentication(loginResult["access_token"]);
+  authentication();
   return loginResult;
 }
 
@@ -51,6 +65,17 @@ async function signup() {
   });
   let signupResult = await response.json();
   return signupResult;
+}
+
+async function logout() {
+  localStorage.removeItem("jwt");
+  let response = await fetch("/api/user", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  let signupResult = await response.json();
+  location.reload();
+  return logoutResult;
 }
 
 //view

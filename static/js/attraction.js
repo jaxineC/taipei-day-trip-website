@@ -43,10 +43,14 @@ function load() {
   // alert(imagesList);------------>undefined ?????????@@
 }
 
-async function authentication() {
+async function authentication(access_token) {
   let response = await fetch("/api/user", {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: `Bearer ${access_token}}` ...原本也可以
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
   });
   let status = await response.json();
   if (status.data != null) {
