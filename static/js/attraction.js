@@ -7,6 +7,11 @@
 let index = 0;
 let imagesList;
 
+function init() {
+  load();
+  authentication();
+}
+
 function load() {
   let attractionId = window.location.pathname.replace("/attraction/", "");
   fetch(`/api/attraction/${attractionId}`, {
@@ -36,6 +41,18 @@ function load() {
       return (imagesList = result.data.images);
     });
   // alert(imagesList);------------>undefined ?????????@@
+}
+
+async function authentication() {
+  let response = await fetch("/api/user", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  let status = await response.json();
+  if (status.data != null) {
+    document.getElementById("authenticate").innerHTML = "登出";
+  }
+  return status;
 }
 
 function next() {

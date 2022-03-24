@@ -2,9 +2,17 @@
 from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
+import json
 	# pyjwt
 	# import jwt
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
+from flask_jwt_extended import (
+	create_access_token,
+	get_jwt_identity,
+	jwt_required,
+	JWTManager
+)
+
+
 # settings-------------------------------------------------------------------
 app=Flask(
 	__name__,
@@ -30,7 +38,9 @@ cnxpool = mypl.MySQLConnectionPool(
 
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = "set-to-use-jwt"
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 jwt = JWTManager(app)
+
 # jwt.init_app(app) ...not in Flask doc
 
 
@@ -149,11 +159,10 @@ def attractionId(attractionId):
 def login():
 	try:
 		#get values from request body
-		# input_email = requests.args.patch('email') ...本來想用這個,改用下面的是官方文件
-		# input_pw = requests.args.patch('password')
-		input_email = request.json.get("email", None)
-		input_pw = request.json.get("password", None)
-		#run mysql to authenticate  user
+		input_data = json.loads(request.get_json())
+		input_email = input_data["email"]
+		input_pw = input_data["password"]
+		#run mysql to authenticate user
 		cnx = cnxpool.get_connection()
 		cursor = cnx.cursor(dictionary=True)
 		sql = 'SELECT id, name, email FROM member WHERE email = %s AND password = %s'
@@ -166,17 +175,22 @@ def login():
 				# pyjwt
 				# encoded_jwt = jwt.encode({"data": result}, key, algorithm)
 				# jwt.decode(encoded_jwt, key, algorithms)
-			#Flask-JWT-Extended
-			access_token = create_access_token(identity=input_email, additional_claims=data)
+				#Flask-JWT-Extended
+				# access_token = create_access_token(identity=username, additional_claims=data) ...官方
+			access_token = create_access_token(input_email, result)
+
+			# resp = jsonify({'login': True})
+			# set_access_cookies(resp, access_token)
 			data = result
 			#return login success msg + tocken
-			return jsonify({"ok": True, "access_token":access_token})
+			return jsonify({"ok": True, "access_token":result})
 		else:
 			message = "登入資訊錯誤"
-			return jsonify({"error": True,"message": "自訂的錯誤訊息"}), 400
-	except:
+			return jsonify({"error": True,"message":input_email})
+	except Exception as e:
 		message = "伺服器內部錯誤"
-		return jsonify({"error": True,"message": "自訂的錯誤訊息"}) , 500
+		return jsonify({"error": True,"message": message}) , 500
+		# return e
 
 #requests.get(url, params={key:value}, args) ...python requests
 #request.args.get(‘name’)....flask request
@@ -185,18 +199,18 @@ def login():
 #render_template(‘abc.html’, name_template=name)------>傳回
 @app.route("/api/user", methods=['GET'])
 #verify tocken
-@jwt_required
+# @jwt_required...............Flask doc沒有搞清楚這要幹嗎
 def status():
 	try:
 		# Access the identity of the current user with get_jwt_identity
 		# claims = get_jwt() ...Flask doc
 		data = get_jwt()
-		# return jsonify(logged_in_as=current_user), 200 .... Flask 官方參考return info
+		# return jsonify(logged_in_as=current_user), 200 ...官方
 		return jsonify({"data":data})
-		#return jsonify(foo=claims["foo"]) ...Flask doc
+		#return jsonify(foo=claims["foo"]) ...官方
 	#fail message
 	except:
-		return jsonfy({"data":None})
+		return jsonify({"data":None})
 		    
     
     
@@ -240,8 +254,10 @@ def signup():
 @app.route("/api/user", methods=['DELETE'])
 def logout():
 	#clear tocken
-	data = None;
-	access_token = None;
+	# data = None;
+	# access_token = None;
+	resp = jsonify({'logout': True})
+	unset_jwt_cookies(resp)
 	#return logged out successfully
 	return jsonify({"ok": True}) 
 

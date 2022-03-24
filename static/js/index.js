@@ -16,6 +16,43 @@ async function fetchData(query) {
   return result;
 }
 
+async function authentication() {
+  let response = await fetch("/api/user", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  let status = await response.json();
+  if (status.data != null) {
+    document.getElementById("authenticate").innerHTML = "登出";
+  }
+  return status;
+}
+
+async function login() {
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+  let bodyData = `{"email": "${email}", "password": "${password}"}`;
+  // let bodyData = { email: "jx@gmail.com", password: "0000" };
+  let response = await fetch("/api/user", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(bodyData),
+    // body: `{"email": ${email}, "password": ${password}}`,
+    // body: { email: "jx@gmail.com", password: "0000" },
+  });
+  let loginResult = await response.json();
+  return loginResult;
+}
+
+async function signup() {
+  let response = await fetch("/api/user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+  let signupResult = await response.json();
+  return signupResult;
+}
+
 //view
 // function renderContent(result) {//op2: fetchData(query).then(renderContent)
 async function renderContent(query) {
@@ -89,7 +126,6 @@ function renderLogin() {
   let login = document.createElement("div");
   login.className = "popupContainer";
   login.id = "popupContainer";
-  login.textContent = popupContent;
   document.getElementById("body").appendChild(login);
   document.getElementById("popupContainer").innerHTML = loginContent;
 }
@@ -113,11 +149,12 @@ function newSearch() {
   searchContent();
 }
 
-function webContent() {
+function init() {
   // let keyword = document.getElementById("keyword").value;
   let query = null;
   // fetchData(query).then(renderContent);
   renderContent(query);
+  authentication();
   // renderContent();
 }
 
@@ -185,7 +222,7 @@ function loadMore() {
         let keyword = document.getElementById("keyword").value;
         if (keyword == "") {
           let query = null;
-          webContent();
+          renderContent(query);
         } else {
           let keyword = document.getElementById("keyword").value;
           let query = `&keyword=${keyword}`;
@@ -203,14 +240,14 @@ let loginContent = `<div id="popupContainer" class="popupContainer">
     <div id="stripe" class="stripe"></div>
     <img onclick="closePopup()" id="popupImg" class="popupImg" src="icon/icon_close.png"/>
     <div class="Header3 Bold popupTitle">登入會員帳號</div>
-    <form  action="url_for(login())">
+    <div>
       <input id="email" class="Body popupInput email" type="email" name="email" placeholder="輸入電子信箱">
       <br/>
       <input id="password" class="Body popupInput password" type="password" name="email" placeholder="輸入密碼">
-      <button class="popupBoxBtn Button">登入帳戶</button>
+      <button onclick="login()" class="popupBoxBtn Button">登入帳戶</button>
       <br/>
       <div  id="popupA" class="popupA"><a onclick="renderSignUp()">還沒有帳戶？點此註冊</a></div>
-    </form>
+    </div>
   </div>
 </div>`;
 

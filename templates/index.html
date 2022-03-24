@@ -20,13 +20,13 @@
     <title>index</title>
   </head>
 
-  <body id="body" onload="webContent()">
+  <body id="body" onload="init()">
     <nav>
       <div class="navContainer">
         <div class="navTitle">台北一日遊</div>
         <div class="navBtnContainer">
           <button class="navBtn Body">預定行程</button>
-          <button onclick="renderSignUp()" class="navBtn Body">登入/註冊</button>
+          <button onclick="renderLogin()" id="authenticate"class="navBtn Body authenticate">登入/註冊</button>
         </div>
       </div>
     </nav>
