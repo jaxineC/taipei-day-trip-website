@@ -12,7 +12,8 @@ from flask_jwt_extended import (
 	jwt_required,
 	JWTManager,
 	set_access_cookies,
-  unset_jwt_cookies
+  unset_jwt_cookies,
+	verify_jwt_in_request
 )
 
 
@@ -203,24 +204,23 @@ def login():
 #render_template(‘abc.html’, name_template=name)------>傳回
 @app.route("/api/user", methods=['GET'])
 #verify tocken
-@jwt_required(optional=False, fresh=False, refresh=False, locations=None)
+# @jwt_required(optional=False, fresh=False, refresh=False, locations=None)
 def authentication():
 	try:
 		# Access the identity of the current user with get_jwt_identity
-		# identity = get_jwt_identity()
-		# claims = get_jwt() ...Flask doc
+
+		verify_jwt_in_request(optional=True)
 		claim = get_jwt()
+		
+		# claim = get_jwt()
 		data = {key:claim[key] for key in["id","name", "email"]}
-		# wanted_keys = ("id","name", "email")
+
 		# v=verify_jwt_in_request(optional=False, fresh=False, refresh=False, locations=None)
-		# return jsonify(logged_in_as=current_user), 200 ...官方
 		return jsonify({"data":data})
-		#return jsonify(foo=claims["foo"]) ...官方
 	#fail message
 	except:
-		return jsonify({"data":None, "message":"請確認正確登入"})
-		    
-    
+		return jsonify({"data":None})
+
     
 
 #requests.post(url, data={key: value}, json={key: value}, args) ...python requests
@@ -231,9 +231,13 @@ def authentication():
 def signup():
 	try:
 		#get values from request body
-		input_name = request.form.get("name", None)
-		input_email = request.form.get("email", None)
-		input_pw = request.json.get("password", None)
+		input_data = json.loads(request.get_json())
+		input_name = input_data["name"]
+		input_email = input_data["email"]
+		input_pw = input_data["password"]
+		# input_name = request.form.get("name", None)
+		# input_email = request.form.get("email", None)
+		# input_pw = request.json.get("password", None)
 		#run mysql to authenticate  user
 		cnx = cnxpool.get_connection()
 		cursor = cnx.cursor(dictionary=True)
@@ -244,19 +248,19 @@ def signup():
 		#run mysql check if username is taken
 		if result != None:
 			cnx.close()
-			message = "自訂的錯誤訊息"
-			return jsonify({"error":true, "message":message})
+			message = "使用的email已註冊過,請登入"
+			return jsonify({"error":True, "message":message})
 		else:
 			sql = 'INSERT INTO member (name, email, password) VALUES (%s, %s, %s)'
 			injection = (input_name, input_email, input_pw)
 			cursor.execute(sql, injection)
 			cnx.commit()
 			cnx.close()
-			return jsonify({"ok":true})
+			return jsonify({"ok":True})
 	#error handling
 	except:
 		message = "自訂的錯誤訊息"
-		return jsonify({"error":true, "message":message}), 500
+		return jsonify({"error":True, "message":message}), 500
 
 #requests.delete(url, params={key: value}, args)
 @app.route("/api/user", methods=['DELETE'])

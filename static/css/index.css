@@ -64,6 +64,14 @@
   margin-bottom: 10px;
 }
 
+.popupMsg {
+  width: 310px;
+  height: auto;
+  margin-bottom: 10px;
+  color: rgb(218, 71, 27);
+  font-weight: bold;
+}
+
 .popupA {
   width: 310px;
   height: auto;
@@ -407,6 +415,16 @@ footer {
   line-height: 16px;
   letter-spacing: 0em;
   text-align: left;
+}
+
+button:hover {
+  cursor: pointer;
+  /* text-decoration: underline; */
+}
+
+a:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .Content {

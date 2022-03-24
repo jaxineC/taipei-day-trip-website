@@ -29,6 +29,7 @@ async function authentication(access_token) {
   let status = await response.json();
   if (status.data != null) {
     document.getElementById("authenticate").innerHTML = "登出";
+    document.getElementById("authenticate").setAttribute("onClick", "logout()");
   }
   return status;
 }
@@ -52,19 +53,41 @@ async function login() {
   let loginResult = await response.json();
   localStorage.setItem("jwt", loginResult.access_token);
   // localStorage.setItem("jwt", result.access_token);
-  closePopup();
-  // authentication(loginResult["access_token"]);
-  authentication();
-  return loginResult;
+  if (loginResult.error) {
+    renderPopupMsg(loginResult.error, loginResult.message);
+  } else {
+    renderPopupMsg(false, "歡迎");
+    setTimeout(closePopup, 3000);
+    // authentication(loginResult["access_token"]);
+    authentication();
+    return loginResult;
+  }
 }
 
 async function signup() {
+  let name = document.getElementById("name").value;
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+  let bodyData = `{
+    "name": "${name}",
+    "email": "${email}",
+    "password": "${password}"
+  }`;
   let response = await fetch("/api/user", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(bodyData),
   });
   let signupResult = await response.json();
-  return signupResult;
+  if (signupResult.error) {
+    renderPopupMsg(signupResult.error, signupResult.message);
+  } else {
+    renderPopupMsg(false, "註冊成功，請登入繼續");
+    setTimeout(renderLogin, 2000);
+    // authentication(loginResult["access_token"]);
+    authentication();
+    return signupResult;
+  }
 }
 
 async function logout() {
@@ -74,7 +97,9 @@ async function logout() {
     headers: { "Content-Type": "application/json" },
   });
   let signupResult = await response.json();
-  location.reload();
+  renderLogout();
+  setTimeout(closePopup, 1000);
+  setTimeout(window.location.reload.bind(window.location), 1000);
   return logoutResult;
 }
 
@@ -161,6 +186,22 @@ function renderSignUp() {
   signup.id = "popupContainer";
   document.getElementById("body").appendChild(signup);
   document.getElementById("popupContainer").innerHTML = signupContent;
+}
+
+function renderLogout() {
+  let signup = document.createElement("div");
+  signup.className = "popupContainer";
+  signup.id = "popupContainer";
+  document.getElementById("body").appendChild(signup);
+  document.getElementById("popupContainer").innerHTML = logoutContent;
+}
+
+function renderPopupMsg(error, msg) {
+  if (error) {
+    document.getElementById("popupMsg").innerHTML = `${msg}`;
+  } else {
+    document.getElementById("popupMsg").innerHTML = `${msg}`;
+  }
 }
 
 function closePopup() {
@@ -271,6 +312,7 @@ let loginContent = `<div id="popupContainer" class="popupContainer">
       <input id="password" class="Body popupInput password" type="password" name="email" placeholder="輸入密碼">
       <button onclick="login()" class="popupBoxBtn Button">登入帳戶</button>
       <br/>
+      <div id="popupMsg" class="popupMsg"></div>
       <div  id="popupA" class="popupA"><a onclick="renderSignUp()">還沒有帳戶？點此註冊</a></div>
     </div>
   </div>
@@ -282,14 +324,26 @@ let signupContent = `<div id="popupContainer" class="popupContainer">
     <div id="stripe" class="stripe"></div>
     <img onclick="closePopup()" id="popupImg" class="popupImg" src="icon/icon_close.png"/>
     <div class="Header3 Bold popupTitle">註冊會員帳號</div>
-    <form action="url_for(signup())">
+    <div>
       <input id="name" class="Body popupInput name" type="text" name="email" placeholder="輸入姓名">
       <input id="email" class="Body popupInput email" type="email" name="email" placeholder="輸入電子信箱">
       <br/>
       <input id="password" class="Body popupInput password" type="password" name="email" placeholder="輸入密碼">
-      <button class="popupBoxBtn Button">註冊新帳戶</button>
+      <button onclick="signup()" class="popupBoxBtn Button">註冊新帳戶</button>
       <br/>
+      <div id="popupMsg" class="popupMsg"></div>
       <div  id="popupA" class="popupA"><a onclick="renderLogin()">已經有帳戶了？點此登入</a></div>
-    </form>
+    </div>
+  </div>
+</div>`;
+
+let logoutContent = `<div id="popupContainer" class="popupContainer">
+  <div id="popupBackground" class="popupBackground"></div>
+  <div id="popupBox" class="popupBox">
+    <div id="stripe" class="stripe"></div>
+    <img onclick="closePopup()" id="popupImg" class="popupImg" src="icon/icon_close.png"/>
+    <div class="Header3 Bold popupTitle">成功登出</div>
+    <div id="popupMsg" class="popupMsg"></div>
+    <div  id="popupA" class="popupA">重新載入</div>
   </div>
 </div>`;
