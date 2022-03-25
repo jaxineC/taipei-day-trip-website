@@ -165,6 +165,7 @@ async function renderContent(query) {
   }
   return (page = result.nextPage);
 }
+
 function clearContent() {
   let searchResult = document.createElement("div");
   searchResult.id = "mainContainer";

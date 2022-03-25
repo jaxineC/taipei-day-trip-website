@@ -41,6 +41,7 @@
 }
 
 .popupTitle {
+  width: 310px;
   margin: 15px 0px 15px 0px;
 }
 .popupInput {
