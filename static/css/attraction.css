@@ -329,6 +329,15 @@ button {
   border-radius: 5px;
 }
 
+button:hover {
+  cursor: pointer;
+  /* text-decoration: underline; */
+}
+
+a:hover {
+  cursor: pointer;
+}
+
 hr {
   width: 100%;
   margin: 37px 0px 50px 0px;

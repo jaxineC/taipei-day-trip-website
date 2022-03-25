@@ -425,7 +425,6 @@ button:hover {
 
 a:hover {
   cursor: pointer;
-  text-decoration: underline;
 }
 
 .Content {

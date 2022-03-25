@@ -166,6 +166,19 @@ async function signup() {
   }
 }
 
+async function logout() {
+  localStorage.removeItem("jwt");
+  let response = await fetch("/api/user", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  let signupResult = await response.json();
+  renderLogout();
+  setTimeout(closePopup, 1000);
+  setTimeout(window.location.reload.bind(window.location), 1000);
+  return logoutResult;
+}
+
 async function login() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
