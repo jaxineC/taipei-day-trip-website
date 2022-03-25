@@ -57,7 +57,7 @@ async function login() {
     renderPopupMsg(loginResult.error, loginResult.message);
   } else {
     renderPopupMsg(false, "歡迎");
-    setTimeout(closePopup, 3000);
+    setTimeout(closePopup, 1000);
     // authentication(loginResult["access_token"]);
     authentication();
     return loginResult;
@@ -83,7 +83,7 @@ async function signup() {
     renderPopupMsg(signupResult.error, signupResult.message);
   } else {
     renderPopupMsg(false, "註冊成功，請登入繼續");
-    setTimeout(renderLogin, 2000);
+    setTimeout(renderLogin, 1000);
     // authentication(loginResult["access_token"]);
     authentication();
     return signupResult;

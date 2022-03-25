@@ -3,18 +3,16 @@ from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
 import json
-	# pyjwt
-	# import jwt
 from flask_jwt_extended import (
 	create_access_token,
 	get_jwt,
-	get_jwt_identity,
 	jwt_required,
 	JWTManager,
-	set_access_cookies,
-  unset_jwt_cookies,
 	verify_jwt_in_request
 )
+
+# from model.api import app2
+# app.register_blueprint(app2)
 
 
 # settings-------------------------------------------------------------------
@@ -27,6 +25,10 @@ app=Flask(
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
+# Flask blueprint
+bp = Blueprint('auth', __name__, url_prefix='/auth')
+
+# Connect to MySQL
 cnxpool = mypl.MySQLConnectionPool(
 	host = "localhost",
 	user = "root",
@@ -35,18 +37,21 @@ cnxpool = mypl.MySQLConnectionPool(
 	pool_name = "mypool",
 	pool_size = 5,
 )
-	# pyjwt
-	# key = "pw_for_jwt"
-	# algorithm = "HS256"
-
-
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = "key-to-use-jwt"
 app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
-# app.config["JWT_COOKIE_SECURE"] = True
 jwt = JWTManager(app)
 
-# jwt.init_app(app) ...not in Flask doc
+# functions----------------------------------------------------------------------
+
+# mysql
+def dbQuery(sql,injection) :
+	cnx = cnxpool.get_connection()
+	cursor = cnx.cursor(dictionary=True)
+	cursor.execute(sql, injection)
+	result = cursor.fetchone()
+	cnx.close()
+	return result
 
 
 # templates----------------------------------------------------------------------
@@ -81,8 +86,8 @@ def attractions():
 			number2 = (int(input_page)+1)*12
 			currentPage = int(input_page)
 		keyword = str(input_keyword)
-		cnx1 = cnxpool.get_connection()
-		cur = cnx1.cursor(dictionary=True)
+		cnx = cnxpool.get_connection()
+		cur = cnx.cursor(dictionary=True)
 		
 		if input_keyword == None:
 			sql = "SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE name IS NOT NULL LIMIT %s,12"
@@ -111,7 +116,7 @@ def attractions():
 			# elif (count - currentPage*12) >0 : nextpage=currentPage+1
 			else: nextpage=None
 		cur.close()
-		cnx1.close() 
+		cnx.close() 
 		# if result == []:
 		if int(input_page)>58//12:
 			raise ValueError
@@ -136,14 +141,14 @@ def attractionId(attractionId):
 		id_str= str(int(attractionId))
 		if int(attractionId)<0 or int(attractionId)>58: 
 			raise ValueError
-		cnx2 = cnxpool.get_connection()
-		cur = cnx2.cursor(dictionary=True)
+		cnx = cnxpool.get_connection()
+		cur = cnx.cursor(dictionary=True)
 		sql =	"SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE id = %s"
 		val = (id_str,)
 		cur.execute(sql, val)
 		result = cur.fetchall()
 		cur.close()
-		cnx2.close()
+		cnx.close()
 		if result == []:
 			raise ValueError
 		else:
@@ -159,6 +164,7 @@ def attractionId(attractionId):
 		return jsonify({"error":True, "message": input_msg})
 		# return (str(e))
 
+
 #requests.patch(url, params={key:value}, args)
 @app.route("/api/user", methods=['PATCH'])
 def login():
@@ -168,26 +174,23 @@ def login():
 		input_email = input_data["email"]
 		input_pw = input_data["password"]
 		#run mysql to authenticate user
-		cnx = cnxpool.get_connection()
-		cursor = cnx.cursor(dictionary=True)
+
+		# cnx = cnxpool.get_connection()
+		# cursor = cnx.cursor(dictionary=True)
 		sql = 'SELECT id, name, email FROM member WHERE email = %s AND password = %s'
 		injection = (input_email, input_pw)
-		cursor.execute(sql, injection)
-		result = cursor.fetchone()
-		cnx.close()
+		result = dbQuery(sql,injection)
+		# cursor.execute(sql, injection)
+		# result = cursor.fetchone()
+		# cnx.close()
 		if result != None:
-			#generate json web token????????????????????????????????????????
-				# pyjwt
-				# encoded_jwt = jwt.encode({"data": result}, key, algorithm)
-				# jwt.decode(encoded_jwt, key, algorithms)
-				#Flask-JWT-Extended
-				# access_token = create_access_token(identity=username, additional_claims=claims) ...官方
+			#generate json web token
 			access_token = create_access_token(input_email, additional_claims=result)
-
-			# resp = jsonify({'login': True})
-			# set_access_cookies(resp, access_token)
+			#---------------------------------------cookies
+			resp = make_response('Setting cookie?')
+			resp.set_cookie(key='Token', value=access_token)
+			#---------------------------------------cookies
 			data = result
-			#return login success msg + tocken
 			return jsonify({"ok": True, "access_token":access_token})
 		else:
 			message = "帳號密碼輸入錯誤"
@@ -197,36 +200,32 @@ def login():
 		return jsonify({"error": True,"message": message}) , 500
 		# return e
 
-#requests.get(url, params={key:value}, args) ...python requests
-#request.args.get(‘name’)....flask request
-#request.values.get(‘name’)
-# def index_id(id)
-#render_template(‘abc.html’, name_template=name)------>傳回
+
 @app.route("/api/user", methods=['GET'])
 #verify tocken
-# @jwt_required(optional=False, fresh=False, refresh=False, locations=None)
 def authentication():
 	try:
 		# Access the identity of the current user with get_jwt_identity
-
 		verify_jwt_in_request(optional=True)
 		claim = get_jwt()
-		
-		# claim = get_jwt()
 		data = {key:claim[key] for key in["id","name", "email"]}
+		#---------------------------------------cookie
+		# token = request.cookies.get("Token")
+		# if token == True:
+		# 	return jsonify({"data":data})
+		# else:
+		# 	return jsonify({"data":"有跑完try"})
+		#---------------------------------------cookies
 
-		# v=verify_jwt_in_request(optional=False, fresh=False, refresh=False, locations=None)
 		return jsonify({"data":data})
 	#fail message
-	except:
+	except Exception as e:
 		return jsonify({"data":None})
+		# return e
 
     
 
-#requests.post(url, data={key: value}, json={key: value}, args) ...python requests
-#request.form.get(‘username’)....flask request
-#request.values.get(‘username’)
-#
+
 @app.route("/api/user", methods=['POST'])
 def signup():
 	try:
@@ -235,29 +234,28 @@ def signup():
 		input_name = input_data["name"]
 		input_email = input_data["email"]
 		input_pw = input_data["password"]
-		# input_name = request.form.get("name", None)
-		# input_email = request.form.get("email", None)
-		# input_pw = request.json.get("password", None)
 		#run mysql to authenticate  user
-		cnx = cnxpool.get_connection()
-		cursor = cnx.cursor(dictionary=True)
+		# cnx = cnxpool.get_connection()
+		# cursor = cnx.cursor(dictionary=True)
 		sql = 'SELECT name, email FROM member WHERE email = %s'
 		injection = (input_email,)
-		cursor.execute(sql, injection)
-		result = cursor.fetchone()
+		result = dbQuery(sql,injection)
+		# cursor.execute(sql, injection)
+		# result = cursor.fetchone()
 		#run mysql check if username is taken
 		if result != None:
-			cnx.close()
+			# cnx.close()
 			message = "使用的email已註冊過,請登入"
 			return jsonify({"error":True, "message":message})
 		else:
+			cnx = cnxpool.get_connection()
+			cursor = cnx.cursor(dictionary=True)
 			sql = 'INSERT INTO member (name, email, password) VALUES (%s, %s, %s)'
 			injection = (input_name, input_email, input_pw)
 			cursor.execute(sql, injection)
 			cnx.commit()
 			cnx.close()
 			return jsonify({"ok":True})
-	#error handling
 	except:
 		message = "自訂的錯誤訊息"
 		return jsonify({"error":True, "message":message}), 500
@@ -266,11 +264,7 @@ def signup():
 @app.route("/api/user", methods=['DELETE'])
 def logout():
 	#clear tocken
-	# data = None;
-	# access_token = None;
 	resp = jsonify({'logout': True})
-	unset_jwt_cookies(resp)
-	#return logged out successfully
 	return jsonify({"ok": True}) 
 
 
