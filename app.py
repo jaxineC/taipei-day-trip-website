@@ -11,8 +11,7 @@ from flask_jwt_extended import (
 	verify_jwt_in_request
 )
 
-# from model.api import app2
-# app.register_blueprint(app2)
+from api.user import user
 
 
 # settings-------------------------------------------------------------------
@@ -26,7 +25,9 @@ app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
 # Flask blueprint
-bp = Blueprint('auth', __name__, url_prefix='/auth')
+bp = Blueprint('api', __name__, url_prefix='/api')
+app.register_blueprint(user)
+app.register_blueprint(user, url_prefix='/user')
 
 # Connect to MySQL
 cnxpool = mypl.MySQLConnectionPool(
@@ -41,17 +42,6 @@ cnxpool = mypl.MySQLConnectionPool(
 app.config["JWT_SECRET_KEY"] = "key-to-use-jwt"
 app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
 jwt = JWTManager(app)
-
-# functions----------------------------------------------------------------------
-
-# mysql
-def dbQuery(sql,injection) :
-	cnx = cnxpool.get_connection()
-	cursor = cnx.cursor(dictionary=True)
-	cursor.execute(sql, injection)
-	result = cursor.fetchone()
-	cnx.close()
-	return result
 
 
 # templates----------------------------------------------------------------------
@@ -164,8 +154,17 @@ def attractionId(attractionId):
 		return jsonify({"error":True, "message": input_msg})
 		# return (str(e))
 
+# functions----------------------------------------------------------------------
+def dbQuery(sql,injection) :
+	cnx = cnxpool.get_connection()
+	cursor = cnx.cursor(dictionary=True)
+	cursor.execute(sql, injection)
+	result = cursor.fetchone()
+	cnx.close()
+	return result
 
-#requests.patch(url, params={key:value}, args)
+
+# APIs------------------------------------------------------------------------
 @app.route("/api/user", methods=['PATCH'])
 def login():
 	try:
@@ -202,7 +201,6 @@ def login():
 
 
 @app.route("/api/user", methods=['GET'])
-#verify tocken
 def authentication():
 	try:
 		# Access the identity of the current user with get_jwt_identity
@@ -216,14 +214,11 @@ def authentication():
 		# else:
 		# 	return jsonify({"data":"有跑完try"})
 		#---------------------------------------cookies
-
 		return jsonify({"data":data})
 	#fail message
 	except Exception as e:
 		return jsonify({"data":None})
 		# return e
-
-    
 
 
 @app.route("/api/user", methods=['POST'])
@@ -260,13 +255,12 @@ def signup():
 		message = "自訂的錯誤訊息"
 		return jsonify({"error":True, "message":message}), 500
 
-#requests.delete(url, params={key: value}, args)
+
 @app.route("/api/user", methods=['DELETE'])
 def logout():
 	#clear tocken
 	resp = jsonify({'logout': True})
 	return jsonify({"ok": True}) 
-
 
 # run--------------------------------------------------------------------------
 if __name__ == '__main__':
