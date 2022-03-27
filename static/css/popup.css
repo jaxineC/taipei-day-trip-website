@@ -1,0 +1,80 @@
+/* -------------------------------------------------------------------------- */
+.popupBackground {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: #000000;
+  opacity: 0.25;
+  z-index: 99;
+}
+.popupBox {
+  width: 340px;
+  /* height: 275px; */
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  margin-left: -170px;
+  border-radius: 5px;
+
+  background-color: #ffffff;
+  z-index: 100;
+  opacity: 1;
+  color: #666666;
+
+  text-align: center;
+}
+
+.stripe {
+  height: 10px;
+  background: linear-gradient(270deg, #337788 0%, #66aabb 100%);
+  border-radius: 5px 5px 0px 0px;
+}
+
+.popupClose {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 27px;
+  right: 17px;
+}
+
+.popupTitle {
+  width: 310px;
+  margin: 15px 0px 15px 0px;
+}
+.popupInput {
+  box-sizing: border-box;
+  width: 308px;
+  height: 47px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.popupBoxBtn {
+  width: 310px;
+  height: 47px;
+  border-style: none;
+  border-radius: 5px;
+  text-align: center !important;
+  color: #ffffff;
+  background-color: #448899;
+  margin-bottom: 10px;
+}
+
+.popupMsg {
+  width: 310px;
+  height: auto;
+  margin-bottom: 10px;
+  color: rgb(218, 71, 27);
+  font-weight: bold;
+}
+
+.popupA {
+  width: 310px;
+  height: auto;
+  margin-bottom: 15px;
+}
