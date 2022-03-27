@@ -1,10 +1,14 @@
 // a literal expression, With strict mode, you can not use undeclared variables to write cleaner code.
-"use strict";
+// "use strict";
+import { test } from "./Model/model.js";
 let page = 0;
 let query = null;
 let popup_window = null;
 let access_token;
-// let result; //op1:global variables: fetch return result=nono; fetchData(query).then(renderContent);
+
+function moduleTest(x, y) {
+  test(x, y);
+}
 
 //Model
 async function fetchData(query) {
@@ -22,7 +26,6 @@ async function authentication(access_token) {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${access_token}}` ...原本也可以
       Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
   });
@@ -42,23 +45,17 @@ async function login() {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${access_token}}`, ...原本也可以
-      // Authorization: `Bearer ${localStorage.getItem('jwt')}` ...官方
     },
 
     body: JSON.stringify(bodyData),
-    // body: `{"email": ${email}, "password": ${password}}`,
-    // body: { email: "jx@gmail.com", password: "0000" },
   });
   let loginResult = await response.json();
   localStorage.setItem("jwt", loginResult.access_token);
-  // localStorage.setItem("jwt", result.access_token);
   if (loginResult.error) {
     renderPopupMsg(loginResult.error, loginResult.message);
   } else {
     renderPopupMsg(false, "歡迎");
     setTimeout(closePopup, 1000);
-    // authentication(loginResult["access_token"]);
     authentication();
     return loginResult;
   }
@@ -84,7 +81,6 @@ async function signup() {
   } else {
     renderPopupMsg(false, "註冊成功，請登入繼續");
     setTimeout(renderLogin, 1000);
-    // authentication(loginResult["access_token"]);
     authentication();
     return signupResult;
   }
@@ -106,7 +102,6 @@ async function logout() {
 //view
 // function renderContent(result) {//op2: fetchData(query).then(renderContent)
 async function renderContent(query) {
-  // op3: rederContent to call fetch
   let result = await fetchData(query);
   for (let i = 0; i < 12; i++) {
     if (!result.data[i]) {
@@ -121,7 +116,6 @@ async function renderContent(query) {
       let attractions = document.createElement("a");
       attractions.id = "attraction-" + (i + 12 * page);
       attractions.className = "attractions";
-      // attractions.href = `/attraction/${i + 1}`;
       attractions.href = `/attraction/${result.data[i].id}`;
       document.getElementById("mainContainer").appendChild(attractions);
 
@@ -216,21 +210,19 @@ function newSearch() {
   searchContent();
 }
 
+let x = 0;
+let y = 0;
 function init() {
-  // let keyword = document.getElementById("keyword").value;
   let query = null;
-  // fetchData(query).then(renderContent);
+  test(x, y);
   renderContent(query);
   authentication();
-  // renderContent();
 }
 
 function searchContent() {
   let keyword = document.getElementById("keyword").value;
   let query = `&keyword=${keyword}`;
-  // fetchData(query).then(renderContent);
   renderContent(query);
-  // renderContent();
 }
 
 function checkSearch() {
@@ -248,7 +240,6 @@ function checkSearch() {
 let body = document.getElementById("body");
 // ---------------------------addEventListener
 //監聽 scroll 事件，並利用 getBoundingClientRect() 計算元素和可視範圍的相對位置。
-// element.addEventListener(event, function, useCapture)
 window.addEventListener("scroll", debounce(loadMore, 100));
 // ---------------------------avoid triggering scroll continously
 function debounce(func, wait) {
@@ -348,3 +339,7 @@ let logoutContent = `<div id="popupContainer" class="popupContainer">
     <div  id="popupA" class="popupA">重新載入</div>
   </div>
 </div>`;
+
+init();
+document.getElementById("authenticate").addEventListener("click", renderLogin);
+document.getElementById("searchBtn").addEventListener("click", newSearch);
