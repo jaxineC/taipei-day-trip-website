@@ -1,6 +1,14 @@
 // a literal expression, With strict mode, you can not use undeclared variables to write cleaner code.
 // "use strict";
 import { fetchData } from "./Model/model.js";
+import { clearContent, renderPopupMsg, popupClose } from "./View/view.js";
+import {
+  loginContent,
+  signupContent,
+  logoutContent,
+} from "./View/viewContent.js";
+
+//declare global variables
 let page = 0;
 let query = null;
 let popup_window = null;
@@ -41,7 +49,7 @@ async function login() {
     renderPopupMsg(loginResult.error, loginResult.message);
   } else {
     renderPopupMsg(false, "歡迎");
-    setTimeout(closePopup, 1000);
+    setTimeout(popupClose, 1000);
     authentication();
     return loginResult;
   }
@@ -80,13 +88,13 @@ async function logout() {
   });
   let signupResult = await response.json();
   renderLogout();
-  setTimeout(closePopup, 1000);
+  setTimeout(popupClose, 1000);
   setTimeout(window.location.reload.bind(window.location), 1000);
   return logoutResult;
 }
 
 //view
-async function renderContent(page, query) {
+export async function renderContent(page, query) {
   let result = await fetchData(page, query);
   for (let i = 0; i < 12; i++) {
     if (!result.data[i]) {
@@ -145,30 +153,29 @@ async function renderContent(page, query) {
   return (page = result.nextPage);
 }
 
-function clearContent() {
-  let searchResult = document.createElement("div");
-  searchResult.id = "mainContainer";
-  searchResult.className = "mainContainer";
-  document.getElementById("mainContainer").innerHTML = null;
-}
-
-function renderLogin() {
+export function renderLogin() {
   let login = document.createElement("div");
   login.className = "popupContainer";
   login.id = "popupContainer";
   document.getElementById("body").appendChild(login);
   document.getElementById("popupContainer").innerHTML = loginContent;
+  document
+    .getElementById("renderSignUp")
+    .addEventListener("click", renderSignUp);
+  document.getElementById("login").addEventListener("click", login);
 }
 
-function renderSignUp() {
+export function renderSignUp() {
   let signup = document.createElement("div");
   signup.className = "popupContainer";
   signup.id = "popupContainer";
   document.getElementById("body").appendChild(signup);
   document.getElementById("popupContainer").innerHTML = signupContent;
+  document.getElementById("renderLogin").addEventListener("click", renderLogin);
+  document.getElementById("signup").addEventListener("click", signup);
 }
 
-function renderLogout() {
+export function renderLogout() {
   let signup = document.createElement("div");
   signup.className = "popupContainer";
   signup.id = "popupContainer";
@@ -176,31 +183,17 @@ function renderLogout() {
   document.getElementById("popupContainer").innerHTML = logoutContent;
 }
 
-function renderPopupMsg(error, msg) {
-  if (error) {
-    document.getElementById("popupMsg").innerHTML = `${msg}`;
-  } else {
-    document.getElementById("popupMsg").innerHTML = `${msg}`;
-  }
-}
-
-function closePopup() {
-  document.getElementById("popupContainer").remove();
-}
-
 //Controler
-function newSearch() {
-  clearContent();
-  checkSearch();
-  searchContent();
-}
-
-let x = 0;
-let y = 0;
 function init() {
   let query = null;
   renderContent(page, query);
   authentication();
+}
+
+function newSearch() {
+  clearContent();
+  checkSearch();
+  searchContent();
 }
 
 function searchContent() {
@@ -274,55 +267,6 @@ function loadMore() {
     }
   }
 }
-
-//--------------------------------------------------
-let loginContent = `<div id="popupContainer" class="popupContainer">
-  <div id="popupBackground" class="popupBackground"></div>
-  <div id="popupBox" class="popupBox">
-    <div id="stripe" class="stripe"></div>
-    <img id="closePopup" class="popupImg" src="icon/icon_close.png"/>
-    <div class="Header3 Bold popupTitle">登入會員帳號</div>
-    <div>
-      <input id="email" class="Body popupInput email" type="email" name="email" placeholder="輸入電子信箱">
-      <br/>
-      <input id="password" class="Body popupInput password" type="password" name="email" placeholder="輸入密碼">
-      <button onclick="login()" class="popupBoxBtn Button">登入帳戶</button>
-      <br/>
-      <div id="popupMsg" class="popupMsg"></div>
-      <div  id="popupA" class="popupA"><a onclick="renderSignUp()">還沒有帳戶？點此註冊</a></div>
-    </div>
-  </div>
-</div>`;
-
-let signupContent = `<div id="popupContainer" class="popupContainer">
-  <div id="popupBackground" class="popupBackground"></div>
-  <div id="popupBox" class="popupBox">
-    <div id="stripe" class="stripe"></div>
-    <img id="closePopup" class="popupImg" src="icon/icon_close.png"/>
-    <div class="Header3 Bold popupTitle">註冊會員帳號</div>
-    <div>
-      <input id="name" class="Body popupInput name" type="text" name="email" placeholder="輸入姓名">
-      <input id="email" class="Body popupInput email" type="email" name="email" placeholder="輸入電子信箱">
-      <br/>
-      <input id="password" class="Body popupInput password" type="password" name="email" placeholder="輸入密碼">
-      <button onclick="signup()" class="popupBoxBtn Button">註冊新帳戶</button>
-      <br/>
-      <div id="popupMsg" class="popupMsg"></div>
-      <div  id="popupA" class="popupA"><a onclick="renderLogin()">已經有帳戶了？點此登入</a></div>
-    </div>
-  </div>
-</div>`;
-
-let logoutContent = `<div id="popupContainer" class="popupContainer">
-  <div id="popupBackground" class="popupBackground"></div>
-  <div id="popupBox" class="popupBox">
-    <div id="stripe" class="stripe"></div>
-    <img id="closePopup" class="popupImg" src="icon/icon_close.png"/>
-    <div class="Header3 Bold popupTitle">成功登出</div>
-    <div id="popupMsg" class="popupMsg"></div>
-    <div  id="popupA" class="popupA">重新載入</div>
-  </div>
-</div>`;
 
 init();
 document.getElementById("authenticate").addEventListener("click", renderLogin);
