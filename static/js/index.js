@@ -1,7 +1,8 @@
 // a literal expression, With strict mode, you can not use undeclared variables to write cleaner code.
 // "use strict";
 import { fetchData } from "./Model/model.js";
-import { clearContent, renderPopupMsg, popupClose } from "./View/view.js";
+import { clearContent } from "./View/view.js";
+import { renderPopupMsg, popupClose } from "./View/viewPopup.js";
 import {
   loginContent,
   signupContent,
@@ -27,6 +28,7 @@ async function authentication(access_token) {
   if (status.data != null) {
     document.getElementById("authenticate").innerHTML = "登出";
     document.getElementById("authenticate").id = "logoutBtn";
+    document.getElementById("logoutBtn").addEventListener("click", logout);
   }
   return status;
 }
@@ -94,7 +96,7 @@ async function logout() {
 }
 
 //view
-export async function renderContent(page, query) {
+async function renderContent(page, query) {
   let result = await fetchData(page, query);
   for (let i = 0; i < 12; i++) {
     if (!result.data[i]) {
@@ -153,34 +155,37 @@ export async function renderContent(page, query) {
   return (page = result.nextPage);
 }
 
-export function renderLogin() {
-  let login = document.createElement("div");
-  login.className = "popupContainer";
-  login.id = "popupContainer";
-  document.getElementById("body").appendChild(login);
+function renderLogin() {
+  let loginObj = document.createElement("div");
+  loginObj.className = "popupContainer";
+  loginObj.id = "popupContainer";
+  document.getElementById("body").appendChild(loginObj);
   document.getElementById("popupContainer").innerHTML = loginContent;
   document
     .getElementById("renderSignUp")
     .addEventListener("click", renderSignUp);
   document.getElementById("login").addEventListener("click", login);
+  document.getElementById("popupClose").addEventListener("click", popupClose);
 }
 
-export function renderSignUp() {
-  let signup = document.createElement("div");
-  signup.className = "popupContainer";
-  signup.id = "popupContainer";
-  document.getElementById("body").appendChild(signup);
+function renderSignUp() {
+  let signupObj = document.createElement("div");
+  signupObj.className = "popupContainer";
+  signupObj.id = "popupContainer";
+  document.getElementById("body").appendChild(signupObj);
   document.getElementById("popupContainer").innerHTML = signupContent;
   document.getElementById("renderLogin").addEventListener("click", renderLogin);
   document.getElementById("signup").addEventListener("click", signup);
+  document.getElementById("popupClose").addEventListener("click", popupClose);
 }
 
-export function renderLogout() {
-  let signup = document.createElement("div");
-  signup.className = "popupContainer";
-  signup.id = "popupContainer";
-  document.getElementById("body").appendChild(signup);
+function renderLogout() {
+  let signupObj = document.createElement("div");
+  signupObj.className = "popupContainer";
+  signupObj.id = "popupContainer";
+  document.getElementById("body").appendChild(signupObj);
   document.getElementById("popupContainer").innerHTML = logoutContent;
+  document.getElementById("popupClose").addEventListener("click", popupClose);
 }
 
 //Controler
