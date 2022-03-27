@@ -1,26 +1,12 @@
 // a literal expression, With strict mode, you can not use undeclared variables to write cleaner code.
 // "use strict";
-import { test } from "./Model/model.js";
+import { fetchData } from "./Model/model.js";
 let page = 0;
 let query = null;
 let popup_window = null;
 let access_token;
 
-function moduleTest(x, y) {
-  test(x, y);
-}
-
 //Model
-async function fetchData(query) {
-  let response = await fetch(`/api/attractions?page=${page + query}`, {
-    method: "GET",
-    mode: "cors",
-    headers: { "Content-Type": "application/json" },
-  });
-  let result = await response.json();
-  return result;
-}
-
 async function authentication(access_token) {
   let response = await fetch("/api/user", {
     method: "GET",
@@ -32,7 +18,7 @@ async function authentication(access_token) {
   let status = await response.json();
   if (status.data != null) {
     document.getElementById("authenticate").innerHTML = "登出";
-    document.getElementById("authenticate").setAttribute("onClick", "logout()");
+    document.getElementById("authenticate").id = "logoutBtn";
   }
   return status;
 }
@@ -100,9 +86,8 @@ async function logout() {
 }
 
 //view
-// function renderContent(result) {//op2: fetchData(query).then(renderContent)
-async function renderContent(query) {
-  let result = await fetchData(query);
+async function renderContent(page, query) {
+  let result = await fetchData(page, query);
   for (let i = 0; i < 12; i++) {
     if (!result.data[i]) {
       let noMore = document.createElement("div");
@@ -214,8 +199,7 @@ let x = 0;
 let y = 0;
 function init() {
   let query = null;
-  test(x, y);
-  renderContent(query);
+  renderContent(page, query);
   authentication();
 }
 
@@ -296,7 +280,7 @@ let loginContent = `<div id="popupContainer" class="popupContainer">
   <div id="popupBackground" class="popupBackground"></div>
   <div id="popupBox" class="popupBox">
     <div id="stripe" class="stripe"></div>
-    <img onclick="closePopup()" id="popupImg" class="popupImg" src="icon/icon_close.png"/>
+    <img id="closePopup" class="popupImg" src="icon/icon_close.png"/>
     <div class="Header3 Bold popupTitle">登入會員帳號</div>
     <div>
       <input id="email" class="Body popupInput email" type="email" name="email" placeholder="輸入電子信箱">
@@ -314,7 +298,7 @@ let signupContent = `<div id="popupContainer" class="popupContainer">
   <div id="popupBackground" class="popupBackground"></div>
   <div id="popupBox" class="popupBox">
     <div id="stripe" class="stripe"></div>
-    <img onclick="closePopup()" id="popupImg" class="popupImg" src="icon/icon_close.png"/>
+    <img id="closePopup" class="popupImg" src="icon/icon_close.png"/>
     <div class="Header3 Bold popupTitle">註冊會員帳號</div>
     <div>
       <input id="name" class="Body popupInput name" type="text" name="email" placeholder="輸入姓名">
@@ -333,7 +317,7 @@ let logoutContent = `<div id="popupContainer" class="popupContainer">
   <div id="popupBackground" class="popupBackground"></div>
   <div id="popupBox" class="popupBox">
     <div id="stripe" class="stripe"></div>
-    <img onclick="closePopup()" id="popupImg" class="popupImg" src="icon/icon_close.png"/>
+    <img id="closePopup" class="popupImg" src="icon/icon_close.png"/>
     <div class="Header3 Bold popupTitle">成功登出</div>
     <div id="popupMsg" class="popupMsg"></div>
     <div  id="popupA" class="popupA">重新載入</div>
