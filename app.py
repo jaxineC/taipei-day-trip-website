@@ -2,6 +2,16 @@
 from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
+import json
+from flask_jwt_extended import (
+	create_access_token,
+	get_jwt,
+	jwt_required,
+	JWTManager,
+	verify_jwt_in_request
+)
+# ------------- from blueprint 
+from api.user import user
 
 
 # settings-------------------------------------------------------------------
@@ -14,8 +24,22 @@ app=Flask(
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
-app.secret_key = 'secret4Session'
+# Flask blueprint
+bp = Blueprint(
+	'api', 
+	__name__, 
+	url_prefix='/api'
+)
+app.register_blueprint(user)
+app.register_blueprint(user, url_prefix='/user')
 
+# Setup the Flask-JWT-Extended extension
+app.config["JWT_SECRET_KEY"] = "key-to-use-jwt"
+app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
+jwt = JWTManager(app)
+
+# function----------------------------------------------------------------------
+# Connect to MySQL
 cnxpool = mypl.MySQLConnectionPool(
 	host = "localhost",
 	user = "root",
@@ -24,6 +48,14 @@ cnxpool = mypl.MySQLConnectionPool(
 	pool_name = "mypool",
 	pool_size = 5,
 )
+
+def dbQuery(sql,injection) :
+	cnx = cnxpool.get_connection()
+	cursor = cnx.cursor(dictionary=True)
+	cursor.execute(sql, injection)
+	result = cursor.fetchone()
+	cnx.close()
+	return result
 
 
 # templates----------------------------------------------------------------------
@@ -58,8 +90,8 @@ def attractions():
 			number2 = (int(input_page)+1)*12
 			currentPage = int(input_page)
 		keyword = str(input_keyword)
-		cnx1 = cnxpool.get_connection()
-		cur = cnx1.cursor(dictionary=True)
+		cnx = cnxpool.get_connection()
+		cur = cnx.cursor(dictionary=True)
 		
 		if input_keyword == None:
 			sql = "SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE name IS NOT NULL LIMIT %s,12"
@@ -88,7 +120,7 @@ def attractions():
 			# elif (count - currentPage*12) >0 : nextpage=currentPage+1
 			else: nextpage=None
 		cur.close()
-		cnx1.close() 
+		cnx.close() 
 		# if result == []:
 		if int(input_page)>58//12:
 			raise ValueError
@@ -113,14 +145,14 @@ def attractionId(attractionId):
 		id_str= str(int(attractionId))
 		if int(attractionId)<0 or int(attractionId)>58: 
 			raise ValueError
-		cnx2 = cnxpool.get_connection()
-		cur = cnx2.cursor(dictionary=True)
+		cnx = cnxpool.get_connection()
+		cur = cnx.cursor(dictionary=True)
 		sql =	"SELECT id,  name, category, description, address, transport, mrt, latitude, images FROM attractions WHERE id = %s"
 		val = (id_str,)
 		cur.execute(sql, val)
 		result = cur.fetchall()
 		cur.close()
-		cnx2.close()
+		cnx.close()
 		if result == []:
 			raise ValueError
 		else:
@@ -139,5 +171,5 @@ def attractionId(attractionId):
 
 # run--------------------------------------------------------------------------
 if __name__ == '__main__':
-	app.debug = True
+	# app.debug = True
 	app.run(host='0.0.0.0',port=3000)

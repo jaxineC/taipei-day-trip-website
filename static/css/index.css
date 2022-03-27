@@ -1,3 +1,5 @@
+/* -------------------------------------------------------------------------- */
+
 body {
   box-sizing: border-box;
 
@@ -322,17 +324,26 @@ footer {
   font-weight: 700;
   line-height: 24px;
   letter-spacing: 0em;
-  text-align: left;
+  /* text-align: left; */
 }
 
 .Button {
   font-family: Noto Sans TC;
   font-size: 19px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 16px;
   letter-spacing: 0em;
   text-align: left;
+}
+
+button:hover {
+  cursor: pointer;
+  /* text-decoration: underline; */
+}
+
+a:hover {
+  cursor: pointer;
 }
 
 .Content {

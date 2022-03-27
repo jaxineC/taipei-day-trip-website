@@ -5,18 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="/css/attraction.css" rel="stylesheet"></link>
-    <script type="text/javascript">
-    </script>
+    <link href="/css/popup.css" rel="stylesheet"></link>
+    <script src="/js/attraction.js" type="module"></script>
     <title>attraction</title>
   </head>
 
-  <body id="body" onload="load()">
+  <body id="body">
     <nav>
       <div class="navContainer">
-        <div class="navTitle">台北一日遊</div>
+        <a href="/" class="navTitle">台北一日遊</a>
         <div class="navBtnContainer">
           <button class="navBtn Body">預定行程</button>
-          <button class="navBtn Body">登入/註冊</button>
+          <button id="authenticate"class="navBtn Body authenticate">登入/註冊</button>
         </div>
       </div>
     </nav>
@@ -27,8 +27,8 @@
           <div class="images">
             <img class="image" id="image-0">
             <div class="arrows">
-              <img onclick="prev()" class="arrow" id="leftArrow" src="/icon/btn_leftArrow.png"></img>
-              <img onclick="next()" class="arrow" id="rightArrow" src="/icon/btn_rightArrow.png"></img>
+              <img class="arrow" id="leftArrow" src="/icon/btn_leftArrow.png"></img>
+              <img class="arrow" id="rightArrow" src="/icon/btn_rightArrow.png"></img>
             </div>
             <div class="circles" id="circles">
               <!-- <div class="circle-i current"></div> -->
@@ -40,12 +40,12 @@
             <div class="bookingTxt"><span class="Bold">訂購導覽行程</span></div>
             <div class="bookingTxt Content">以此景點為中心的一日行程，帶您探索城市角落故事</div>
             <div class="bookingTxt"><sapn class="Bold">選擇日期：</sapn><input id="placeholder" type="date" placeholder="yyyy/mm/dd"/></div>
-            <div class="bookingTxt"><span class="Bold">選擇時間：</span><button onclick="toggle(event)" class="dot" id="dotMorning"></button>上半天<button onclick="toggle(event)" class="dot" id="dotAfternoon"></button>下半天</div>
+            <div class="bookingTxt"><span class="Bold">選擇時間：</span><button class="dot" id="dotMorning"></button>上半天<button class="dot" id="dotAfternoon"></button>下半天</div>
             <div class="bookingTxt"><span class="Bold">導覽費用：</span><span>新台幣 <span class="price" id="price">2000</span> 元</span></div>
             <button class="Button" id="booking">開始預訂行程</button>
           </div>
         </div>
-        <hr>
+        <hr class="hr">
         <p id="description" class="description Content">敘述</p>
         <div class="address">
           <div class="Body Bold Height32">景點地址：</div>
@@ -61,8 +61,5 @@
     <footer id="footer"class="Body Bold footer">
       <p>COPYRIGHT © 2021 台北一日遊</p>
     </footer>
-
-    <script src="/js/attraction.js" type="text/javascript">
-    </script>
   </body>
 </html>
