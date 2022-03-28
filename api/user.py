@@ -12,15 +12,15 @@ from flask_jwt_extended import (
 )
 
 
-# settings-------------------------------------------------------------------
+# settings -------------------------------------------------------------------
 user = Blueprint(
   'user', 
   __name__,
+	url_prefix = '/api'
 )
 
 
-# functions----------------------------------------------------------------------
-# Connect to MySQL
+# functions -------------------------------------------------------------------
 cnxpool = mypl.MySQLConnectionPool(
 	host = "localhost",
 	user = "root",
@@ -40,8 +40,10 @@ def dbQuery(sql,injection) :
 
 
 # APIs------------------------------------------------------------------------
-@user.route("/api/user", methods=['PATCH'])
-def login():
+	# @simple_page.route('/', defaults={'page': 'index'})
+	# @simple_page.route('/<page>')
+@user.route("/user", methods=['PATCH'])
+def user_login():
 	try:
 		#get values from request body
 		input_data = json.loads(request.get_json())
@@ -75,8 +77,8 @@ def login():
 		# return e
 
 
-@user.route("/api/user", methods=['GET'])
-def authentication():
+@user.route("/user", methods=['GET'])
+def user_authentication():
 	try:
 		# Access the identity of the current user with get_jwt_identity
 		verify_jwt_in_request(optional=True)
@@ -96,8 +98,8 @@ def authentication():
 		# return e
 
 
-@user.route("/api/user", methods=['POST'])
-def signup():
+@user.route("/user", methods=['POST'])
+def user_signup():
 	try:
 		#get values from request body
 		input_data = json.loads(request.get_json())
@@ -131,8 +133,8 @@ def signup():
 		return jsonify({"error":True, "message":message}), 500
 
 
-@user.route("/api/user", methods=['DELETE'])
-def logout():
+@user.route("/user", methods=['DELETE'])
+def user_logout():
 	#clear tocken
 	resp = jsonify({'logout': True})
 	return jsonify({"ok": True}) 

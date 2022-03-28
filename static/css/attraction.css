@@ -207,7 +207,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-position: right 0px bottom 0px;
 }
 
-#placeholder {
+#date {
   margin: 5px 34px 5px 14px;
   /* top right bottum left */
 }
