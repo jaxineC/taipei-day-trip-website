@@ -14,7 +14,7 @@ from flask_jwt_extended import (
 from api.user import user
 from api.attractions import attractions
 from api.attraction import attraction
-# from api.booking import booking
+from api.booking import booking
 
 
 # settings -------------------------------------------------------------------
@@ -31,7 +31,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.register_blueprint(user)
 app.register_blueprint(attractions)
 app.register_blueprint(attraction)
-# app.register_blueprint(booking)
+app.register_blueprint(booking)
 
 
 # Flask-JWT-Extended extension

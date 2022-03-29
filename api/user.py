@@ -35,6 +35,7 @@ def dbQuery(sql,injection) :
 	cursor = cnx.cursor(dictionary=True)
 	cursor.execute(sql, injection)
 	result = cursor.fetchone()
+	cnx.commit()
 	cnx.close()
 	return result
 
@@ -95,7 +96,6 @@ def user_authentication():
 	#fail message
 	except Exception as e:
 		return jsonify({"data":None})
-		# return e
 
 
 @user.route("/user", methods=['POST'])

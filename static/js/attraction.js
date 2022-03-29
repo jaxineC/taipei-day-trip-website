@@ -12,7 +12,8 @@ import {
 
 let index = 0;
 let imagesList;
-let time;
+let time = "morning";
+let price = 2000;
 
 function init() {
   load();
@@ -93,18 +94,18 @@ function morning() {
   let url = new URL("https://example.com?foo=1&bar=2");
   // let params = new URLSearchParams(url.search);
   // params.append('foo', 4);
-  let paramsObj = { time: "morning" };
-  let searchParams = new URLSearchParams(paramsObj);
-  alert(window.location);
+  // let paramsObj = { time: "morning" };
+  // let searchParams = new URLSearchParams(paramsObj);
+  time = "morning";
+  price = 2000;
 }
 
 function afternoon() {
   document.getElementById("price").innerHTML = "2500";
   document.getElementById("dotMorning").style.background = "white";
   document.getElementById("dotAfternoon").style.background = "#448899";
-  let paramsObj = { time: "afternoon" };
-  let searchParams = new URLSearchParams(paramsObj);
-  alert(window.location);
+  time = "afternoon";
+  price = 2500;
 }
 
 init();
@@ -113,20 +114,27 @@ document.getElementById("leftArrow").addEventListener("click", prev);
 document.getElementById("rightArrow").addEventListener("click", next);
 document.getElementById("dotMorning").addEventListener("click", morning);
 document.getElementById("dotAfternoon").addEventListener("click", afternoon);
-document.getElementById("booking").addEventListener("click", makeBooking);
+document.getElementById("booking").addEventListener("click", booking);
 
 //-------------------------------------------------------------------
 //Model
-async function makeBooking() {
+async function booking() {
+  let date = document.getElementById("date").value;
+  let attractionId = window.location.pathname.replace("/attraction/", "");
+  let bodyData = `{
+    "attractionId": "${attractionId}", 
+    "date": "${date}",
+    "time": "${time}",
+    "price": ${price}}`;
   let response = await fetch("/api/booking", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
+    body: JSON.stringify(bodyData),
   });
   let result = response.json();
-  alert("HERE");
   // window.location.href = "/booking";
 }
 
