@@ -11,6 +11,7 @@ let status = {};
 function init() {
   load();
   authentication();
+  renderOrder();
 }
 
 function deleteOrder() {}
@@ -19,10 +20,8 @@ function deleteOrder() {}
 async function authentication(access_token) {
   let response = await fetch("/api/user", {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // "access_token": access_token
-    },
+    mode: "cors",
+    headers: { "Content-Type": "application/json" },
   });
   let status = await response.json();
   if (status.data != null) {
@@ -30,6 +29,7 @@ async function authentication(access_token) {
     document.getElementById("authenticate").id = "logoutBtn";
     document.getElementById("logoutBtn").addEventListener("click", logout);
   }
+  document.getElementById("userName").innerHTML = `${status.data.name}`;
   return status;
 }
 
@@ -47,24 +47,22 @@ async function logout() {
 }
 
 async function load() {
-  let response = await fetch(`/api/booking`, {
+  let response = await fetch("/api/booking", {
     method: "GET",
-    hearders: { "Content-Type": "application/json" },
+    mode: "cors",
+    headers: { "Content-Type": "application/json" },
   });
   let result = await response.json();
+  document.getElementById("attractionImg").src = `${result.data.image}`;
+  document.getElementById("attractionName").innerHTML = `${result.data.name}`;
+  document.getElementById("date").id = `${result.data.name}`;
+  document.getElementById("time").id = `${result.data.name}`;
+  document.getElementById("price").id = `${result.data.name}`;
+  document.getElementById("address").id = `${result.data.name}`;
   return result;
 }
 
 //view
-function renderOrder() {
-  document.getElementById("userName").innerHTML = `${status.name}`;
-  document.getElementById("attractionImg").src = `${result.image}`;
-  document.getElementById("attractionName").innerHTML = `${result.name}`;
-  document.getElementById("date").id = `${result.name}`;
-  document.getElementById("time").id = `${result.name}`;
-  document.getElementById("price").id = `${result.name}`;
-  document.getElementById("address").id = `${result.name}`;
-}
 
 init();
 document.getElementById("iconDel").addEventListener("click", deleteOrder);

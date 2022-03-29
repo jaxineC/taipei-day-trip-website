@@ -106,14 +106,16 @@ def get_booking():
         }
       }) 
     else:
+      message = "請登入查看預定行程"
       return jsonify({
         "error": True,
-        "message": "自訂的錯誤訊息"
+        "message": message 
       })
   except:
+    message = "伺服器內部錯誤"
     return jsonify({
       "error": True,
-      "message": injection
+      "message": message
     }
 )
 
