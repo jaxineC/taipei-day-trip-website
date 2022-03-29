@@ -10,6 +10,7 @@ from flask_jwt_extended import (
 	JWTManager,
 	verify_jwt_in_request
 )
+import jwt
 
 
 # settings -------------------------------------------------------------------
@@ -19,6 +20,8 @@ booking = Blueprint(
   url_prefix = '/api'
 )
 
+# PyJWT
+key = "secret"
 
 # functions -------------------------------------------------------------------
 cnxpool = mypl.MySQLConnectionPool(
@@ -41,41 +44,65 @@ def dbQuery(sql,injection) :
 
 
 # APIs------------------------------------------------------------------------
+@booking.route("/booking", methods=['POST'])
+def post_booking():
+  try:
+    access_token = request.cookies.get('access_token')
+    if access_token:
+      payload = jwt.decode(access_token, key, algorithms="HS256")
+      memberId = payload["id"]
+      input_data = json.loads(request.get_json())
+      attractionId = input_data["attractionId"]
+      input_date = input_data["date"]
+      input_time = input_data["time"]
+      price = str(input_data["price"])
+      if input_date == "":
+        return {
+        "error": True,
+        "message": "請先輸入想要的行程日期" 
+      } 
+      sql = 'INSERT INTO orders (memberId, attractionId, date, time, price) VALUES (%s, %s, %s, %s, %s);'
+      injection = (memberId, attractionId, input_date, input_time, price)
+      dbQuery(sql, injection)
+      return jsonify({"ok": True})
+    else:
+      return jsonify({
+        "error": True,
+        "message": "未登入系統，拒絕存取。請登入預定行程" 
+      })
+  except Exception as e:
+    message = "500 伺服器內部錯誤"
+    return jsonify({
+      "error": True,
+      "message": message
+    })
+    # return e
+
 @booking.route("/booking", methods=['GET'])
-# @jwt_required(optional=True)
 def get_booking():
   try:
-    verify_jwt_in_request(optional=True)
-    claim = get_jwt()
-    if claim:
-      memberId = data["id"]
-
-      input_date = request.args.get("date")
-      input_time = request.args.get("time")
-      attractionId = request.path()
+    access_token = request.cookies.get('access_token')
+    if access_token:
+      payload = jwt.decode(access_token, key, algorithms="HS256")
+      memberId = payload["id"]
       sql = '''
-      SELECT id, name, address, image 
+      SELECT orders.orderId, attractions.id, attractions.name, attractions.address, attractions.images, orders.date, orders.time, orders.price
       FROM attractions 
-      JOIN orders ON orders.attractionID = attractions.id
-      WHERE orders.memberId = %s ''' 
+      JOIN orders ON orders.attractionId = attractions.id
+      WHERE orders.memberId =%s AND orders.orderID = (SELECT MAX(orders.orderID) FROM orders)''' 
       injection = (memberId,)
       result = dbQuery(sql, injection)
-      # --------------lines to put in function module--------------
-      image_str = result['images'].replace('""','"')
-      result['images']=eval(image_str)
-      # --------------lines to put in function module--------------
-
       return jsonify({
         "data": {
           "attraction": {
             "id": result['id'],
             "name": result['name'],
             "address": result['address'],
-            "image": result['image'][0]
+            "image": result['images'][0]
           },
-          "date": input_date,
-          "time": input_time,
-          "price": price
+          "date": result['date'],
+          "time": result['time'],
+          "price": result['price']
         }
       }) 
     else:
@@ -86,51 +113,10 @@ def get_booking():
   except:
     return jsonify({
       "error": True,
-      "message": "自訂的錯誤訊息"
+      "message": injection
     }
 )
-@booking.route("/booking", methods=['POST'])
-@jwt_required(optional=True)
-def post_booking():
-  try:
-    claim = get_jwt()
-    if claim:
-      memberId = claim["id"]
-      input_data = json.loads(request.get_json())
-      attractionId = input_data["attractionId"]
-      input_date = input_data["date"]
-      input_time = input_data["time"]
-      price = input_data["price"]
 
-      sql = 'INSERT INTO orders (memberId, attractionId, input_date, input_time, price) VALUES (%s, %s, %s, %s, %s);'
-      injection = (memberId, attractionId, input_date, input_time, price)
-      result = dbQuery(sql, injection)
-      
-      if input_date == "":
-        return {
-        "error": True,
-        "message": "建立失敗，輸入不正確或其他原因" 
-      } 
-      else:
-        # return jsonify({"ok": True})
-        return "ok"
-    else:
-      return jsonify({
-        "error": True,
-        "message": "未登入系統，拒絕存取。請登入預定行程" 
-      })
-  except 422:
-    return jsonify({
-      "error": True,
-      "message": "未登入系統，拒絕存取。請登入預定行程" 
-    })
-  except Exception as e:
-    return jsonify({
-      "error": True,
-      # "message": "500 伺服器內部錯誤"
-      "message" : claim
-    })
-    # return e
 
 @booking.route("/booking", methods=['DELETE'])
 # @jwt_required(optional=True)

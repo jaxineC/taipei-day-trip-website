@@ -135,7 +135,7 @@ async function booking() {
     body: JSON.stringify(bodyData),
   });
   let result = response.json();
-  // window.location.href = "/booking";
+  window.location.href = "http://192.168.1.103:3000/booking";
 }
 
 async function authentication(access_token) {

@@ -1,60 +1,26 @@
-/* -------------------------------------------------------------------------- */
-
+/* 0.body */
+/* 1.header */
+/* 2.main */
+/* 3.media query */
+/* --------------------0.body-------------------- */
 body {
   box-sizing: border-box;
 
   width: 100%;
-  display: flex;
-
   padding: 0px;
   margin: 0px;
 
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-nav {
-  width: 100%;
-  height: 54px;
-  background: white;
-  position: fixed;
-  top: 0px;
-  z-index: 999;
-
-  display: flex;
-  justify-content: center;
+a {
+  text-decoration: none;
 }
 
-.navContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navTitle {
-  font-family: Noto Sans TC;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 34px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: #448899;
-  margin-left: 10px;
-}
-
-.navBtnContainer {
-  display: flex;
-  justify-content: end;
-}
-.navBtn {
-  padding: 10px;
-  border: none;
-  background: none;
-  color: #666666;
-}
-
+/* --------------------1.header-------------------- */
 header {
   width: 100%;
   height: 320px;
@@ -139,6 +105,7 @@ header {
   margin: 8px 15px 8px 15px;
 }
 
+/* --------------------2.main--------------------*/
 main {
   width: 100%;
   display: flex;
@@ -155,10 +122,6 @@ main {
   /* grid-auto-columns: 270px; */
   gap: 30px;
   justify-content: center;
-}
-
-a {
-  text-decoration: none;
 }
 
 .attractions {
@@ -221,26 +184,7 @@ a {
   font-weight: bold;
 }
 
-footer {
-  width: 100%;
-  height: 104px;
-  background: #757575;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  //styleName: Body - Bold 16(13.3);
-  font-family: Noto Sans TC;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 13px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-
-/* media query */
+/* --------------------3.media query--------------------*/
 @media only screen and (max-width: 4000px) {
   .navContainer,
   .headContainer,
@@ -302,70 +246,4 @@ footer {
   }
 }
 
-#test {
-  background: red;
-}
-
 /* ------------------------------------------------------------------------------ */
-.Header1 {
-  font-family: Noto Sans TC;
-  font-size: 28px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-
-.Header3 {
-  font-family: Noto Sans TC;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px;
-  letter-spacing: 0em;
-  /* text-align: left; */
-}
-
-.Button {
-  font-family: Noto Sans TC;
-  font-size: 19px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-
-button:hover {
-  cursor: pointer;
-  /* text-decoration: underline; */
-}
-
-a:hover {
-  cursor: pointer;
-}
-
-.Content {
-  font-family: Noto Sans TC;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 23px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-
-.Body {
-  font-family: Noto Sans TC;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 13px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-
-.Bold {
-  font-weight: bold;
-}
