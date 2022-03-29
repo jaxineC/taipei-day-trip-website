@@ -3,13 +3,7 @@ from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
 import json
-from flask_jwt_extended import (
-	create_access_token,
-	get_jwt,
-	jwt_required,
-	JWTManager,
-	verify_jwt_in_request
-)
+import jwt
 
 
 # settings -------------------------------------------------------------------
@@ -19,6 +13,8 @@ user = Blueprint(
 	url_prefix = '/api'
 )
 
+# PyJWT
+key = "secret"
 
 # functions -------------------------------------------------------------------
 cnxpool = mypl.MySQLConnectionPool(
@@ -51,51 +47,35 @@ def user_login():
 		input_email = input_data["email"]
 		input_pw = input_data["password"]
 		#run mysql to authenticate user
-
-		# cnx = cnxpool.get_connection()
-		# cursor = cnx.cursor(dictionary=True)
 		sql = 'SELECT id, name, email FROM member WHERE email = %s AND password = %s'
 		injection = (input_email, input_pw)
 		result = dbQuery(sql,injection)
-		# cursor.execute(sql, injection)
-		# result = cursor.fetchone()
-		# cnx.close()
-		if result != None:
+		payload = result
+		if result:
 			#generate json web token
-			access_token = create_access_token(input_email, additional_claims=result)
-			#---------------------------------------cookies
-			resp = make_response('Setting cookie?')
-			resp.set_cookie(key='Token', value=access_token)
-			#---------------------------------------cookies
-			data = result
-			return jsonify({"ok": True, "access_token":access_token})
+			access_token = jwt.encode(payload, key, algorithm="HS256")
+			response = make_response(jsonify({"ok": True, "access_token":access_token}))
+			response.set_cookie(key='access_token', value=access_token, expires=None, path='/', domain=None, secure=False)
+			return response
 		else:
 			message = "帳號密碼輸入錯誤"
 			return jsonify({"error": True,"message":message})
 	except Exception as e:
 		message = "伺服器內部錯誤"
-		return jsonify({"error": True,"message": e}) , 500
+		return jsonify({"error": True,"message": message}) 
 		# return e
-
-
 @user.route("/user", methods=['GET'])
 def user_authentication():
 	try:
-		# Access the identity of the current user with get_jwt_identity
-		verify_jwt_in_request(optional=True)
-		claim = get_jwt()
-		data = {key:claim[key] for key in["id","name", "email"]}
-		#---------------------------------------cookie
-		# token = request.cookies.get("Token")
-		# if token == True:
-		# 	return jsonify({"data":data})
-		# else:
-		# 	return jsonify({"data":"有跑完try"})
-		#---------------------------------------cookies
-		return jsonify({"data":data})
-	#fail message
+		access_token = request.cookies.get('access_token')
+		payload = jwt.decode(access_token, key, algorithms="HS256")
+		if payload:
+			return jsonify({"data":payload})
+		else:
+			return jsonify({"data":None})
 	except Exception as e:
-		return jsonify({"data":None})
+		message = "伺服器內部錯誤"
+		return jsonify({"error": True,"message": message}) 
 
 
 @user.route("/user", methods=['POST'])
@@ -136,5 +116,6 @@ def user_signup():
 @user.route("/user", methods=['DELETE'])
 def user_logout():
 	#clear tocken
-	resp = jsonify({'logout': True})
-	return jsonify({"ok": True}) 
+	response = make_response(jsonify({"ok": True}) )
+	response.set_cookie(key='access_token', value='', expires=0)
+	return response

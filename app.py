@@ -3,13 +3,7 @@ from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
 import json
-from flask_jwt_extended import (
-	create_access_token,
-	get_jwt,
-	jwt_required,
-	JWTManager,
-	verify_jwt_in_request
-)
+import jwt
 # <<<<<<<<<<<<<<<<< module/blueprint/package? >>>>>>>>>>>>>>>>>>>> 
 from api.user import user
 from api.attractions import attractions
@@ -34,10 +28,9 @@ app.register_blueprint(attraction)
 app.register_blueprint(booking)
 
 
-# Flask-JWT-Extended extension
-app.config["JWT_SECRET_KEY"] = "key-to-use-jwt"
-app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
-jwt = JWTManager(app)
+# PyJWT
+key = "secret"
+
 
 
 # function ----------------------------------------------------------------------

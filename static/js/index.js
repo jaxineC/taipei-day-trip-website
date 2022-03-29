@@ -92,7 +92,6 @@ async function logout() {
   renderLogout();
   setTimeout(popupClose, 1000);
   setTimeout(window.location.reload.bind(window.location), 1000);
-  return logoutResult;
 }
 
 //view
