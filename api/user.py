@@ -68,8 +68,8 @@ def user_login():
 def user_authentication():
 	try:
 		access_token = request.cookies.get('access_token')
-		payload = jwt.decode(access_token, key, algorithms="HS256")
-		if payload:
+		if access_token:
+			payload = jwt.decode(access_token, key, algorithms="HS256")
 			return jsonify({"data":payload})
 		else:
 			return jsonify({"data":None})

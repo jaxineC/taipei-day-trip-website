@@ -120,7 +120,7 @@ def get_booking():
     message = "伺服器內部錯誤"
     return jsonify({
       "error": True,
-      "message": message
+      "message": result
     })
 
 
@@ -130,8 +130,9 @@ def delete_booking():
   try:
     access_token = request.cookies.get('access_token')
     if access_token:
-      memberId = data["id"]
-      sql = 'DELETE FROM orders WHERE memberId= %s;'
+      payload = jwt.decode(access_token, key, algorithms="HS256")
+      memberId = payload["id"]
+      sql = 'DELETE FROM orders WHERE memberId= %s ORDER BY orderId DESC LIMIT 1;'
       injection = (memberId,)
       dbQuery(sql, injection)
       return jsonify({
