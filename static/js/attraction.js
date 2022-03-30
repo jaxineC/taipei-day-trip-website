@@ -6,6 +6,7 @@ import {
   signupContent,
   logoutContent,
 } from "./View/viewContent.js";
+// import { fetchOrder } from "./Model/model.js";
 
 // alert(window.location.href);
 // alert(window.location.pathname);
@@ -118,7 +119,12 @@ document.getElementById("booking").addEventListener("click", booking);
 
 //-------------------------------------------------------------------
 //Model
-async function booking() {
+function booking() {
+  fetchOrder();
+  window.location.href = "http://192.168.1.103:3000/booking";
+}
+
+async function fetchOrder() {
   let date = document.getElementById("date").value;
   let attractionId = window.location.pathname.replace("/attraction/", "");
   let bodyData = `{
@@ -135,7 +141,7 @@ async function booking() {
     body: JSON.stringify(bodyData),
   });
   let result = response.json();
-  window.location.href = "http://192.168.1.103:3000/booking";
+  return result;
 }
 
 async function authentication(access_token) {

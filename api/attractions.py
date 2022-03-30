@@ -106,3 +106,6 @@ def get_attractions():
 		# return (str(e))
 
 
+		
+
+

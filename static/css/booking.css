@@ -57,24 +57,31 @@ main {
   margin: 37px 0px 120px 0px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
-.order {
-  display: grid;
-  grid-template-columns: 22% 57.5% 2.5%;
-  grid-template-rows: 51px 200px;
-  column-gap: 2%;
-  place-content: center;
-  /* align-items: center; */
+  align-items: center;
 }
 
-.orderTitle {
-  grid-column: 1/-1;
-  grid-row: 1/2;
+.greeting {
+  width: 82%;
+  height: 51px;
 }
+
+.bookingContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.order {
+  width: 82%;
+  display: grid;
+  grid-template-columns: 27% 1fr 30px;
+  column-gap: 2%;
+  place-content: center;
+}
+
 .orderImage {
-  grid-column: 1/2;
-  grid-row: 2/-1;
+  height: 200px;
 }
 img {
   width: 100%;
@@ -92,17 +99,15 @@ img {
 .iconDel {
   width: 30px;
   height: 30px;
-  grid-column: 3/4;
-  grid-row: 2/-1;
 }
 
 .contact {
-  width: 84%;
+  width: 82%;
   align-self: center;
 }
 
 .payment {
-  width: 84%;
+  width: 82%;
   align-self: center;
 }
 
@@ -115,7 +120,7 @@ img {
 }
 
 .confirm {
-  width: 100%;
+  width: 82%;
 }
 
 .confirmPrice {
@@ -124,10 +129,10 @@ img {
 }
 
 .confirmBtn {
-  position: absolute;
-  right: 0px;
   width: 173px;
   height: 36px;
+
+  float: right;
 
   border-style: none;
   border-radius: 5px;
@@ -159,12 +164,16 @@ img {
 
 @media only screen and (max-width: 600px) {
   .mainContainer {
-    width: 90%;
+    width: 100%;
     margin: 55px 18px 47px 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: visible;
+  }
+
+  .order {
+    grid-template-columns: repeat(auto-fill, 100%);
   }
 
   main .profile {

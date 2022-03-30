@@ -92,6 +92,10 @@ def get_booking():
       WHERE orders.memberId =%s AND orders.orderID = (SELECT MAX(orders.orderID) FROM orders)''' 
       injection = (memberId,)
       result = dbQuery(sql, injection)
+
+      image_str = result['images'].replace('""','"')
+      result['images']=eval(image_str)
+
       return jsonify({
         "data": {
           "attraction": {
@@ -102,7 +106,8 @@ def get_booking():
           },
           "date": result['date'],
           "time": result['time'],
-          "price": result['price']
+          "price": result['price'],
+          "address": result['address']
         }
       }) 
     else:
@@ -116,25 +121,30 @@ def get_booking():
     return jsonify({
       "error": True,
       "message": message
-    }
-)
+    })
 
 
 @booking.route("/booking", methods=['DELETE'])
 # @jwt_required(optional=True)
 def delete_booking():
-  verify_jwt_in_request(optional=True)
-  claim = get_jwt()
-  if claim:
-    memberId = data["id"]
-    sql = 'DELETE FROM orders WHERE memberId= %s;'
-    injection = (memberId,)
-    dbQuery(sql, injection)
-    return jsonify({
-      "ok": True
-    })
-  else:
+  try:
+    access_token = request.cookies.get('access_token')
+    if access_token:
+      memberId = data["id"]
+      sql = 'DELETE FROM orders WHERE memberId= %s;'
+      injection = (memberId,)
+      dbQuery(sql, injection)
+      return jsonify({
+        "ok": True
+      })
+    else:
+      return jsonify({
+        "error": True,
+        "message": "未登入系統，拒絕存取" 
+      })
+  except:
+    message = "伺服器內部錯誤"
     return jsonify({
       "error": True,
-      "message": "未登入系統，拒絕存取" 
+      "message": message
     })
