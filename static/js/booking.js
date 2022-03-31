@@ -56,7 +56,7 @@ async function logout() {
   let signupResult = await response.json();
   renderLogout();
   setTimeout(popupClose, 1000);
-  setTimeout(window.location.reload.bind(window.location), 1000);
+  window.location.href = "/";
   return logoutResult;
 }
 

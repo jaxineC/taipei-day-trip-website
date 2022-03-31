@@ -13,14 +13,14 @@ let query = null;
 let popup_window = null;
 //controller-----------------------------------------------------------------------controller
 async function init() {
-  renderContent(page, query);
-
+  let nextPage = await renderContent(page, query);
   let status = await authentication();
   if (status.data != null) {
     renderLogoutBtn();
   } else {
     document.getElementById("LoginBtn").addEventListener("click", renderLogin);
   }
+  return (page = nextPage);
 }
 
 function newSearch() {
@@ -29,7 +29,7 @@ function newSearch() {
   searchContent();
 }
 
-function loadMore() {
+async function loadMore() {
   if (body.scrollHeight >= document.documentElement.clientHeight) {
     if (
       body.getBoundingClientRect().bottom <=
@@ -46,7 +46,8 @@ function loadMore() {
         let keyword = document.getElementById("keyword").value;
         if (keyword == "") {
           let query = null;
-          renderContent(page, query);
+          let nextPage = await renderContent(page, query);
+          return (page = nextPage);
         } else {
           let keyword = document.getElementById("keyword").value;
           let query = `&keyword=${keyword}`;
@@ -57,10 +58,11 @@ function loadMore() {
   }
 }
 
-function searchContent() {
+async function searchContent() {
   let keyword = document.getElementById("keyword").value;
   let query = `&keyword=${keyword}`;
-  renderContent(page, query);
+  let nextPage = await renderContent(page, query);
+  return (page = nextPage);
 }
 
 function checkSearch() {
@@ -211,7 +213,7 @@ async function renderContent(page, query) {
       cats.appendChild(catNode);
     }
   }
-  return (page = result.nextPage);
+  return result.nextPage;
 }
 
 function renderLogoutBtn() {
