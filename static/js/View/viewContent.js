@@ -45,3 +45,14 @@ export let logoutContent = `<div id="popupContainer" class="popupContainer">
     <div  id="popupA" class="popupA">重新載入</div>
   </div>
 </div>`;
+
+export let promptContent = `<div id="popupContainer" class="popupContainer">
+  <div id="popupBackground" class="popupBackground"></div>
+  <div id="popupBox" class="popupBox">
+    <div id="stripe" class="stripe"></div>
+    <img id="popupClose" class="popupClose" src="/icon/icon_close.png"/>
+    <div class="Header3 Bold popupTitle">輸入錯誤</div>
+    <div id="popupMsg" class="popupMsg"></div>
+    <div  id="popupA" class="popupA">視窗關閉，請繼續操作 </div>
+  </div>
+</div>`;

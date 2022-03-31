@@ -1,5 +1,3 @@
-// a literal expression, With strict mode, you can not use undeclared variables to write cleaner code.
-// "use strict";
 import { fetchData } from "./Model/model.js";
 import { clearContent } from "./View/view.js";
 import { renderPopupMsg, popupClose } from "./View/viewPopup.js";
@@ -13,23 +11,88 @@ import {
 let page = 0;
 let query = null;
 let popup_window = null;
-let access_token;
+//controller-----------------------------------------------------------------------controller
+async function init() {
+  let nextPage = await renderContent(page, query);
+  let status = await authentication();
+  if (status.data != null) {
+    renderLogoutBtn();
+  } else {
+    document.getElementById("LoginBtn").addEventListener("click", renderLogin);
+  }
+  return (page = nextPage);
+}
 
-//Model
-async function authentication(access_token) {
+function newSearch() {
+  clearContent();
+  checkSearch();
+  searchContent();
+}
+
+async function loadMore() {
+  if (body.scrollHeight >= document.documentElement.clientHeight) {
+    if (
+      body.getBoundingClientRect().bottom <=
+      document.documentElement.clientHeight
+    ) {
+      if (page == null) {
+        let noMore = document.createElement("div");
+        noMore.id = "noMore";
+        noMore.className = "noMore";
+        document.getElementById("mainContainer").appendChild(noMore);
+        let nMoreNode = document.createTextNode("沒有再多景點要載入了");
+        noMore.appendChild(nMoreNode);
+      } else {
+        let keyword = document.getElementById("keyword").value;
+        if (keyword == "") {
+          let query = null;
+          let nextPage = await renderContent(page, query);
+          return (page = nextPage);
+        } else {
+          let keyword = document.getElementById("keyword").value;
+          let query = `&keyword=${keyword}`;
+          searchContent();
+        }
+      }
+    }
+  }
+}
+
+async function searchContent() {
+  let keyword = document.getElementById("keyword").value;
+  let query = `&keyword=${keyword}`;
+  let nextPage = await renderContent(page, query);
+  return (page = nextPage);
+}
+
+function checkSearch() {
+  let keyword = document.getElementById("keyword").value;
+  if (!keyword) {
+    alert("請輸入關鍵字搜尋景點");
+    let query = null;
+  } else {
+    return (page = 0);
+  }
+}
+
+async function quickBooking() {
+  let status = await authentication();
+  if (status.data != null) {
+    window.location.href = "/booking";
+  } else {
+    renderLogin();
+  }
+}
+
+//model-----------------------------------------------------------------------model
+async function authentication() {
   let response = await fetch("/api/user", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
   });
   let status = await response.json();
-  if (status.data != null) {
-    document.getElementById("authenticate").innerHTML = "登出";
-    document.getElementById("authenticate").id = "logoutBtn";
-    document.getElementById("logoutBtn").addEventListener("click", logout);
-  }
   return status;
 }
 
@@ -46,13 +109,13 @@ async function login() {
     body: JSON.stringify(bodyData),
   });
   let loginResult = await response.json();
-  localStorage.setItem("jwt", loginResult.access_token);
   if (loginResult.error) {
     renderPopupMsg(loginResult.error, loginResult.message);
   } else {
     renderPopupMsg(false, "歡迎");
     setTimeout(popupClose, 1000);
     authentication();
+    renderLogoutBtn();
     return loginResult;
   }
 }
@@ -83,7 +146,6 @@ async function signup() {
 }
 
 async function logout() {
-  localStorage.removeItem("jwt");
   let response = await fetch("/api/user", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
@@ -92,10 +154,9 @@ async function logout() {
   renderLogout();
   setTimeout(popupClose, 1000);
   setTimeout(window.location.reload.bind(window.location), 1000);
-  return logoutResult;
 }
 
-//view
+//view-----------------------------------------------------------------------view
 async function renderContent(page, query) {
   let result = await fetchData(page, query);
   for (let i = 0; i < 12; i++) {
@@ -152,7 +213,13 @@ async function renderContent(page, query) {
       cats.appendChild(catNode);
     }
   }
-  return (page = result.nextPage);
+  return result.nextPage;
+}
+
+function renderLogoutBtn() {
+  document.getElementById("LoginBtn").innerHTML = "登出";
+  document.getElementById("LoginBtn").id = "logoutBtn";
+  document.getElementById("logoutBtn").addEventListener("click", logout);
 }
 
 function renderLogin() {
@@ -188,42 +255,9 @@ function renderLogout() {
   document.getElementById("popupClose").addEventListener("click", popupClose);
 }
 
-//Controler
-function init() {
-  let query = null;
-  renderContent(page, query);
-  authentication();
-}
-
-function newSearch() {
-  clearContent();
-  checkSearch();
-  searchContent();
-}
-
-function searchContent() {
-  let keyword = document.getElementById("keyword").value;
-  let query = `&keyword=${keyword}`;
-  renderContent(query);
-}
-
-function checkSearch() {
-  let keyword = document.getElementById("keyword").value;
-  if (!keyword) {
-    alert("請輸入關鍵字搜尋景點");
-    let query = null;
-  } else {
-    return (page = 0);
-  }
-}
-
-//--------------------------------------------------------------------
-//訂變數 選定拿來算位置的對象
-let body = document.getElementById("body");
-// ---------------------------addEventListener
-//監聽 scroll 事件，並利用 getBoundingClientRect() 計算元素和可視範圍的相對位置。
-window.addEventListener("scroll", debounce(loadMore, 100));
 // ---------------------------avoid triggering scroll continously
+let body = document.getElementById("body");
+window.addEventListener("scroll", debounce(loadMore, 100));
 function debounce(func, wait) {
   let timeout;
 
@@ -237,42 +271,9 @@ function debounce(func, wait) {
     timeout = setTimeout(later, wait);
   };
 }
-function throttle() {
-  let lastMove = 0;
-  if (Date.now() - lastMove > 3) {
-    test();
-    lastMove = Date.now();
-  }
-}
-// ---------------------------scroll triggers webContent if user at bottom
-function loadMore() {
-  if (body.scrollHeight >= document.documentElement.clientHeight) {
-    if (
-      body.getBoundingClientRect().bottom <=
-      document.documentElement.clientHeight
-    ) {
-      if (page == null) {
-        let noMore = document.createElement("div");
-        noMore.id = "noMore";
-        noMore.className = "noMore";
-        document.getElementById("mainContainer").appendChild(noMore);
-        let nMoreNode = document.createTextNode("沒有再多景點要載入了");
-        noMore.appendChild(nMoreNode);
-      } else {
-        let keyword = document.getElementById("keyword").value;
-        if (keyword == "") {
-          let query = null;
-          renderContent(query);
-        } else {
-          let keyword = document.getElementById("keyword").value;
-          let query = `&keyword=${keyword}`;
-          searchContent();
-        }
-      }
-    }
-  }
-}
 
 init();
-document.getElementById("authenticate").addEventListener("click", renderLogin);
 document.getElementById("searchBtn").addEventListener("click", newSearch);
+document
+  .getElementById("quickBookingBtn")
+  .addEventListener("click", quickBooking);

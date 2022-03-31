@@ -1,0 +1,136 @@
+* {
+  box-sizing: border-box;
+}
+/* --------------------1.nav-------------------- */
+nav {
+  width: 100%;
+  height: 54px;
+  background: white;
+  position: fixed;
+  top: 0px;
+  z-index: 999;
+
+  display: flex;
+  justify-content: center;
+}
+
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navTitle {
+  font-family: Noto Sans TC;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 34px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #448899;
+  margin-left: 10px;
+}
+
+.navBtnContainer {
+  display: flex;
+  justify-content: end;
+}
+.navBtn {
+  padding: 10px;
+  border: none;
+  background: none;
+  color: #666666;
+}
+
+/* --------------------2.footer-------------------- */
+.footer {
+  width: 100%;
+  height: 104px;
+  background: #757575;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  text-align: center !important;
+  vertical-align: middle;
+  line-height: 104px;
+}
+
+/* --------------------3.fonts-------------------- */
+.Header1 {
+  font-family: Noto Sans TC;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.Header3 {
+  font-family: Noto Sans TC;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+}
+
+.Button {
+  font-family: Noto Sans TC;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: center;
+}
+
+.Content {
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400, Regular;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #666666;
+}
+
+.Body {
+  font-family: Noto Sans TC;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 13px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.Bold {
+  font-weight: bold;
+}
+
+.Reg {
+  font-weight: 400;
+}
+
+.Height32 {
+  line-height: 32px;
+}
+
+.Teal {
+  color: #448899;
+}
+
+/* --------------------4.actions-------------------- */
+button:hover {
+  cursor: pointer;
+  /* text-decoration: underline; */
+}
+
+a:hover {
+  cursor: pointer;
+}

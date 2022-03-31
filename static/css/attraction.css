@@ -1,67 +1,28 @@
+/* 0.body */
+/* 1.nav */
+/* 2.main */
+/* 3.media query */
+/* --------------------0.body-------------------- */
 body {
-  box-sizing: border-box;
-
   width: 100%;
-
-  padding: 0px;
-  margin: auto;
 
   color: #666666;
   vertical-align: center;
+  margin: 0;
 }
 
 a {
   text-decoration: none;
 }
 
-/* 2. nav->main->footer */
-/* ------------------------------------------------------------------------------ */
+/* --------------------1.nav-------------------- */
 nav {
-  width: 100%;
-  height: 54px;
-  background: white;
   border-style: solid;
   border-width: 0px 0px 1px 0px;
   border-color: #e8e8e8;
   /* border: 1px solid #e8e8e8; */
-
-  position: fixed;
-  top: 0px;
-  z-index: 999;
-
-  display: flex;
-  justify-content: center;
 }
-
-.navContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navTitle {
-  font-family: Noto Sans TC;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 34px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: #448899;
-  margin-left: 10px;
-}
-
-.navBtnContainer {
-  display: flex;
-  justify-content: end;
-}
-.navBtn {
-  padding: 10px;
-  border: none;
-  background: none;
-  color: #666666;
-}
-
+/* --------------------2.main-------------------- */
 main {
   width: 100%;
   margin-top: 54px;
@@ -207,7 +168,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-position: right 0px bottom 0px;
 }
 
-#placeholder {
+#date {
   margin: 5px 34px 5px 14px;
   /* top right bottum left */
 }
@@ -246,20 +207,11 @@ button {
   border-radius: 5px;
 }
 
-button:hover {
-  cursor: pointer;
-  /* text-decoration: underline; */
-}
-
-a:hover {
-  cursor: pointer;
-}
-
 hr {
   width: 100%;
   margin: 37px 0px 50px 0px;
   border: none;
-  height: 2px;
+  height: 1.5px;
   background-color: #e8e8e8;
 }
 
@@ -282,25 +234,7 @@ hr {
   align-self: center;
 }
 
-footer {
-  width: 100%;
-  height: 104px;
-  background: #757575;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer {
-  margin: auto;
-  text-align: center !important;
-  vertical-align: middle;
-  line-height: 104px;
-}
-
-/* 3. media query */
-/* ------------------------------------------------------------------------------ */
+/* --------------------3.media query-------------------- */
 @media only screen and (max-width: 4000px) {
   .navContainer,
   .headContainer,
@@ -316,7 +250,6 @@ footer {
 
 @media only screen and (max-width: 1200px) {
   .navContainer,
-  .headContainer,
   .mainContainer {
     width: 95%;
   }
@@ -338,8 +271,6 @@ footer {
     grid-template-rows: min-content;
     overflow: visible;
 
-    /* margin: auto; ??????????????*/
-    /* extra */
     align-items: center;
   }
 
@@ -373,68 +304,4 @@ footer {
     margin: 0 auto;
     z-index: -1;
   }
-}
-
-#test {
-  background: red;
-}
-
-/* 4. Mutual Fonts */
-/* ------------------------------------------------------------------------------ */
-.Header1 {
-  font-family: Noto Sans TC;
-  font-size: 28px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-
-.Header3 {
-  font-family: Noto Sans TC;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px;
-  letter-spacing: 0em;
-}
-
-.Button {
-  font-family: Noto Sans TC;
-  font-size: 19px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px;
-  letter-spacing: 0em;
-  text-align: center;
-}
-
-.Content {
-  font-family: Noto Sans TC;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400, Regular;
-  line-height: 23px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: #666666;
-}
-
-.Body {
-  font-family: Noto Sans TC;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 13px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-
-.Bold {
-  font-weight: bold;
-}
-
-.Height32 {
-  line-height: 32px;
 }
