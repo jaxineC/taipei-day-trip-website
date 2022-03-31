@@ -13,6 +13,8 @@ async function init() {
   let status = await authentication();
   if (status.data != null) {
     document.getElementById("userName").innerHTML = `${status.data.name}`;
+    document.getElementById("inputName").value = `${status.data.name}`;
+    document.getElementById("inputEmail").value = `${status.data.email}`;
     let result = await getOrder();
     if (result.data != null) {
       loadOrder(result);

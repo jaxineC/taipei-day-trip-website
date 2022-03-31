@@ -4,15 +4,11 @@
 /* 3.media query */
 /* --------------------0.body-------------------- */
 body {
-  box-sizing: border-box;
-
   width: 100%;
-
-  padding: 0px;
-  margin: auto;
 
   color: #666666;
   vertical-align: center;
+  margin: 0;
 }
 
 a {
@@ -254,7 +250,6 @@ hr {
 
 @media only screen and (max-width: 1200px) {
   .navContainer,
-  .headContainer,
   .mainContainer {
     width: 95%;
   }

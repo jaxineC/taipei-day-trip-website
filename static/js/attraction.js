@@ -5,6 +5,7 @@ import {
   loginContent,
   signupContent,
   logoutContent,
+  promptContent,
 } from "./View/viewContent.js";
 
 //declare global variables
@@ -43,8 +44,14 @@ function afternoon() {
 async function booking() {
   let status = await authentication();
   if (status.data != null) {
-    postOrder();
-    window.location.href = "/booking";
+    let date = document.getElementById("date").value;
+    let result = await postOrder();
+    if (!date) {
+      renderPrompt();
+      renderPopupMsg(result.error, result.message);
+    } else {
+      window.location.href = "/booking";
+    }
   } else {
     renderLogin();
   }
@@ -84,13 +91,13 @@ async function login() {
     body: JSON.stringify(bodyData),
   });
   let loginResult = await response.json();
-  localStorage.setItem("jwt", loginResult.access_token);
   if (loginResult.error) {
     renderPopupMsg(loginResult.error, loginResult.message);
   } else {
     renderPopupMsg(false, "歡迎");
     setTimeout(popupClose, 1000);
     authentication();
+    renderLogoutBtn();
     return loginResult;
   }
 }
@@ -145,7 +152,6 @@ async function postOrder() {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
     body: JSON.stringify(bodyData),
   });
@@ -256,6 +262,16 @@ function renderLogout() {
   document.getElementById("body").appendChild(signupObj);
   document.getElementById("popupContainer").innerHTML = logoutContent;
   document.getElementById("popupClose").addEventListener("click", popupClose);
+}
+
+function renderPrompt() {
+  let signupObj = document.createElement("div");
+  signupObj.className = "popupContainer";
+  signupObj.id = "popupContainer";
+  document.getElementById("body").appendChild(signupObj);
+  document.getElementById("popupContainer").innerHTML = promptContent;
+  document.getElementById("popupClose").addEventListener("click", popupClose);
+  setTimeout(popupClose, 2000);
 }
 
 init();

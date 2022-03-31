@@ -4,11 +4,7 @@
 /* 3.media query */
 /* --------------------0.body-------------------- */
 body {
-  box-sizing: border-box;
-
   width: 100%;
-  padding: 0px;
-  margin: 0px;
 
   display: flex;
   flex-direction: column;

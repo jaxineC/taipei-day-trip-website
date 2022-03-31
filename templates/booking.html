@@ -27,7 +27,7 @@
         <div id="greeting" class="greeting Body Bold">您好，<span id="userName"></span>，待預訂的行程如下：</div>
         <div id="bookingContainer" class="bookingContainer">
           <div id="order" class="order">
-            <div id="orderImage" class="orderImage Body Bold"><img id="attractionImg"/></div>
+            <img id="attractionImg" class="orderImage Body Bold"></img>
             <div id="orderInfo" class="orderInfo">
               <div id="orderName" class="orderName Body Bold Teal">台北一日遊：<span id="attractionName">平安鐘</span></div>
               <div id="orderDate" class="orderTxt Body Bold">日期：<span id="date" class="Reg">YYYY-MM-DD</span></div>
@@ -35,13 +35,13 @@
               <div id="orderPrice" class="orderTxt Body Bold">費用：<span class="Reg">新台幣 <sapn id="price">----</sapn> 元</span></div>
               <div id="orderAddress" class="orderTxt Body Bold">地點：<span id="address" class="Reg">地址</span></div>
             </div>
-            <div><img src="/icon/icon_delete.png" id="iconDel" class="iconDel"></img></div>
+            <img src="/icon/icon_delete.png" id="iconDel" class="iconDel"></img>
           </div>
           <hr class="hr">
           <div id="contact" class="contact">
             <div id="contactTitle" class="contactTitle Bold">您的聯絡資訊</div>
-            <div id="contactName" class="contactName">聯絡姓名：<input type="text" placeholder="Jane Doe" name="name"></div>
-            <div id="contactEmail" class="contactEmail">連絡信箱：<input type="email" placeholder="JaneDoe@gmail.com" name="email"></div>
+            <div id="contactName" class="contactName">聯絡姓名：<input id="inputName" type="text" placeholder="Jane Doe" name="name"></div>
+            <div id="contactEmail" class="contactEmail">連絡信箱：<input id="inputEmail" type="email" placeholder="JaneDoe@gmail.com" name="email"></div>
             <div id="contactNumber" class="contactNumber">手機號碼：<input type="number" placeholder="0123-456-789" name="number"></div>
             <div id="contactNotes" class="contactNotes Bold">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
           </div>
