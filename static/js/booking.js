@@ -1,4 +1,4 @@
-import { fetchData } from "./Model/model.js";
+import { getData, fetchData } from "./Model/model.js";
 import { clearContent } from "./View/view.js";
 import { renderPopupMsg, popupClose } from "./View/viewPopup.js";
 import {
@@ -37,23 +37,14 @@ async function quickBooking() {
 }
 
 //model-----------------------------------------------------------------------model
-async function authentication(access_token) {
-  let response = await fetch("/api/user", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  let status = await response.json();
+
+async function authentication() {
+  let status = await getData("/api/user", "GET");
   return status;
 }
 
 async function logout() {
-  let response = await fetch("/api/user", {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-  });
-  let signupResult = await response.json();
+  let result = await fetchData("/api/user", "DELETE", false);
   renderLogout();
   setTimeout(popupClose, 1000);
   window.location.href = "/";
@@ -61,22 +52,12 @@ async function logout() {
 }
 
 async function deleteOrder() {
-  let response = await fetch("/api/booking", {
-    method: "DELETE",
-    mode: "cors",
-    headers: { "Content-Type": "application/json" },
-  });
-  let result = await response.json();
+  let result = await fetchData("/api/booking", "DELETE", false);
   renderNoOrder();
 }
 
 async function getOrder() {
-  let response = await fetch("/api/booking", {
-    method: "GET",
-    mode: "cors",
-    headers: { "Content-Type": "application/json" },
-  });
-  let result = await response.json();
+  let result = await getData("/api/booking", "GET");
   return result;
 }
 
@@ -109,10 +90,10 @@ function loadOrder(result) {
 }
 
 function renderLogout() {
-  let signupObj = document.createElement("div");
-  signupObj.className = "popupContainer";
-  signupObj.id = "popupContainer";
-  document.getElementById("body").appendChild(signupObj);
+  let addNode = document.createElement("div");
+  addNode.className = "popupContainer";
+  addNode.id = "popupContainer";
+  document.getElementById("body").appendChild(addNode);
   document.getElementById("popupContainer").innerHTML = logoutContent;
   document.getElementById("popupClose").addEventListener("click", popupClose);
 }
