@@ -1,7 +1,7 @@
 import { getData, fetchData } from "./Model/model.js";
 import { clearContent } from "./View/view.js";
 import {
-  renderPopupWidow,
+  renderPopupWindow,
   renderPopupMsg,
   popupClose,
 } from "./View/viewPopup.js";
@@ -194,7 +194,7 @@ function prev() {
 }
 
 function renderLogin() {
-  renderPopupWidow(loginContent);
+  renderPopupWindow(loginContent);
   document
     .getElementById("renderSignUp")
     .addEventListener("click", renderSignUp);
@@ -203,19 +203,19 @@ function renderLogin() {
 }
 
 function renderSignUp() {
-  renderPopupWidow(signupContent);
+  renderPopupWindow(signupContent);
   document.getElementById("renderLogin").addEventListener("click", renderLogin);
   document.getElementById("signup").addEventListener("click", signup);
   document.getElementById("popupClose").addEventListener("click", popupClose);
 }
 
 function renderLogout() {
-  renderPopupWidow(logoutContent);
+  renderPopupWindow(logoutContent);
   document.getElementById("popupClose").addEventListener("click", popupClose);
 }
 
 function renderPrompt() {
-  renderPopupWidow(promptContent);
+  renderPopupWindow(promptContent);
   document.getElementById("popupClose").addEventListener("click", popupClose);
   setTimeout(popupClose, 2000);
 }
