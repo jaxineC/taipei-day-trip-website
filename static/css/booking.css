@@ -41,13 +41,15 @@ input:focus {
 .ok {
   display: none;
   position: relative;
-  left: 10px;
+  left: 15px;
+  bottom: 5px;
 }
 
 .error {
   display: none;
   position: relative;
   left: 10px;
+  bottom: 2px;
   padding: 4px;
 }
 
@@ -55,6 +57,7 @@ input:focus {
   display: none;
   position: relative;
   left: 20px;
+  bottom: 5px;
   height: 38px;
   padding: 4px;
   vertical-align: middle;

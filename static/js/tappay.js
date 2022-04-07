@@ -5,12 +5,10 @@ const APP_KEY =
 
 let fields = {
   number: {
-    // css selector
     element: "#card-number",
     placeholder: "**** **** **** ****",
   },
   expirationDate: {
-    // DOM object
     element: document.getElementById("card-expiration-date"),
     placeholder: "MM / YY",
   },
@@ -20,12 +18,7 @@ let fields = {
   },
 };
 const submitButton = document.querySelector("#submitBtn");
-// const status = {
-//   0	欄位已填好，並且沒有問題
-//   1	欄位還沒有填寫
-//   2	欄位有錯誤，此時在 CardView 裡面會用顯示 errorColor
-//   3	使用者正在輸入中
-// // };
+
 // 2. 利用 TPDirect.setupSDK 設定參數 (初始化使用TPDirect)
 TPDirect.setupSDK(APP_ID, APP_KEY, "sandbox");
 
@@ -38,10 +31,11 @@ TPDirect.card.setup({
       color: "black",
     },
     ".valid": {
-      color: "#51B727",
+      color: "gray",
+      // color: "#51B727",
     },
     ".invalid": {
-      color: "red",
+      color: "gray",
     },
   },
 });
@@ -79,10 +73,8 @@ TPDirect.card.onUpdate(function (update) {
   // update.canGetPrime === true
   // --> you can call TPDirect.card.getPrime()
   if (update.canGetPrime) {
-    // Enable submit Button to get prime.
     submitButton.removeAttribute("disabled");
   } else {
-    // Disable submit Button to get prime.
     submitButton.setAttribute("disabled", true);
   }
 
@@ -90,12 +82,13 @@ TPDirect.card.onUpdate(function (update) {
   if (update.cardType === "visa") {
     // Handle card type visa.
   }
-  // number 欄位是錯誤的
+  //   0	欄位已填好，並且沒有問題
+  //   1	欄位還沒有填寫
+  //   2	欄位有錯誤，此時在 CardView 裡面會用顯示 errorColor
+  //   3	使用者正在輸入中
   if (update.status.number === 2) {
-    //欄位有錯誤
     setToError(".card-number");
   } else if (update.status.number === 0) {
-    //欄位已填好，並且沒有問題
     setToSuccess(".card-number");
   } else if (update.status.number === 3) {
     setToEntering(".card-number");
@@ -104,10 +97,8 @@ TPDirect.card.onUpdate(function (update) {
   }
 
   if (update.status.expiry === 2) {
-    //欄位有錯誤
     setToError(".card-expiration-date");
   } else if (update.status.expiry === 0) {
-    //欄位已填好，並且沒有問題
     setToSuccess(".card-expiration-date");
   } else if (update.status.expiry === 3) {
     setToEntering(".card-expiration-date");
@@ -116,10 +107,8 @@ TPDirect.card.onUpdate(function (update) {
   }
 
   if (update.status.ccv === 2) {
-    //欄位有錯誤
     setToError(".card-ccv");
   } else if (update.status.ccv === 0) {
-    //欄位已填好，並且沒有問題
     setToSuccess(".card-ccv");
   } else if (update.status.ccv === 3) {
     setToEntering(".card-ccv");
@@ -134,7 +123,6 @@ TPDirect.card.onUpdate(function (update) {
 
 function onSubmit(event) {
   event.preventDefault();
-
   // 取得 TapPay Fields 的 status
   const tappayStatus = TPDirect.card.getTappayFieldsStatus();
 
@@ -143,7 +131,6 @@ function onSubmit(event) {
     alert("can not get prime");
     return;
   }
-
   // Get prime
   TPDirect.card.getPrime((result) => {
     if (result.status !== 0) {
@@ -156,3 +143,5 @@ function onSubmit(event) {
     // Pay By Prime Docs: https://docs.tappaysdk.com/tutorial/zh/back.html#pay-by-prime-api
   });
 }
+
+document.getElementById("submitBtn").addEventListener("click", onSubmit);
