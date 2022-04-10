@@ -92,12 +92,6 @@ def post_order():
     response = req.json()
     
 
-
-
-    
-
-
-
     # 付款成功，紀錄付款資訊；將訂單付款狀態改為【已付款】，將訂單編號傳回前端。
     if response["status"] == 0:
       sql = 'INSERT INTO orders (order_number, memberId, attractionId, date, time, price, payment) VALUES (%s, %s, %s, %s, %s, %s, %s);'

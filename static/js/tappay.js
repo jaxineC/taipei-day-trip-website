@@ -182,12 +182,12 @@ function onSubmit(event) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(bodyData),
     })
-      .then((response) => {
-        response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
-        return data;
-        // if data.
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
       });
   });
 }
