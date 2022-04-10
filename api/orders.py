@@ -5,7 +5,7 @@ import mysql.connector.pooling as mypl
 import json
 import jwt
 import requests
-# from urllib.error import HTTPError
+from urllib.error import HTTPError
 from datetime import datetime, date, time
 import time
 
@@ -124,16 +124,14 @@ def post_order():
 
 
     
-  except Exception as e:
-
-
-    # if err.code == 500:
-    #   message = "訂單建立失敗，輸入不正確或其他原因"
-    # elif err.code == 403:
-    #   message = "未登入系統，拒絕存取"
-    # else:
-      # message = "伺服器內部錯誤"
-    message = "400, 403, 500 自訂的錯誤訊息"
+  except HTTPError as err:
+    if err.code == 400:
+      message = "訂單建立失敗，輸入不正確或其他原因"
+    elif err.code == 403:
+      message = "未登入系統，拒絕存取"
+    else:
+      message = "伺服器內部錯誤"
+    # message = "400, 403, 500 自訂的錯誤訊息"
     return jsonify({
       "error": True,
       "message": message
