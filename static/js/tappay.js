@@ -1,3 +1,7 @@
+import { getData, fetchData } from "./Model/model.js";
+
+let orderData = await getData("/api/booking", "GET");
+
 // 0. declare variables
 const APP_ID = "124002";
 const APP_KEY =
@@ -141,6 +145,50 @@ function onSubmit(event) {
 
     // send prime to your server, to pay with Pay by Prime API .
     // Pay By Prime Docs: https://docs.tappaysdk.com/tutorial/zh/back.html#pay-by-prime-api
+    let price = orderData.data.price;
+    let id = orderData.data.attraction.id;
+    let attractionName = orderData.data.attraction.name;
+    let address = orderData.data.attraction.address;
+    let attractionImg = orderData.data.attraction.image;
+    let date = orderData.data.date;
+    let time = orderData.data.time;
+    let name = document.getElementById("inputName").value;
+    let email = document.getElementById("inputEmail").value;
+    let phoneNumber = document.getElementById("inputNumber").value;
+    let bodyData = `{
+      "prime": "${result.card.prime}",
+      "order": {
+        "price":"${price}",
+        "trip": {
+          "attraction": {
+            "id": "${id}",
+            "name": "${attractionName}",
+            "address": "${address}",
+            "image": "${attractionImg}"
+          },
+          "date": "${date}",
+          "time": "${time}"
+        },
+        "contact": {
+          "name": "${name}",
+          "email": "${email}",
+          "phone": "${phoneNumber}"
+        }
+      }
+    }`;
+    // let data = await fetchData("/api/order", "POST", bodyData);
+    fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bodyData),
+    })
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => {
+        return data;
+        // if data.
+      });
   });
 }
 

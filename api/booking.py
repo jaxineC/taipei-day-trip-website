@@ -3,13 +3,6 @@ from flask import *
 import mysql.connector
 import mysql.connector.pooling as mypl
 import json
-from flask_jwt_extended import (
-	create_access_token,
-	get_jwt,
-	jwt_required,
-	JWTManager,
-	verify_jwt_in_request
-)
 import jwt
 
 
@@ -61,7 +54,7 @@ def post_booking():
         "error": True,
         "message": "請先輸入想要的行程日期" 
       } 
-      sql = 'INSERT INTO orders (memberId, attractionId, date, time, price) VALUES (%s, %s, %s, %s, %s);'
+      sql = 'INSERT INTO bookings (memberId, attractionId, date, time, price) VALUES (%s, %s, %s, %s, %s);'
       injection = (memberId, attractionId, input_date, input_time, price)
       dbQuery(sql, injection)
       return jsonify({"ok": True})
@@ -86,10 +79,10 @@ def get_booking():
       payload = jwt.decode(access_token, key, algorithms="HS256")
       memberId = payload["id"]
       sql = '''
-      SELECT orders.orderId, attractions.id, attractions.name, attractions.address, attractions.images, orders.date, orders.time, orders.price
+      SELECT bookings.bookingID, attractions.id, attractions.name, attractions.address, attractions.images, bookings.date, bookings.time, bookings.price
       FROM attractions 
-      JOIN orders ON orders.attractionId = attractions.id
-      WHERE orders.memberId =%s AND orders.orderID = (SELECT MAX(orders.orderID) FROM orders)''' 
+      JOIN bookings ON bookings.attractionId = attractions.id
+      WHERE bookings.memberId =%s AND bookings.bookingID = (SELECT MAX(bookings.bookingID) FROM bookings)''' 
       injection = (memberId,)
       result = dbQuery(sql, injection)
 
@@ -120,19 +113,17 @@ def get_booking():
     message = "伺服器內部錯誤"
     return jsonify({
       "error": True,
-      "message": result
+      "message": message
     })
 
-
 @booking.route("/booking", methods=['DELETE'])
-# @jwt_required(optional=True)
 def delete_booking():
   try:
     access_token = request.cookies.get('access_token')
     if access_token:
       payload = jwt.decode(access_token, key, algorithms="HS256")
       memberId = payload["id"]
-      sql = 'DELETE FROM orders WHERE memberId= %s ORDER BY orderId DESC LIMIT 1;'
+      sql = 'DELETE FROM bookings WHERE memberId= %s ORDER BY bookingID DESC LIMIT 1;'
       injection = (memberId,)
       dbQuery(sql, injection)
       return jsonify({

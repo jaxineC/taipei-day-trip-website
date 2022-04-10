@@ -63,7 +63,7 @@ export let bookingContent = `
       <div id="orderName" class="orderName Body Bold Teal">台北一日遊：<span id="attractionName"></span></div>
       <div id="orderDate" class="orderTxt Body Bold">日期：<span id="date" class="Reg">YYYY-MM-DD</span></div>
       <div id="orderTime" class="orderTxt Body Bold">時間：<span id="time" class="Reg">時段</span></div>
-      <div id="orderPrice" class="orderTxt Body Bold">費用：<span class="Reg">新台幣 <sapn id="price">----</sapn> 元</span></div>
+      <div id="orderPrice" class="orderTxt Body Bold">費用：<span class="Reg">新台幣 <sapn id="price"></sapn> 元</span></div>
       <div id="orderAddress" class="orderTxt Body Bold">地點：<span id="address" class="Reg">地址</span></div>
     </div>
     <img src="/icon/icon_delete.png" id="iconDel" class="iconDel"></img>

@@ -9,6 +9,7 @@ from api.user import user
 from api.attractions import attractions
 from api.attraction import attraction
 from api.booking import booking
+from api.orders import orders
 
 
 # settings -------------------------------------------------------------------
@@ -26,6 +27,7 @@ app.register_blueprint(user)
 app.register_blueprint(attractions)
 app.register_blueprint(attraction)
 app.register_blueprint(booking)
+app.register_blueprint(orders)
 
 
 # PyJWT
@@ -69,5 +71,5 @@ def thankyou():
 
 # run--------------------------------------------------------------------------
 if __name__ == '__main__':
-	# app.debug = True
+	app.debug = True
 	app.run(host='0.0.0.0',port=3000)

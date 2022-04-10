@@ -41,6 +41,7 @@ export function loadOrder(result, status) {
   ).innerHTML = `${result.data.attraction.address}`;
   document.getElementById("inputName").value = `${status.data.name}`;
   document.getElementById("inputEmail").value = `${status.data.email}`;
+  document.getElementById("confirmPrice").innerHTML = `${result.data.price}`;
 }
 
 export function renderNoOrder() {

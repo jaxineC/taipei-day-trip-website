@@ -34,7 +34,7 @@
             <div id="contactTitle" class="contactTitle Bold">您的聯絡資訊</div>
             <div id="contactName" class="contactName">聯絡姓名：  <input id="inputName" type="text" placeholder="Jane Doe" name="name"></div>
             <div id="contactEmail" class="contactEmail">連絡信箱：  <input id="inputEmail" type="email" placeholder="JaneDoe@gmail.com" name="email"></div>
-            <div id="contactNumber" class="contactNumber">手機號碼：  <input type="number" placeholder="0123-456-789" name="number" required><img class="ok" src="icon/icon_check.png"></img></div>
+            <div id="contactNumber" class="contactNumber">手機號碼：  <input id="inputNumber" type="number" placeholder="0123-456-789" name="number" required><img class="ok" src="icon/icon_check.png"></img></div>
             <div id="contactNotes" class="contactNotes Bold">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
           </div>
           <hr class="hr">
@@ -64,7 +64,7 @@
           </div>
           <hr class="hr">
           <div id="confirm" class="confirm">
-            <div id="confirmPrice" class="confirmPrice Body Bold">總價：新台幣 2000 元</div>
+            <div class="confirmPrice Body Bold">總價：新台幣 <span id="confirmPrice"></span> 元</div>
             <div><button id="submitBtn" class="submitBtn Button">確認訂購並付款</button></div>
           </div>
         </div>
@@ -75,6 +75,6 @@
       <p>COPYRIGHT © 2021 台北一日遊</p>
     </footer>
     <script src="https://js.tappaysdk.com/tpdirect/v5.8.0"></script>
-    <script src="/js/tappay.js" type="text/javascript"></script>
+    <script defer src="/js/tappay.js" type="module"></script>
   </body>
 </html>

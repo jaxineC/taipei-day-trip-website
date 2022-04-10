@@ -5,12 +5,7 @@ import {
   renderPopupMsg,
   popupClose,
 } from "./View/viewPopup.js";
-import {
-  loginContent,
-  signupContent,
-  logoutContent,
-  bookingContent,
-} from "./View/viewContent.js";
+import { logoutContent, bookingContent } from "./View/viewContent.js";
 
 //variables-----------------------------------------------------------------------variables
 
@@ -21,15 +16,20 @@ export let result = {};
 async function init() {
   await authentication();
   if (status.data != null) {
-    document.getElementById("order").innerHTML = bookingContent;
-    document.getElementById("userName").innerHTML = `${status.data.name}`;
-    let result = await getOrder();
-    if (result.data != null) {
-      loadOrder(result, status);
-      document.getElementById("iconDel").addEventListener("click", deleteOrder);
-    } else {
-      renderNoOrder();
-    }
+    let data = await getData("/api/thankyou", "get");
+    document.getElementById("orderNumber").innerHTML = `${data.orderNumber}`;
+    document.getElementById("price").innerHTML = `${data.price}`;
+    document.getElementById(
+      "attractionName"
+    ).innerHTML = `${data.attractionName}`;
+    document.getElementById("address").innerHTML = `${data.address}`;
+    document.getElementById("date").innerHTML = `${data.date}`;
+    document.getElementById("time").innerHTML = `${data.time}`;
+    document.getElementById("contactName").innerHTML = `${data.contactName}`;
+    document.getElementById("contactEmail").innerHTML = `${data.contactEmail}`;
+    document.getElementById(
+      "contactNumber"
+    ).innerHTML = `${data.contactNumber}`;
   } else {
     window.location.href = "/";
   }
@@ -44,20 +44,10 @@ async function quickBooking() {
   }
 }
 
-function deleteOrder() {
-  fetchData("/api/booking", "DELETE", false);
-  renderNoOrder();
-}
-
 //model-----------------------------------------------------------------------model
 
 async function authentication() {
   status = await getData("/api/user", "GET");
-  // status.data = {
-  //   id: data.data.id,
-  //   name: data.data.name,
-  //   email: data.data.email,
-  // };
   return status;
 }
 
