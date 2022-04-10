@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/common.css" rel="stylesheet"></link>
+    <link href="/css/thankyou.css" rel="stylesheet" />
+    <link href="/css/popup.css" rel="stylesheet" />
     <title>thank you</title>
   </head>
   <body id="body">
@@ -19,9 +22,11 @@
 
     <main id="main"> 
       <div id="mainContainer" class="mainContainer">
-        <div id="greeting" class="greeting Body Bold">成功付款，謝謝!</div>
         <div id="bookingContainer" class="bookingContainer">
-          <div id="order" class="order Body Bol">訂單明細
+          <div id="greeting" class="greeting Body Bold">成功付款，謝謝!</div>
+          <br/>
+          <div>訂單編號：<sapn id="orderNumber" class="orderNumber Body Reg"></sapn></div>
+          <!-- <div id="order" class="order Body Bol">訂單明細
             <div>訂單編號：<sapn id="orderNumber" class="orderNumber Reg"></sapn></div>
             <div>訂單金額:<sapn id="price" class="price Reg"></sapn></div>
             <hr class="hr">
@@ -33,14 +38,13 @@
             <div>聯絡姓名：<sapn id="contactName" class="contact Reg"></sapn></div>
             <div>eamil：<sapn id="contactEmail" class="contact Reg"></sapn></div>
             <div>電話：<sapn id="contactNumber" class="contact Reg"></sapn></div>
-          </div>
+          </div> -->
       </div>
     </main>
 
     <footer id="footer"class="Body Bold footer">
       <p>COPYRIGHT © 2021 台北一日遊</p>
     </footer>
-    <script src="https://js.tappaysdk.com/tpdirect/v5.8.0"></script>
-    <script src="/js/tappay.js" type="text/javascript"></script>
+    <script src="/js/thankyou.js" type="module"></script>
   </body>
 </html>

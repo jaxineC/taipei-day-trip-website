@@ -186,7 +186,9 @@ function onSubmit(event) {
       .then((data) => {
         console.log("Success:", data.data.payment.status);
         if (data.data.payment.status == 0) {
-          window.location.href = `/thankyou?number=${data.data.number}`;
+          setTimeout(() => {
+            window.location.href = `/thankyou?number=${data.data.number}`;
+          }, 3000);
         }
       })
       .catch((error) => {

@@ -15,24 +15,26 @@ export let result = {};
 //controller-----------------------------------------------------------------------controller
 async function init() {
   await authentication();
-  if (status.data != null) {
-    let data = await getData("/api/thankyou", "get");
-    document.getElementById("orderNumber").innerHTML = `${data.orderNumber}`;
-    document.getElementById("price").innerHTML = `${data.price}`;
-    document.getElementById(
-      "attractionName"
-    ).innerHTML = `${data.attractionName}`;
-    document.getElementById("address").innerHTML = `${data.address}`;
-    document.getElementById("date").innerHTML = `${data.date}`;
-    document.getElementById("time").innerHTML = `${data.time}`;
-    document.getElementById("contactName").innerHTML = `${data.contactName}`;
-    document.getElementById("contactEmail").innerHTML = `${data.contactEmail}`;
-    document.getElementById(
-      "contactNumber"
-    ).innerHTML = `${data.contactNumber}`;
-  } else {
-    window.location.href = "/";
-  }
+  let queryString = window.location.search.replace("?number=", "");
+  document.getElementById("orderNumber").innerHTML = `${queryString}`;
+  // if (status.data != null) {
+  //   let data = await getData("/api/thankyou", "get");
+  //   document.getElementById("orderNumber").innerHTML = `${data.orderNumber}`;
+  //   document.getElementById("price").innerHTML = `${data.price}`;
+  //   document.getElementById(
+  //     "attractionName"
+  //   ).innerHTML = `${data.attractionName}`;
+  //   document.getElementById("address").innerHTML = `${data.address}`;
+  //   document.getElementById("date").innerHTML = `${data.date}`;
+  //   document.getElementById("time").innerHTML = `${data.time}`;
+  //   document.getElementById("contactName").innerHTML = `${data.contactName}`;
+  //   document.getElementById("contactEmail").innerHTML = `${data.contactEmail}`;
+  //   document.getElementById(
+  //     "contactNumber"
+  //   ).innerHTML = `${data.contactNumber}`;
+  // } else {
+  //   window.location.href = "/";
+  // }
 }
 
 async function quickBooking() {
