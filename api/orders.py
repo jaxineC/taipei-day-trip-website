@@ -34,6 +34,7 @@ def dbQuery(sql,injection) :
 	cursor = cnx.cursor(dictionary=True)
 	cursor.execute(sql, injection)
 	result = cursor.fetchone()
+	cursor.close()
 	cnx.commit()
 	cnx.close()
 	return result
@@ -89,26 +90,48 @@ def post_order():
     req= requests.post(url, json.dumps(data), headers = header)
     # response = json.loads(req)
     response = req.json()
+    
+
+
+
+    
+
+
 
     # 付款成功，紀錄付款資訊；將訂單付款狀態改為【已付款】，將訂單編號傳回前端。
-    sql = 'INSERT INTO orders (order_number, memberId, attractionId, date, time, price, payment) VALUES (%s, %s, %s, %s, %s, %s, %s);'
-    injection = (order_number, memberId, attractionId, date_short, time, price, "已付款")
-    dbQuery(sql, injection)
-
-
-    return jsonify({
-      "data": {
-        "number": order_number,
-        "payment": {
-          "status": response["status"],
-          "message": "付款成功"
+    if response["status"] == 0:
+      sql = 'INSERT INTO orders (order_number, memberId, attractionId, date, time, price, payment) VALUES (%s, %s, %s, %s, %s, %s, %s);'
+      injection = (order_number, memberId, attractionId, date_short, time, price, "已付款")
+      dbQuery(sql, injection)
+      return jsonify({
+        "data": {
+          "number": order_number,
+          "payment": {
+            "status": response["status"],
+            "message": "付款成功"
+          }
         }
-      }
-    })
+      })
+
+    else:
+    # 付款失敗，紀錄付款資訊；不更動訂單付款狀態，將訂單編號傳遞回前端。
+      return jsonify({
+        "data": {
+          "number": order_number,
+          "payment": {
+            "status": response["status"],
+            "message": "付款失敗"
+          }
+        }
+      })
+
+
+
+
 
     
   except Exception as e:
-    # 付款失敗，紀錄付款資訊；不更動訂單付款狀態，將訂單編號傳遞回前端。
+
 
     # if err.code == 500:
     #   message = "訂單建立失敗，輸入不正確或其他原因"
