@@ -184,7 +184,10 @@ function onSubmit(event) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
+        console.log("Success:", data.data.payment.status);
+        if (data.data.payment.status == 0) {
+          window.location.href = `/thankyou?number=${data.data.number}`;
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
