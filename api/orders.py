@@ -7,7 +7,6 @@ import jwt
 import requests
 from urllib.error import HTTPError
 from datetime import datetime, date, time
-import time
 
 # settings -------------------------------------------------------------------
 orders = Blueprint(
@@ -48,7 +47,7 @@ def post_order():
     access_token = request.cookies.get('access_token')
     payload = jwt.decode(access_token, key, algorithms="HS256")
     memberId = payload["id"]
-    date_time = datetime.now().strftime("%Y"+"%m"+"%d"+"%M"+"%S")
+    date_time = datetime.now().strftime("%Y"+"%m"+"%d"+"%H"+"%M"+"%S")
     order_number = str(date_time)+"-MEM-"+str(memberId).rjust(4,"0")
 
     #get info from frontend request payload
@@ -62,7 +61,6 @@ def post_order():
     contact_name =input_data["order"]["contact"]["name"]
     contact_email =input_data["order"]["contact"]["email"]
     contact_number =input_data["order"]["contact"]["phone"]
-    
     
     #prep for tappay requirement (url, headers, data)
     timeout = 30
@@ -97,33 +95,25 @@ def post_order():
       sql = 'INSERT INTO orders (order_number, memberId, attractionId, date, time, price, payment) VALUES (%s, %s, %s, %s, %s, %s, %s);'
       injection = (order_number, memberId, attractionId, date_short, time, price, "已付款")
       dbQuery(sql, injection)
-      return jsonify({
-        "data": {
-          "number": order_number,
-          "payment": {
-            "status": response["status"],
-            "message": "付款成功"
-          }
-        }
-      })
+      sql = 'DELETE FROM bookings WHERE memberId = %s ;'
+      injection = ( memberId, )
+      dbQuery(sql, injection)
+      message_payment = "付款成功"
 
-    else:
     # 付款失敗，紀錄付款資訊；不更動訂單付款狀態，將訂單編號傳遞回前端。
-      return jsonify({
-        "data": {
-          "number": order_number,
-          "payment": {
-            "status": response["status"],
-            "message": "付款失敗"
-          }
+    else:
+      message_payment = "付款失敗"
+    return jsonify({
+      "data": {
+        "number": order_number,
+        "payment": {
+          "status": response["status"],
+          "message": message_payment
         }
-      })
+      }
+    })
 
 
-
-
-
-    
   except HTTPError as err:
     if err.code == 400:
       message = "訂單建立失敗，輸入不正確或其他原因"
