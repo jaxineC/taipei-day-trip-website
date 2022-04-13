@@ -1,6 +1,10 @@
-import { fetchData } from "./Model/model.js";
-import { clearContent } from "./View/view.js";
-import { renderPopupMsg, popupClose } from "./View/viewPopup.js";
+import { getData, fetchData } from "./Model/model.js";
+import { renderNoMore, clearContent } from "./View/view.js";
+import {
+  renderPopupWindow,
+  renderPopupMsg,
+  popupClose,
+} from "./View/viewPopup.js";
 import {
   loginContent,
   signupContent,
@@ -36,20 +40,13 @@ async function loadMore() {
       document.documentElement.clientHeight
     ) {
       if (page == null) {
-        let noMore = document.createElement("div");
-        noMore.id = "noMore";
-        noMore.className = "noMore";
-        document.getElementById("mainContainer").appendChild(noMore);
-        let nMoreNode = document.createTextNode("沒有再多景點要載入了");
-        noMore.appendChild(nMoreNode);
+        renderNoMore();
       } else {
         let keyword = document.getElementById("keyword").value;
         if (keyword == "") {
-          let query = null;
           let nextPage = await renderContent(page, query);
           return (page = nextPage);
         } else {
-          let keyword = document.getElementById("keyword").value;
           let query = `&keyword=${keyword}`;
           searchContent();
         }
@@ -86,13 +83,7 @@ async function quickBooking() {
 
 //model-----------------------------------------------------------------------model
 async function authentication() {
-  let response = await fetch("/api/user", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  let status = await response.json();
+  let status = await getData("/api/user", "GET");
   return status;
 }
 
@@ -100,23 +91,14 @@ async function login() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
   let bodyData = `{"email": "${email}", "password": "${password}"}`;
-  let response = await fetch("/api/user", {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-
-    body: JSON.stringify(bodyData),
-  });
-  let loginResult = await response.json();
-  if (loginResult.error) {
-    renderPopupMsg(loginResult.error, loginResult.message);
+  let result = await fetchData("/api/user", "PATCH", bodyData);
+  if (result.error) {
+    renderPopupMsg(result.error, result.message);
   } else {
     renderPopupMsg(false, "歡迎");
     setTimeout(popupClose, 1000);
     authentication();
     renderLogoutBtn();
-    return loginResult;
   }
 }
 
@@ -129,28 +111,18 @@ async function signup() {
     "email": "${email}",
     "password": "${password}"
   }`;
-  let response = await fetch("/api/user", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(bodyData),
-  });
-  let signupResult = await response.json();
-  if (signupResult.error) {
-    renderPopupMsg(signupResult.error, signupResult.message);
+  let result = await fetchData("/api/user", "POST", bodyData);
+  if (result.error) {
+    renderPopupMsg(result.error, result.message);
   } else {
     renderPopupMsg(false, "註冊成功，請登入繼續");
     setTimeout(renderLogin, 1000);
     authentication();
-    return signupResult;
   }
 }
 
 async function logout() {
-  let response = await fetch("/api/user", {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-  });
-  let signupResult = await response.json();
+  let result = await fetchData("/api/user", "DELETE", false);
   renderLogout();
   setTimeout(popupClose, 1000);
   setTimeout(window.location.reload.bind(window.location), 1000);
@@ -158,7 +130,8 @@ async function logout() {
 
 //view-----------------------------------------------------------------------view
 async function renderContent(page, query) {
-  let result = await fetchData(page, query);
+  let url = `/api/attractions?page=${page + query}`;
+  let result = await getData(url, "GET");
   for (let i = 0; i < 12; i++) {
     if (!result.data[i]) {
       let noMore = document.createElement("div");
@@ -223,11 +196,7 @@ function renderLogoutBtn() {
 }
 
 function renderLogin() {
-  let loginObj = document.createElement("div");
-  loginObj.className = "popupContainer";
-  loginObj.id = "popupContainer";
-  document.getElementById("body").appendChild(loginObj);
-  document.getElementById("popupContainer").innerHTML = loginContent;
+  renderPopupWindow(loginContent);
   document
     .getElementById("renderSignUp")
     .addEventListener("click", renderSignUp);
@@ -236,22 +205,14 @@ function renderLogin() {
 }
 
 function renderSignUp() {
-  let signupObj = document.createElement("div");
-  signupObj.className = "popupContainer";
-  signupObj.id = "popupContainer";
-  document.getElementById("body").appendChild(signupObj);
-  document.getElementById("popupContainer").innerHTML = signupContent;
+  renderPopupWindow(signupContent);
   document.getElementById("renderLogin").addEventListener("click", renderLogin);
   document.getElementById("signup").addEventListener("click", signup);
   document.getElementById("popupClose").addEventListener("click", popupClose);
 }
 
 function renderLogout() {
-  let signupObj = document.createElement("div");
-  signupObj.className = "popupContainer";
-  signupObj.id = "popupContainer";
-  document.getElementById("body").appendChild(signupObj);
-  document.getElementById("popupContainer").innerHTML = logoutContent;
+  renderPopupWindow(logoutContent);
   document.getElementById("popupClose").addEventListener("click", popupClose);
 }
 
@@ -260,7 +221,6 @@ let body = document.getElementById("body");
 window.addEventListener("scroll", debounce(loadMore, 100));
 function debounce(func, wait) {
   let timeout;
-
   return function executedFunction() {
     let later = () => {
       clearTimeout(timeout);

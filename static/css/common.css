@@ -1,6 +1,20 @@
 * {
   box-sizing: border-box;
 }
+
+input:invalid + .ok {
+  display: none;
+  position: absolute;
+  right: 20px;
+}
+input:valid + .ok {
+  display: inline;
+  position: absolute;
+  right: 20px;
+  vertical-align: middle;
+  padding: 8.5px;
+}
+
 /* --------------------1.nav-------------------- */
 nav {
   width: 100%;
@@ -133,4 +147,60 @@ button:hover {
 
 a:hover {
   cursor: pointer;
+}
+
+/* --------------------5.css animation-------------------- */
+.dotsFlashing {
+  vertical-align: middle;
+  display: inline-block;
+  position: relative;
+  left: 4px;
+  bottom: 18px;
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #757575;
+  color: #757575;
+  animation: dotsFlashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+
+.dotsFlashing::before,
+.dotsFlashing::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
+.dotsFlashing::before {
+  left: -10px;
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #757575;
+
+  animation: dotsFlashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.dotsFlashing::after {
+  left: 10px;
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #757575;
+  color: #757575;
+  animation: dotsFlashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dotsFlashing {
+  0% {
+    background-color: #757575;
+  }
+  50%,
+  100% {
+    background-color: #c8c8c8;
+  }
 }
